@@ -31,3 +31,5 @@ Read `README.md` first. This is the paint shop sister site of Big Jo’s Beds (g
 `npm run dev` · `npm test` · `npm run test:e2e` · `npm run build`
 
 Playwright is pinned to 1.56.1 to match the Chromium in Claude Code cloud sessions.
+
+Astro is pinned to 7.3.5 and `@astrojs/vercel` to 11.0.11, the versions Big Jo’s Beds runs in production. With astro 7.3.8 and adapter 11.0.13 the server entry gained `import "rolldown"`, and every on-demand page crashed on Vercel with "Cannot find native binding" (11 Oct 2026). Before upgrading either one, build and check that `.vercel/output/functions/_render.func/.vercel/output/server/entry.mjs` doesn't import `rolldown`, then open an on-demand page (such as `/cart`) on a preview deployment.

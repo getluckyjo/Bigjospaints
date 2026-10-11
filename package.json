@@ -15,9 +15,9 @@
     "logos": "node scripts/export-logos.mjs"
   },
   "dependencies": {
-    "@astrojs/vercel": "^11.0.11",
+    "@astrojs/vercel": "11.0.11",
     "@supabase/supabase-js": "^2.117.3",
-    "astro": "^7.3.5",
+    "astro": "7.3.5",
     "resend": "^6.32.0",
     "zod": "^4.6.5"
   },
