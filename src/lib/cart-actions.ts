@@ -1,4 +1,4 @@
-/** Cart form posts: add from a colour page or the consultant, change a quantity, remove a line. */
+/** Cart form posts: add from a colour page or the consultant (paint or sample pots), change a quantity, remove a line. */
 import { addToCart, lineKey, parseCart, sampleEntry, setQuantity, validEntry, type CartEntry } from './cart';
 
 export function applyCartAction(current: CartEntry[], form: FormData): { entries: CartEntry[]; added: number } {
@@ -16,6 +16,15 @@ export function applyCartAction(current: CartEntry[], form: FormData): { entries
     // A sample pot, from a colour page or the consultant.
     const entry = sampleEntry(String(form.get('colour') ?? ''), String(form.get('sample') ?? ''), Number(form.get('qty') ?? 1));
     return { entries: entry ? addToCart(current, [entry]) : current, added: entry ? entry[3] : 0 };
+  }
+  if (action === 'add-samples') {
+    // From the consultant: a sample pot of each suggested colour, as "colourId|sampleId".
+    const additions = form
+      .getAll('pot')
+      .map((value) => String(value).split('|'))
+      .map(([colour, sample]) => sampleEntry(colour, sample, 1))
+      .filter((e): e is CartEntry => e !== null);
+    return { entries: addToCart(current, additions), added: additions.length };
   }
   if (action === 'add-one') {
     // From a colour page: colour, "productId|litres" and a quantity.

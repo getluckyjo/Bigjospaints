@@ -157,6 +157,24 @@ test.describe('AI colour consultant', () => {
     await expect(previews.getByRole('status')).toHaveText('We saved the picture to your device. Attach it in WhatsApp to send it with the message.');
   });
 
+  test('orders a sample pot of each suggested colour in one go', async ({ page }) => {
+    await fillConsultant(page, 'Calm and restful');
+    await page.getByRole('button', { name: /Show my 3 colours/ }).click();
+    const offer = page.locator('.bj-sample-offer');
+    await expect(offer).toBeVisible({ timeout: 30_000 });
+    await expect(offer.locator('li')).toHaveCount(3);
+    const withPot = offer.locator('li', { hasText: /^((?!No sample pot).)*$/ });
+    const button = offer.getByRole('button', { name: /^Order (\d+ sample pots|the sample pot) · R[\d,]+$/ });
+    await expect(button).toBeVisible();
+    const pots = Number((await button.textContent())!.match(/Order (\d+)/)?.[1] ?? 1);
+    expect(pots).toBe(await withPot.count());
+    await expect(offer.getByRole('link', { name: 'How to test a sample pot' })).toHaveAttribute('href', '/samples#test');
+    await button.click();
+    await expect(page).toHaveURL(/\/cart\?added=/);
+    await expect(page.locator('.bj-cart-line', { hasText: 'sample pot' })).toHaveCount(pots);
+    await expect(page.getByRole('link', { name: 'here’s how to test them' })).toHaveAttribute('href', '/samples#test');
+  });
+
   test('falls back to brief-based colours, and says so, when the AI fails', async ({ page }) => {
     await fillConsultant(page, 'trigger-error please');
     await page.getByRole('button', { name: /Show my 3 colours/ }).click();

@@ -8,9 +8,9 @@ import Swatch from '../components/Swatch.astro';
 import copy from '../content/copy.json';
 import { deliveryDays } from '../lib/business';
 import { BRIEF_IDEAS, ROOM_TYPES, handleConsultPost, type ConsultPageState } from '../lib/consult';
-import { getBrand } from '../lib/catalogue';
-import { DEFAULT_HEIGHT_M, ROOM_PRESETS, describeMix } from '../lib/estimate';
-import { formatZar } from '../lib/money';
+import { getBrand, sampleFor, smallestTinFor } from '../lib/catalogue';
+import { DEFAULT_HEIGHT_M, ROOM_PRESETS, describeMix, formatLitres } from '../lib/estimate';
+import { fill, formatZar } from '../lib/money';
 import { issuePreviewToken, roomLabel } from '../lib/preview';
 
 const c = copy.consultant;
@@ -38,6 +38,15 @@ const sizeLabels: Record<string, string> = { photo: 'Photo', brief: 'Your brief'
 const previewToken = result ? issuePreviewToken(state.photoUrl, result.suggestions.map((s) => s.colour.id), result.room.walls) : null;
 // What "Send on WhatsApp" needs: the wording, and each colour's paint and cost (src/scripts/preview-share.ts).
 const shareCopy = { room: roomLabel(v.roomType), text: c.previewShareText, saved: c.previewShareSaved, label: c.previewCardLabel, cost: c.previewCardCost, note: c.previewCardNote };
+// "Try them on your wall first": a sample pot of each colour, or the smallest tin where there's no pot.
+const sampleOffer = (result?.suggestions ?? []).map((s) => {
+  const brand = getBrand(s.colour.brand)?.name ?? s.colour.brand;
+  const pot = sampleFor(s.colour);
+  const tin = pot ? undefined : smallestTinFor(s.colour);
+  return { colour: s.colour, brand, pot, tin };
+});
+const pots = sampleOffer.filter((o) => o.pot);
+const potsTotal = formatZar(pots.reduce((sum, o) => sum + o.pot!.priceCents, 0));
 const shareFor = (s: NonNullable<typeof result>['suggestions'][number]) => {
   const brand = getBrand(s.colour.brand)?.name ?? s.colour.brand;
   const tins = describeMix(s.estimate.mix);
@@ -115,6 +124,40 @@ const shareFor = (s: NonNullable<typeof result>['suggestions'][number]) => {
                 <p class="bj-sr-only" aria-live="polite" data-bj-preview-status></p>
               </section>
             )}
+            <section class="bj-sample-offer bj-stack" aria-labelledby="sample-offer-title">
+              <div class="bj-stack" style="--bj-stack-gap:6px">
+                <h3 class="bj-icon-text" id="sample-offer-title"><Icon name="swatch" />{c.samplesTitle}</h3>
+                <p class="bj-small bj-muted">{c.samplesBody}</p>
+              </div>
+              <ul>
+                {sampleOffer.map((o) => (
+                  <li>
+                    <Swatch tag="span" hex={o.colour.hex} class="bj-demo__dot" />
+                    <span>
+                      {o.colour.name}
+                      <span class="bj-small bj-muted bj-block">
+                        {o.pot
+                          ? `${o.brand} ${o.pot.sample.name}, ${formatLitres(o.pot.sample.millilitres / 1000)}`
+                          : o.tin && fill(c.samplesNone, { size: `${formatLitres(o.tin.litres)} ${o.brand} ${o.tin.product.name}`, price: formatZar(o.tin.priceCents) })}
+                      </span>
+                    </span>
+                    <span class="bj-sample-offer__price">{o.pot ? formatZar(o.pot.priceCents) : ''}</span>
+                  </li>
+                ))}
+              </ul>
+              <div class="bj-row">
+                {pots.length > 0 && (
+                  <form method="post" action="/cart" data-bj-busy>
+                    <input type="hidden" name="action" value="add-samples" />
+                    {pots.map((o) => <input type="hidden" name="pot" value={`${o.colour.id}|${o.pot!.sample.id}`} />)}
+                    <button class="bj-button" type="submit" data-busy-label="Adding…">
+                      <Icon name="cart" />{pots.length === 1 ? fill(c.samplesButtonOne, { price: potsTotal }) : fill(c.samplesButton, { count: String(pots.length), price: potsTotal })}
+                    </button>
+                  </form>
+                )}
+                <a class="bj-small" href="/samples#test">{c.samplesGuide}</a>
+              </div>
+            </section>
             <div class="bj-options">
               {result.suggestions.map((option, i) => <OptionCard option={option} index={i} walls={result.room.walls} />)}
             </div>

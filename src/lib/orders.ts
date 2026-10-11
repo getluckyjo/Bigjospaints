@@ -50,6 +50,8 @@ export interface Order extends NewOrder {
   reviewReasons: string[] | null;
   createdAt: string;
   paidAt: string | null;
+  /** When the one sample follow-up email was sent (or is being sent). */
+  followUpSentAt?: string | null;
 }
 
 export interface PaymentUpdate {
@@ -69,7 +71,15 @@ export interface OrderStore {
     from: OrderStatus[],
     extra?: { reasons?: string[]; payload?: Record<string, string> },
   ): Promise<Order | null>;
+  /** Paid orders with sample pots, paid between `from` and `to`, that haven't had their follow-up email. */
+  sampleFollowUpsDue(from: Date, to: Date, limit: number): Promise<Order[]>;
+  /** Marks the follow-up as sent, once: false when it already was (another run got there first). */
+  claimFollowUp(reference: string): Promise<boolean>;
+  /** Undoes a claim when the email couldn't be sent, so the next run tries again. */
+  releaseFollowUp(reference: string): Promise<void>;
 }
+
+const hasSamples = (order: Pick<Order, 'lines'>) => order.lines.some((l) => l.isSample);
 
 const REF_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 
@@ -144,6 +154,27 @@ export class MemoryStore implements OrderStore {
     if (extra?.reasons) order.reviewReasons = extra.reasons;
     return structuredClone(order);
   }
+
+  async sampleFollowUpsDue(from: Date, to: Date, limit: number): Promise<Order[]> {
+    return [...this.orders.values()]
+      .filter((o) => o.status === 'paid' && o.paidAt && !o.followUpSentAt && hasSamples(o))
+      .filter((o) => Date.parse(o.paidAt!) >= from.getTime() && Date.parse(o.paidAt!) <= to.getTime())
+      .sort((a, b) => Date.parse(a.paidAt!) - Date.parse(b.paidAt!))
+      .slice(0, limit)
+      .map((o) => structuredClone(o));
+  }
+
+  async claimFollowUp(reference: string): Promise<boolean> {
+    const order = this.orders.get(reference);
+    if (!order || order.followUpSentAt) return false;
+    order.followUpSentAt = new Date().toISOString();
+    return true;
+  }
+
+  async releaseFollowUp(reference: string): Promise<void> {
+    const order = this.orders.get(reference);
+    if (order) order.followUpSentAt = null;
+  }
 }
 
 // ---------- Supabase store ----------
@@ -172,6 +203,7 @@ interface OrderRow {
   review_reasons: string[] | null;
   created_at: string;
   paid_at: string | null;
+  follow_up_sent_at?: string | null;
 }
 
 function fromRow(row: OrderRow): Order {
@@ -199,6 +231,7 @@ function fromRow(row: OrderRow): Order {
     reviewReasons: row.review_reasons,
     createdAt: row.created_at,
     paidAt: row.paid_at,
+    followUpSentAt: row.follow_up_sent_at ?? null,
   };
 }
 
@@ -279,6 +312,38 @@ export class SupabaseStore implements OrderStore {
       .maybeSingle();
     if (error) throw new Error(`Could not update order: ${error.message}`);
     return data ? fromRow(data as OrderRow) : null;
+  }
+
+  async sampleFollowUpsDue(from: Date, to: Date, limit: number): Promise<Order[]> {
+    const { data, error } = await this.db
+      .from('orders')
+      .select()
+      .eq('status', 'paid')
+      .is('follow_up_sent_at', null)
+      .gte('paid_at', from.toISOString())
+      .lte('paid_at', to.toISOString())
+      .contains('lines', [{ isSample: true }])
+      .order('paid_at')
+      .limit(limit);
+    if (error) throw new Error(`Could not load follow-ups: ${error.message}`);
+    return (data as OrderRow[]).map(fromRow);
+  }
+
+  async claimFollowUp(reference: string): Promise<boolean> {
+    const { data, error } = await this.db
+      .from('orders')
+      .update({ follow_up_sent_at: new Date().toISOString() })
+      .eq('reference', reference)
+      .is('follow_up_sent_at', null)
+      .select('reference')
+      .maybeSingle();
+    if (error) throw new Error(`Could not claim follow-up: ${error.message}`);
+    return !!data;
+  }
+
+  async releaseFollowUp(reference: string): Promise<void> {
+    const { error } = await this.db.from('orders').update({ follow_up_sent_at: null }).eq('reference', reference);
+    if (error) throw new Error(`Could not release follow-up: ${error.message}`);
   }
 }
 

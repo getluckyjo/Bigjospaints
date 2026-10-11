@@ -19,6 +19,8 @@ Astro.response.headers.set('Cache-Control', 'no-store');
 // A paid order empties the cart.
 if (order?.status === 'paid') Astro.cookies.delete(CART_COOKIE, { path: '/' });
 
+const hasSamples = !!order?.lines.some((l) => l.isSample);
+const hasPaint = !!order?.lines.some((l) => !l.isSample);
 const state = !order ? 'missing' : order.status === 'paid' ? 'paid' : order.status === 'needs_review' ? 'review' : order.status === 'pending_payment' ? 'pending' : 'closed';
 ---
 
@@ -39,7 +41,8 @@ const state = !order ? 'missing' : order.status === 'paid' ? 'paid' : order.stat
             <div class="bj-stack" role="status">
               <Icon name="done" class="bj-status-icon bj-status-icon--done" />
               <h1>Thank you. Your order is confirmed.</h1>
-              <p class="bj-lead">We’ve emailed a confirmation to {order.email}. Your paint will be delivered in {deliveryDays} days.</p>
+              <p class="bj-lead">We’ve emailed a confirmation to {order.email}. Your {hasSamples && !hasPaint ? 'sample pots' : 'paint'} will be delivered in {deliveryDays} days.</p>
+              {hasSamples && <p>While you wait, read <a href="/samples#test">how to test your sample pots</a>.</p>}
             </div>
           )}
           {state === 'pending' && (

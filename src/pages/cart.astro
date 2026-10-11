@@ -83,6 +83,9 @@ const total = subtotalCents + (deliveryFeeCents ?? 0);
             <div><dt class="bj-icon-text"><Icon name="delivery" />Delivery in {deliveryDays} days</dt><dd>{deliveryFeeCents === null ? 'To be confirmed' : deliveryFeeCents === 0 ? 'Free' : formatZar(deliveryFeeCents)}</dd></div>
             <div class="bj-totals__total"><dt>Total</dt><dd>{formatZar(total)}</dd></div>
           </dl>
+          {pots > 0 && (
+            <p class="bj-note"><Icon name="swatch" />Sample pots: <a href="/samples#test">here’s how to test them</a> when they arrive.</p>
+          )}
           <div class="bj-row" style="justify-content:space-between">
             <a class="bj-link-arrow" href="/colours">Keep shopping</a>
             <a class="bj-button" href="/checkout"><Icon name="secure" />Check out</a>

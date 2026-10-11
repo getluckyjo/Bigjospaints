@@ -15,5 +15,9 @@
     "daysSource": "Owner, 11 Oct 2026: 'customers can buy the paint online and get it delivered in 3 days'.",
     "feeCents": null,
     "feeNote": "Not supplied yet. While null, checkout shows the delivery fee as 'to be confirmed' and doesn't charge it; a live build fails until it is set (0 = free delivery)."
+  },
+  "sampleFollowUp": {
+    "afterDays": 7,
+    "note": "Draft for owner review: one email this many days after a sample order is paid (3 days' delivery plus 4 days to test), asking how the test patches look. Sent by the daily cron in vercel.json."
   }
 }

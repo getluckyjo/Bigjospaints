@@ -12,6 +12,7 @@ export interface Business {
   vatRegistered: boolean;
   vatNumber: string | null;
   delivery: { days: number; feeCents: number | null };
+  sampleFollowUp: { afterDays: number };
 }
 
 export const business = data as unknown as Business;
@@ -19,6 +20,8 @@ export const business = data as unknown as Business;
 export const deliveryDays = business.delivery.days;
 /** null while the owner hasn't set a fee: shown as "to be confirmed" and not charged (test shop only). */
 export const deliveryFeeCents = business.delivery.feeCents;
+/** Days after a sample order is paid when we email once to ask how the test patches look. */
+export const sampleFollowUpDays = business.sampleFollowUp.afterDays;
 
 /** wa.me link to the business WhatsApp with an optional prefilled message; null when no number is set. */
 export function whatsappHref(text?: string): string | null {

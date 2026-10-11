@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 const COLOUR = 'dulux-clinic-white';
-const PAGES = ['/', '/colour-consultant', '/colours', `/colours/${COLOUR}`, '/brands', '/help', '/cart', '/checkout'];
+const PAGES = ['/', '/colour-consultant', '/colours', `/colours/${COLOUR}`, '/samples', '/brands', '/help', '/cart', '/checkout'];
 const WIDTHS = [320, 390, 768, 1440];
 
 const noOverflow = (page: Page) => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);

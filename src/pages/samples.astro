@@ -1,0 +1,86 @@
+---
+/** Sample pots: how to order one, what they cost (from the catalogue) and how to test a colour. */
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import copy from '../content/copy.json';
+import { deliveryDays } from '../lib/business';
+import { getBrand, samples } from '../lib/catalogue';
+import { formatLitres } from '../lib/estimate';
+import { fill, formatZar } from '../lib/money';
+
+const s = copy.samples;
+const rows = samples.map((sample) => {
+  const prices = Object.values(sample.prices).filter((c): c is number => typeof c === 'number');
+  const low = Math.min(...prices);
+  const high = Math.max(...prices);
+  return {
+    id: sample.id,
+    brand: getBrand(sample.brand)?.name ?? sample.brand,
+    name: sample.name,
+    size: formatLitres(sample.millilitres / 1000),
+    finish: sample.finish,
+    price: low === high ? formatZar(low) : `${formatZar(low)} to ${formatZar(high)}`,
+    covers: sample.covers,
+  };
+});
+---
+
+<Base title={s.seo.title} description={s.seo.description}>
+  <section class="bj-container bj-section bj-stack">
+    <div class="bj-stack bj-reading" style="--bj-stack-gap:12px">
+      <span class="bj-eyebrow bj-icon-text"><Icon name="swatch" />{s.eyebrow}</span>
+      <h1>{s.title}</h1>
+      <p class="bj-lead">{s.intro}</p>
+    </div>
+
+    <h2 id="order-title">{s.orderTitle}</h2>
+    <ol class="bj-steps bj-steps--3" aria-labelledby="order-title">
+      {
+        s.orderSteps.map((step) => (
+          <li>
+            <h3>{step.title}</h3>
+            <p>{fill(step.body, { days: String(deliveryDays) })}</p>
+          </li>
+        ))
+      }
+    </ol>
+    <div class="bj-row">
+      <a class="bj-button" href="/colour-consultant"><Icon name="spark" />{s.ctaConsultant}</a>
+      <a class="bj-button bj-button--secondary" href="/colours">{s.ctaColours}</a>
+    </div>
+  </section>
+
+  <section class="bj-container bj-section bj-stack bj-reading" aria-labelledby="test-title" id="test">
+    <h2 id="test-title">{s.testTitle}</h2>
+    <ol class="bj-checklist">
+      {s.testSteps.map((step) => <li>{step}</li>)}
+    </ol>
+    <h3>{s.nextTitle}</h3>
+    <p>{s.nextBody}</p>
+  </section>
+
+  <section class="bj-container bj-section bj-stack" aria-labelledby="prices-title">
+    <h2 id="prices-title">{s.pricesTitle}</h2>
+    <div class="bj-table-wrap" tabindex="0" role="region" aria-labelledby="prices-title">
+      <table>
+        <thead>
+          <tr><th scope="col">Brand</th><th scope="col">Sample pot</th><th scope="col">Size</th><th scope="col">Finish</th><th scope="col">Price</th></tr>
+        </thead>
+        <tbody>
+          {
+            rows.map((r) => (
+              <tr>
+                <td>{r.brand}</td>
+                <td>{r.name}{r.covers && <span class="bj-small bj-muted bj-block">{r.covers}</span>}</td>
+                <td>{r.size}</td>
+                <td>{r.finish}</td>
+                <td>{r.price}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+    <p class="bj-small bj-muted">{s.pricesNote}</p>
+  </section>
+</Base>

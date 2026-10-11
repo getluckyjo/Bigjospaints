@@ -114,6 +114,17 @@ describe('sample pots in the cart', () => {
     expect(formatLitres(0.25)).toBe('250 ml');
   });
 
+  it('adds a sample pot of each suggested colour at once, skipping any that don’t fit', () => {
+    const form = new FormData();
+    form.set('action', 'add-samples');
+    form.append('pot', `${light.id}|plascon-perfect-colour-matt-tester`);
+    form.append('pot', `${prominent.id}|plascon-perfect-colour-matt-tester`); // Prominent makes no pots
+    form.append('pot', 'nonsense');
+    const { entries, added } = applyCartAction([], form);
+    expect(entries).toEqual([pot]);
+    expect(added).toBe(1);
+  });
+
   it('refuses a pot the brand can’t make in that colour, or at the wrong size', () => {
     const deep = colours.find((c) => c.brand === 'plascon' && c.base === 'deep')!;
     expect(validEntry(['plascon-perfect-colour-matt-tester', deep.id, 0.25, 1])).toBeNull(); // pastel base only

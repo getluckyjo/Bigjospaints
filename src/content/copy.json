@@ -11,6 +11,10 @@
       "href": "/colours"
     },
     {
+      "label": "Samples",
+      "href": "/samples"
+    },
+    {
       "label": "Brands",
       "href": "/brands"
     },
@@ -64,7 +68,7 @@
     ],
     "samplesTitle": "Try it on your wall first.",
     "samplesBody": "A screen can’t show a colour exactly, and daylight changes it through the day. Order a sample pot from {price}, paint a test patch, and look at it in the morning and the evening before you buy.",
-    "samplesLink": "How sample pots work",
+    "samplesLink": "How to order and test a sample pot",
     "brandsTitle": "Every top brand, one place.",
     "brandsBody": "Compare colours across brands, then buy them in one order.",
     "closingTitle": "Ready to see your room in colour?",
@@ -116,6 +120,12 @@
     "previewCardLabel": "AI mock-up",
     "previewCardCost": "Cost to paint · {tins}",
     "previewCardNote": "AI mock-up. Paint a test patch before you buy.",
+    "samplesTitle": "Try them on your wall first",
+    "samplesBody": "No screen shows paint exactly. Order a sample pot of each colour, paint test patches side by side, and look at them in daylight and at night before you buy the paint.",
+    "samplesButton": "Order {count} sample pots · {price}",
+    "samplesButtonOne": "Order the sample pot · {price}",
+    "samplesNone": "No sample pot in this colour. The smallest tin is {size} at {price}.",
+    "samplesGuide": "How to test a sample pot",
     "rulesNote": "Your colour consultant isn’t switched on yet, so these three colours were matched to your brief by simple rules. The litres and prices are worked out for your room.",
     "aiDownNote": "Your colour consultant couldn’t look at your photo just now, so these colours were matched to your brief instead. Try again in a minute for a full consultation.",
     "estimateNote": "Prices are for wall paint only: two coats plus 10% extra. On-screen colours are approximate, so check a physical swatch or paint a test patch before you start.",
@@ -188,5 +198,46 @@
   },
   "testShop": "Test shop: checkout uses the PayFast sandbox. No real payments are taken and no paint is sent.",
   "footer": "Big Jo’s Paints. South Africa’s top paint brands, delivered in 3 days.",
-  "trademarks": "Brand names and colour names belong to their owners."
+  "trademarks": "Brand names and colour names belong to their owners.",
+  "samples": {
+    "seo": {
+      "title": "Sample pots: try a colour on your wall | Big Jo’s Paints",
+      "description": "Order a sample pot of any colour, paint a test patch and see it in your own light before you buy. How to order, what it costs and how to test it."
+    },
+    "eyebrow": "Sample pots",
+    "title": "Try a colour on your wall before you buy.",
+    "intro": "No screen shows paint exactly, and the light in your room changes it through the day. A sample pot lets you paint a test patch and see the real colour on your own wall first.",
+    "orderTitle": "How to order a sample",
+    "orderSteps": [
+      {
+        "title": "Find your colours",
+        "body": "Ask your colour consultant for three colours that suit your room, or browse the colours yourself."
+      },
+      {
+        "title": "Add the sample pots",
+        "body": "Your consultation has a button that adds a sample pot of each colour. On any colour page, choose “Order a sample pot”."
+      },
+      {
+        "title": "Check out",
+        "body": "Pay securely with PayFast. Your samples are delivered in {days} days, like paint."
+      }
+    ],
+    "pricesTitle": "What sample pots cost",
+    "pricesNote": "Prices are per pot. Prominent Paints doesn’t make sample pots, so its colour pages offer the smallest tin, 1 litre, instead.",
+    "testTitle": "How to test a sample pot",
+    "testSteps": [
+      "Stir the pot well before you start.",
+      "Paint a patch at least the size of an A4 page, or paint a sheet of white card so you can move it around the room.",
+      "Give it two coats, and let the first coat dry before the second, as the instructions on the pot say.",
+      "Leave a hand’s width of plain wall between patches, so the colours don’t change how each other look.",
+      "Let it dry completely before you judge it. Paint often looks lighter or darker when it’s wet.",
+      "Look at it in the morning, at midday and in the evening, and with your lights on at night.",
+      "Try it on more than one wall. The wall with the window in it gets less direct light and looks darker than the wall opposite.",
+      "Hold your floor, curtains, cushions or a piece of furniture next to it to see how they go together."
+    ],
+    "nextTitle": "When you’ve chosen",
+    "nextBody": "Go back to your colour, or start a consultation with your room size, and we’ll work out exactly how much paint you need and what it costs. A few days after your samples arrive, we’ll email you once to see how the test patches look.",
+    "ctaConsultant": "Find my colours",
+    "ctaColours": "Browse colours"
+  }
 }

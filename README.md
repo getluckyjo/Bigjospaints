@@ -85,6 +85,12 @@ The checkout flow is the same as Big Jo’s Beds:
 - PayFast’s ITN (`/api/payfast/itn`) marks the order paid only when every check passes: signature, source IP, merchant, amount, and server confirmation.
 - Paid orders email the customer and the owner. The owner’s email gives a “deliver by” date 3 days out.
 
+## Sample pots
+
+- **Ordering:** every colour page has “Order a sample pot” (or, for Prominent Paints, which makes none, the smallest tin). The consultant’s results have a “Try them on your wall first” box that adds a pot of each suggested colour in one click (`add-samples` in `src/lib/cart-actions.ts`). Sample prices and which pot fits which colour come from `catalogue.json → samples`.
+- **Guide:** `/samples` (in the main menu) explains how to order, what pots cost (from the catalogue) and how to test a colour. The cart and the order page link to it when there are sample pots, and the order confirmation email includes the testing steps (`copy.json → samples.testSteps`, one source for page and email).
+- **Follow-up email:** once a day (07:00 UTC, `crons` in `vercel.json`), `/api/cron/sample-follow-ups` emails each customer whose sample order was paid 7 days ago (`business.json → sampleFollowUp.afterDays`: 3 days’ delivery plus 4 to test), once per order: how do the patches look, links to order each colour, and a nudge to give the consultant the room size. Orders older than 30 days are skipped. It needs `CRON_SECRET` (Vercel sends it to the job), Supabase with `supabase/migrations/0002_sample_follow_ups.sql` applied, and Resend. Code: `src/lib/follow-ups.ts`, `sampleFollowUp()` in `src/lib/email.ts`.
+
 ## Commerce modes
 
 - `sandbox` (default): test shop with a banner, PayFast sandbox, `noindex`.
@@ -98,7 +104,8 @@ The checkout flow is the same as Big Jo’s Beds:
 - [ ] Legal name, registration number, physical address and email in `src/config/business.json` (ECTA s43).
 - [ ] Terms of sale, delivery and returns, and privacy notice as `src/content/policies/*.md`.
 - [ ] PayFast live merchant ID, key and passphrase (Vercel Production, Sensitive).
-- [ ] Supabase project with `supabase/migrations/0001_init.sql` applied, plus `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`.
+- [ ] Supabase project with `supabase/migrations/0001_init.sql` and `0002_sample_follow_ups.sql` applied, plus `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`. Then remove `ORDER_STORE=memory` from Vercel: the in-memory store loses orders between server instances.
+- [ ] `CRON_SECRET` in Vercel (Production, Sensitive) for the daily sample follow-up email.
 - [ ] Resend sending domain, `RESEND_API_KEY`, `EMAIL_FROM` and `OWNER_EMAIL`.
 - [ ] Confirm the WhatsApp number (Johannes’s own number, carried over from Big Jo’s Beds).
 - [ ] A domain, then `PUBLIC_SITE_URL`.
