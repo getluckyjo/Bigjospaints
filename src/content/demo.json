@@ -1,36 +1,36 @@
 {
-  "$comment": "Home-page demo: a real consultation, run on the live site (bigjospaints.vercel.app/colour-consultant) on 11 Oct 2026 with OpenAI GPT-5.5. The photo is a real lounge photographed by Sven Brandsma on Unsplash (src/assets/photos/living-room.jpg; credit in src/lib/photos.ts), sent at 1600 px as the consultant's own upload does. The brief is as sent. roomRead, title, why and tip are the AI's words, unedited; litres and prices are worked out from catalogue.json when the site is built, exactly as the consultant does. public/demo/walls.png marks the pink walls (white = wall) for the tinted preview: picked by colour (CIELAB hue, chroma, lightness) inside the back wall, with the window view, photo frames, hanging pot and cabinet cut out by hand.",
+  "$comment": "Home-page demo: a real consultation, run on the live site (bigjospaints.vercel.app/colour-consultant) on 11 Oct 2026 with OpenAI GPT-5.5. The photo is a real living room photographed by Patrick Perkins on Unsplash (src/assets/photos/apartment.jpg; credit in src/lib/photos.ts), sent at 1600 px as the consultant's own upload does. The brief is as sent. roomRead, title, why and tip are the AI's words, unedited; litres and prices are worked out from catalogue.json when the site is built, exactly as the consultant does. public/demo/walls.png marks the white walls (white = wall) for the tinted preview: the wall areas are drawn by hand, because the shelves, blinds and window are white too, and inside them a pixel counts as wall by its colour (CIELAB lightness, chroma, hue).",
   "ranOn": "2026-10-11",
   "model": "GPT-5.5",
   "roomType": "Lounge",
-  "brief": "Our lounge is a dusty pink and we're ready for a change. Something calm but still warm, to go with the wood stove, the oak floor and our plants.",
-  "size": "large",
+  "brief": "Our lounge is all plain white and feels a bit flat. We'd like some colour that still keeps it light and calm, with all our plants and the wooden floor.",
+  "size": "medium",
   "walls": "all",
   "heightM": 2.6,
   "doors": 1,
   "windows": 1,
-  "roomRead": "Your lounge has good side light, warm oak flooring, a black wood stove with brick, lots of creamy trim and natural plant greens, so a warm calm neutral or soft sage will sit better than the current dusty pink.",
+  "roomRead": "The lounge is compact but bright, with warm wooden floors, a grey sofa, white built-ins and plenty of green plants, so a light nature-led colour will add depth without closing it in.",
   "options": [
     {
-      "title": "Warm and easy",
+      "title": "Soft garden calm",
+      "colour": "plascon-desert-spring",
+      "product": "plascon-cashmere",
+      "why": "This pale grey-green will gently pick up the plants and soften the plain white walls. It stays light enough for all four walls in your 4 × 4 m lounge.",
+      "tip": "Keep the ceiling and trim a clean warm white so the room still feels fresh."
+    },
+    {
+      "title": "Warm and natural",
       "colour": "dulux-sahara-drive",
       "product": "dulux-acrylic-pva",
-      "why": "This sandy beige keeps the warmth of the oak floor and stove area, but feels calmer and more timeless than pink. It will also work well with the grey sofa and cream macramé.",
-      "tip": "Keep the ceiling and trim in a soft white so the room stays bright."
+      "why": "The sandy beige tone works beautifully with the wooden floor and timber furniture. It will make the lounge feel warmer while still calm and airy.",
+      "tip": "Pair it with white shelves and a few green or terracotta plant pots for an easy layered look."
     },
     {
-      "title": "Soft natural calm",
+      "title": "Fresh leafy feel",
       "colour": "duram-tree-fern",
       "product": "duram-classic-matt",
-      "why": "This pale sage picks up the plants and softens the black stove without making the lounge feel cold. It is light enough for all walls in your 6 × 4 m room.",
-      "tip": "Pair it with warm oak, woven textures and off-white curtains or blinds."
-    },
-    {
-      "title": "Quiet greige warmth",
-      "colour": "plascon-ravine",
-      "product": "plascon-cashmere",
-      "why": "This classic greige is a safe, grown-up shift from dusty pink while still feeling warm beside the oak and brick. It will make the grey sofa look intentional rather than heavy.",
-      "tip": "Add a few terracotta or rust cushions to echo the fire and keep the scheme cosy."
+      "why": "This soft sage is a little more colourful, but still muted enough for a relaxed lounge. It links the walls to your plants and sits nicely against the grey sofa.",
+      "tip": "Use warm wood, cream textiles and black accents to keep the sage looking grown-up rather than too sweet."
     }
   ]
 }

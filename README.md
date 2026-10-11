@@ -50,17 +50,20 @@ These files are the only source of colours and prices. They were built on 11 Oct
 
 ## Photos
 
-The site uses real photographs only, never renders or AI images. They come from Unsplash, free to use under the [Unsplash License](https://unsplash.com/license), and each one is credited to its photographer next to the photo (`src/lib/photos.ts`, `src/components/Photo.astro`). The files in `src/assets/photos/` were downloaded from Unsplash’s image service at these addresses, and Astro makes the web sizes when the site is built:
+The site uses real photographs only, never renders or AI images. The owner chose them (11 Oct 2026) from Unsplash; they're free to use under the [Unsplash License](https://unsplash.com/license), and each one is credited to its photographer next to the photo (`src/lib/photos.ts`, `src/components/Photo.astro`). The files in `src/assets/photos/` were downloaded from Unsplash’s image service at these addresses, and Astro makes the web sizes when the site is built:
 
 | File | Photographer | Where it’s used | Downloaded from |
 |---|---|---|---|
-| `dining-room.jpg` | [Elena Popova](https://unsplash.com/photos/a-dining-room-with-blue-walls-and-a-wooden-table-NlZMsnCzZp0) | Home hero | `https://images.unsplash.com/photo-1633389263541-84618e56b894?w=1600&q=80&fm=jpg` |
-| `living-room.jpg` | [Sven Brandsma](https://unsplash.com/photos/cozy-living-room-with-wood-stove-fRx9CBTvL-E) | Home demo (sent to the consultant) | `https://images.unsplash.com/photo-1791540255760-ef09617851c6?w=2000&q=80&fm=jpg` |
-| `test-patches.jpg` | [Patrick Federi](https://unsplash.com/photos/paint-swatches-on-a-weathered-wall-with-teal-door-lgflrTGpBvY) | Home, sample pots | `https://images.unsplash.com/photo-1760101187116-fa8409c3d9ac?w=1400&q=80&fm=jpg` |
-| `tins.jpg` | [Elisabeth Arnold](https://unsplash.com/photos/assortment-of-open-paint-cans-with-various-warm-color-paints-uZ1cCiDiQhc) | Home, brands | `https://images.unsplash.com/photo-1784887830054-ea5fbe193e7c?rect=1260,2560,2280,3440&w=1200&q=80&fm=jpg` (cropped to leave out other paint brands’ labels) |
-| `painting.jpg` | [Barney Goodman](https://unsplash.com/photos/person-painting-wall-with-roller-Azz07JvM-EA) | Home, closing | `https://images.unsplash.com/photo-1789841417999-67a24a247c90?w=1600&q=80&fm=jpg` |
+| `green-couch.jpg` | [Evan Wise](https://unsplash.com/photos/a-living-room-with-a-green-couch-and-a-coffee-table-jZkFVycn3FQ) | Home hero | `https://images.unsplash.com/photo-1661796428215-04fc2830aae6?w=1600&q=80&fm=jpg` |
+| `apartment.jpg` | [Patrick Perkins](https://unsplash.com/photos/gray-fabric-loveseat-near-brown-wooden-table-3wylDrjxH-E) | Home demo (sent to the consultant) | `https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=2000&q=80&fm=jpg` |
+| `bedroom-mirror.jpg` | [Minh Pham](https://unsplash.com/photos/white-wooden-dresser-with-mirror-7pCFUybP_P8) | Home, sample pots | `https://images.unsplash.com/photo-1556020685-ae41abfc9365?w=1400&q=80&fm=jpg` |
+| `swatches.jpg` | [Clay Banks](https://unsplash.com/photos/white-blue-red-and-yellow-concrete-building-T2KOfVwW3g0) | Home, brands | `https://images.unsplash.com/photo-1608556984704-fa578c96e6eb?w=1400&q=80&fm=jpg` |
+| `leather-sofa.jpg` | [Michael Oxendine](https://unsplash.com/photos/living-room-with-brown-leather-sofa-GHCVUtBECuY) | Home, closing | `https://images.unsplash.com/photo-1589834390005-5d4fb9bf3d32?w=1600&q=80&fm=jpg` |
+| `reading-corner.jpg` | [Kate Darmody](https://unsplash.com/photos/white-and-brown-table-lamp-on-brown-wooden-table-TDIdPmW2P9k) | Brands page | `https://images.unsplash.com/photo-1617201929478-8eedff7508f9?w=1400&q=80&fm=jpg` |
 
-When you add a photo: check it’s a real photograph, free (not Unsplash+), and shows no brand logos or labels (crop them out), then add it to `src/lib/photos.ts` with alt text and the credit, and to this table.
+The owner also picked [Yevhenii Deshko’s living room](https://unsplash.com/photos/a-living-room-filled-with-furniture-and-a-large-window-TBJrxAvVx_M), but it’s an Unsplash+ photo, which needs a paid Unsplash+ licence, so it isn’t used.
+
+When you add a photo: check it’s a real photograph and free (not Unsplash+), then add it to `src/lib/photos.ts` with alt text and the credit, and to this table.
 
 ## Payments and orders
 
@@ -96,7 +99,7 @@ The checkout flow is the same as Big Jo’s Beds:
 | `src/data/catalogue.json` | Brands, paints (tins, prices, coverage), sample pots and the hand-picked colours |
 | `src/data/colours/` | Each brand’s full colour range (name, code, hex, collection) |
 | `src/lib/colour-science.ts`, `colour-search.ts` | Colour family, base and description from a hex; search, filters and closest matches for `/colours` |
-| `src/content/demo.json`, `src/components/HomeDemo.astro` | The home-page demo: a real GPT-5.5 consultation on a real lounge photo, with a tinted-walls preview |
+| `src/content/demo.json`, `src/components/HomeDemo.astro` | The home-page demo: a real GPT-5.5 consultation on a real living-room photo, with a tinted-walls preview |
 | `src/lib/photos.ts`, `src/assets/photos/` | The site’s photos and their credits (see Photos) |
 | `src/content/copy.json` | Site copy (draft for owner review) |
 | `src/config/business.json` | Business details and delivery (3 days; fee to be set) |

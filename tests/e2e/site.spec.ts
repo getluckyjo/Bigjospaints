@@ -96,10 +96,11 @@ test('home demo shows a real consultation and tints the walls', async ({ page })
     plain.getContext('2d')!.drawImage(photo, 0, 0);
     const at = (c: HTMLCanvasElement, x: number, y: number) =>
       Array.from(c.getContext('2d')!.getImageData(Math.round(x * c.width), Math.round(y * c.height), 1, 1).data);
-    return { wall: at(canvas, 0.42, 0.3), wallBefore: at(plain, 0.42, 0.3), sofa: at(canvas, 0.75, 0.75), sofaBefore: at(plain, 0.75, 0.75) };
+    return { wall: at(canvas, 0.42, 0.3), wallBefore: at(plain, 0.42, 0.3), sofa: at(canvas, 0.45, 0.6), sofaBefore: at(plain, 0.45, 0.6) };
   });
-  expect(px.wallBefore[0]).toBeGreaterThan(px.wallBefore[1]); // a dusty pink wall in the photo…
+  expect(px.wallBefore[0]).toBeGreaterThanOrEqual(px.wallBefore[1]); // a warm white wall in the photo…
   expect(px.wall[1]).toBeGreaterThan(px.wall[0]); // …turns sage green
+  expect(px.wallBefore[0] - px.wall[0]).toBeGreaterThan(10);
   for (let c = 0; c < 3; c++) expect(Math.abs(px.sofa[c] - px.sofaBefore[c])).toBeLessThanOrEqual(2);
   await demo.getByRole('button', { name: 'Photo as sent' }).click();
   await expect(demo).not.toHaveClass(/is-tinted/);

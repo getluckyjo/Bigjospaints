@@ -1,22 +1,27 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
+import Photo from '../components/Photo.astro';
 import Swatch from '../components/Swatch.astro';
 import copy from '../content/copy.json';
 import { coloursFor, productsFor, sellingBrands } from '../lib/catalogue';
 import { deliveryDays } from '../lib/business';
 import { formatLitres } from '../lib/estimate';
 import { formatZar } from '../lib/money';
+import { photos } from '../lib/photos';
 
 const b = copy.brands;
 ---
 
 <Base title={b.seo.title} description={b.seo.description}>
   <section class="bj-container bj-section bj-stack">
-    <div class="bj-stack" style="--bj-stack-gap:12px">
-      <h1>{b.title}</h1>
-      <p class="bj-lead">{b.intro}</p>
-      <ul class="bj-facts"><li><Icon name="delivery" />Every order delivered in {deliveryDays} days</li></ul>
+    <div class="bj-split bj-split--text-first">
+      <div class="bj-stack" style="--bj-stack-gap:12px">
+        <h1>{b.title}</h1>
+        <p class="bj-lead">{b.intro}</p>
+        <ul class="bj-facts"><li><Icon name="delivery" />Every order delivered in {deliveryDays} days</li></ul>
+      </div>
+      <Photo photo={photos.readingCorner} class="bj-split__photo bj-split__photo--wide" sizes="(min-width: 900px) 45vw, 100vw" loading="eager" />
     </div>
     {
       sellingBrands.map((brand) => {

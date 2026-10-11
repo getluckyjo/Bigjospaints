@@ -146,9 +146,9 @@ fieldset.bj-fieldset legend.bj-h3 { font: 400 var(--bj-type-h3)/1.04 var(--bj-fo
   .bj-split { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 56px; }
   .bj-split--reverse { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
   .bj-split--reverse > .bj-split__photo { order: 2; }
+  .bj-split--text-first { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
   .bj-split__photo .bj-photo__frame { aspect-ratio: 4 / 5; }
   .bj-split__photo--wide .bj-photo__frame { aspect-ratio: 3 / 2; }
-  .bj-closing { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
 }
 
 /* How it works */

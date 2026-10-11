@@ -35,7 +35,7 @@ const factIcons: IconName[] = ['swatch', 'tin', 'delivery'];
         {home.facts.map((fact, i) => <li><Icon name={factIcons[i]} />{fact.replace('3 days', `${deliveryDays} days`)}</li>)}
       </ul>
     </div>
-    <Photo photo={photos.diningRoom} class="bj-hero-photo" loading="eager" sizes="(min-width: 1200px) 480px, (min-width: 900px) 40vw, (min-width: 560px) 480px, 100vw" focus="50% 40%">
+    <Photo photo={photos.greenCouch} class="bj-hero-photo" loading="eager" sizes="(min-width: 1200px) 480px, (min-width: 900px) 40vw, (min-width: 560px) 480px, 100vw" focus="50% 55%">
       <div class="bj-fan" aria-hidden="true">
         {
           fan.map((c, i) => (
@@ -78,7 +78,7 @@ const factIcons: IconName[] = ['swatch', 'tin', 'delivery'];
   </section>
 
   <section class="bj-container bj-section bj-split" aria-labelledby="samples-title">
-    <Photo photo={photos.testPatches} class="bj-split__photo" sizes="(min-width: 900px) 40vw, 100vw" focus="50% 72%" />
+    <Photo photo={photos.bedroomMirror} class="bj-split__photo" sizes="(min-width: 900px) 40vw, 100vw" focus="50% 38%" />
     <div class="bj-stack">
       <h2 id="samples-title">{home.samplesTitle}</h2>
       <p class="bj-lead">{fill(home.samplesBody, { price: formatZar(cheapestSampleCents) })}</p>
@@ -87,7 +87,7 @@ const factIcons: IconName[] = ['swatch', 'tin', 'delivery'];
   </section>
 
   <section class="bj-container bj-section bj-split bj-split--reverse" aria-labelledby="brands-title">
-    <Photo photo={photos.tins} class="bj-split__photo" sizes="(min-width: 900px) 40vw, 100vw" />
+    <Photo photo={photos.swatches} class="bj-split__photo" sizes="(min-width: 900px) 40vw, 100vw" focus="50% 30%" />
     <div class="bj-stack">
       <h2 id="brands-title">{home.brandsTitle}</h2>
       <p class="bj-lead">{home.brandsBody}</p>
@@ -99,7 +99,7 @@ const factIcons: IconName[] = ['swatch', 'tin', 'delivery'];
   </section>
 
   <section class="bj-container bj-section bj-split bj-closing" aria-labelledby="closing-title">
-    <Photo photo={photos.painting} class="bj-split__photo bj-split__photo--wide" sizes="(min-width: 900px) 50vw, 100vw" />
+    <Photo photo={photos.leatherSofa} class="bj-split__photo" sizes="(min-width: 900px) 40vw, 100vw" focus="50% 62%" />
     <div class="bj-stack">
       <h2 id="closing-title">{home.closingTitle}</h2>
       <p class="bj-lead">{home.closingBody}</p>
