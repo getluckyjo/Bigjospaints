@@ -159,7 +159,7 @@ test('ordering a sample pot, or a 1 L tin where the brand makes no pots', async 
   await expect(line).toContainText('Plascon Perfect Colour Matt tester (matt), 250 ml sample pot, R45 each');
   await expect(page.locator('.bj-totals')).toContainText('1 sample pot');
   await page.goto('/colours/prominent-river-clay');
-  await expect(page.getByText('Prominent Paints doesn’t make a sample pot')).toBeVisible();
+  await expect(page.getByText('Prominent Paints doesn’t make sample pots', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: /Add a 1 L tin to test/ }).click();
   await expect(page.locator('.bj-cart-line')).toHaveCount(2);
   await expect(page.locator('.bj-totals')).toContainText('Paint (1 L) and 1 sample pot');

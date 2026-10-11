@@ -1,5 +1,5 @@
 {
-  "$comment": "Big Jo’s Paints catalogue: the only source of colours and prices. Built on 11 Oct 2026 from research into each brand’s own colour data and current South African retail prices. PRICES ARE INDICATIVE RETAIL PRICES FOR OWNER REVIEW: set your own selling prices here. Rules: priceCents is the regular (non-promotional) retail price incl. VAT seen on 11 Oct 2026 (Builders; Prominent’s own shop for Prominent). \"sizes\" is the light (pastel) tint base, used for light colours; \"bases.medium\"/\"bases.deep\" price darker colours where the brand sells those bases. Each colour’s \"base\" is estimated from its lightness (CIE L*: 65+ light, 45–65 medium, under 45 deep); the tinting counter has the final say. coverageM2PerLitre is the data-sheet figure per coat, capped at 10 m²/L because Plascon quotes a theoretical smooth-surface rate. Sample pots (\"samples\") are the brands’ own tester pots at the same retailer prices; \"prices\" is keyed by the tint base the colour needs (pastel, deep, clear/transparent), and a missing base means that pot can’t take those colours. Prominent sells no sample pot, so its colours offer the smallest tin. The hand-picked colours below have their own notes; each brand’s full range is in src/data/colours/<brand>.json (name, code, hex, collection), and its family, base and description are worked out from the hex. Duram publishes each colour’s tint base, which is used instead of the lightness estimate. Colour hex values come from each brand’s own website and are screen approximations.",
+  "$comment": "Big Jo’s Paints catalogue: the only source of colours and prices. Built on 11 Oct 2026 from research into each brand’s own colour data and current South African retail prices. PRICES ARE INDICATIVE RETAIL PRICES FOR OWNER REVIEW: set your own selling prices here. Rules: priceCents is the regular (non-promotional) retail price incl. VAT seen on 11 Oct 2026 (Builders; Prominent’s own shop for Prominent). \"sizes\" is the light (pastel) tint base, used for light colours; \"bases.medium\"/\"bases.deep\" price darker colours where the brand sells those bases. Each colour’s \"base\" is estimated from its lightness (CIE L*: 65+ light, 45–65 medium, under 45 deep); the tinting counter has the final say. coverageM2PerLitre is the data-sheet figure per coat, capped at 10 m²/L because Plascon quotes a theoretical smooth-surface rate. Sample pots (\"samples\") are the brands’ own tester pots at the same retailer prices; \"prices\" is keyed by the tint base the colour needs (pastel, deep, clear/transparent), and a missing base means that pot can’t take those colours. Dulux’s 250 ml tester is offered only for the 384 colours on its in-store colour wall, the colours Dulux lists for it. Prominent sells no sample pot, so its colours offer the smallest tin. The hand-picked colours below have their own notes; each brand’s full range is in src/data/colours/<brand>.json (name, code, hex, collection), and its family, base and description are worked out from the hex. Duram publishes each colour’s tint base, which is used instead of the lightness estimate. Colour hex values come from each brand’s own website and are screen approximations.",
   "checked": "2026-10-11",
   "brands": [
     {
@@ -524,6 +524,28 @@
         "https://www.builders.co.za/paint/tinting/tester-pods/plascon-double-velvet-deep-tint-base-paint-tester-250-ml/p/000000000000411571",
         "https://www.builders.co.za/paint/tinting/tester-pods/plascon-double-velvet-transparent-tint-base-paint-tester-250-ml/p/000000000000411576",
         "https://plascon.co.za/plascon-perfect-colour-tester-samples"
+      ]
+    },
+    {
+      "id": "dulux-luxurious-colour-tester",
+      "brand": "dulux",
+      "name": "Luxurious Colour Tester",
+      "finish": "mid sheen",
+      "millilitres": 250,
+      "prices": {
+        "pastel": 9900,
+        "deep": 9900,
+        "clear": 9900
+      },
+      "tags": [
+        "colour-wall"
+      ],
+      "sources": [
+        "https://www.builders.co.za/paint/tinting/tester-pods/dulux-colour-tester-pastel-tint-base-7-paint-250-ml/p/000000000000202608",
+        "https://www.builders.co.za/paint/tinting/tester-pods/dulux-colour-tester-medium-tint-base-8-paint-250-ml/p/000000000000202744",
+        "https://www.builders.co.za/paint/tinting/tester-pods/dulux-colour-tester-deep-tint-base-9-paint-250-ml/p/000000000000203921",
+        "https://www.builders.co.za/paint/tinting/tester-pods/dulux-colour-tester-ultra-deep-tint-base-6-paint-250-ml/p/000000000000202761",
+        "https://www.dulux.co.za/en/colour-palettes"
       ]
     },
     {

@@ -107,7 +107,7 @@
   "colours": {
     "seo": {
       "title": "Paint colours from South Africa’s top brands | Big Jo’s Paints",
-      "description": "Search over 2,500 paint colours from Plascon, Duram, Prominent and Dulux by name, code, colour family and lightness. Order a sample pot or the paint, delivered in 3 days."
+      "description": "Search over 5,000 paint colours from Plascon, Dulux, Duram and Prominent by name, code, colour family and lightness. Order a sample pot or the paint, delivered in 3 days."
     },
     "title": "Browse colours",
     "intro": "{count} colours from South Africa’s top brands. Search by name or code, or filter by brand, colour and lightness. Choose one to see the paints it comes in, the prices and a sample pot.",
@@ -149,7 +149,7 @@
       {
         "id": "samples",
         "question": "Can I order a sample first?",
-        "answer": "Yes. Plascon and Duram make sample pots, from R36 for a 90 ml Duram Habitat sample to R89 for a 250 ml tester in a deep colour, and each colour page shows the one we can send in that colour. Prominent Paints doesn’t make sample pots, so its colour pages offer the smallest tin, 1 litre, instead. Samples are delivered in 3 days, like paint."
+        "answer": "Yes, for most colours. Each colour page shows the sample pot we can send in that colour: Plascon and Duram testers from R36 to R89, and Dulux’s R99 tester for the colours on its in-store colour wall. Prominent Paints doesn’t make sample pots, so its colour pages offer the smallest tin, 1 litre, instead. Samples are delivered in 3 days, like paint."
       },
       {
         "id": "delivery",

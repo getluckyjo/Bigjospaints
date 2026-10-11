@@ -56,6 +56,8 @@ export interface Colour {
   featured: boolean;
   /** In the shortlist the AI consultant chooses from. */
   ai: boolean;
+  /** Brand groupings beyond the collection, e.g. "colour-wall" for Dulux's in-store colour wall. */
+  tags: string[];
 }
 
 /** Tint bases as the brands name them for sample pots: pastel (light), deep and clear or transparent (strongest). */
@@ -73,6 +75,8 @@ export interface Sample {
   collections?: string[];
   /** Not for colours in these collections. */
   excludeCollections?: string[];
+  /** Only for colours with one of these tags. */
+  tags?: string[];
   /** What the brand says a pot covers, where it says. */
   covers?: string;
   sources: string[];
@@ -118,9 +122,14 @@ interface RangeFile {
   sourceUrl: string;
   /** Collections whose colours join the AI's shortlist. */
   aiCollections: string[];
+  /** Tags whose colours join the AI's shortlist. */
+  aiTags?: string[];
   collections: string[];
   tintBases?: Record<string, string>;
-  /** [name, code, hex without #, collection index, tint base letter?] */
+  /** Tag name → row numbers, e.g. Dulux's in-store colour wall. */
+  tags?: Record<string, number[]>;
+  tagLabels?: Record<string, string>;
+  /** [name, code, hex without #, collection index (-1 for none), tint base letter?] */
   rows: [string, string, string, number, string?][];
 }
 
@@ -145,24 +154,37 @@ export function slugify(text: string): string {
 const baseFromTint = (tint: SampleBase): TinBase => (tint === 'pastel' ? 'light' : 'deep');
 
 function buildColours(): Colour[] {
-  const codeKey = (brand: string, code: string | null) => `${brand}|${(code ?? '').trim().toUpperCase()}`;
-  const featured = new Map<string, Colour>();
-  for (const raw of data.colours as Omit<Colour, 'collection' | 'featured' | 'ai'>[]) {
-    featured.set(codeKey(raw.brand, raw.code), { ...raw, collection: null, featured: true, ai: true });
-  }
-  const used = new Set([...featured.values()].map((c) => c.id));
+  const norm = (text: string | null) => (text ?? '').trim().toUpperCase();
+  const featured = (data.colours as Omit<Colour, 'collection' | 'featured' | 'ai' | 'tags'>[]).map(
+    (raw): Colour => ({ ...raw, collection: null, featured: true, ai: true, tags: [] }),
+  );
+  const used = new Set(featured.map((c) => c.id));
   const out: Colour[] = [];
   for (const range of ranges) {
     const brandName = (data.brands as Brand[]).find((b) => b.id === range.brand)?.name ?? range.brand;
-    for (const [name, code, hexDigits, collectionIndex, tint] of range.rows) {
+    // A hand-picked colour is the row with its code (and its name, where two names share a code).
+    const byCode = new Map<string, number[]>();
+    range.rows.forEach((row, i) => byCode.set(norm(row[1]), [...(byCode.get(norm(row[1])) ?? []), i]));
+    const pickedRow = new Map<number, Colour>();
+    for (const c of featured.filter((f) => f.brand === range.brand)) {
+      const rows = byCode.get(norm(c.code)) ?? [];
+      const i = rows.find((r) => norm(range.rows[r][0]) === norm(c.name)) ?? (rows.length === 1 ? rows[0] : undefined);
+      if (i !== undefined) pickedRow.set(i, c);
+    }
+    const rowTags = new Map<number, string[]>();
+    for (const [tag, rows] of Object.entries(range.tags ?? {})) for (const r of rows) rowTags.set(r, [...(rowTags.get(r) ?? []), tag]);
+
+    range.rows.forEach(([name, code, hexDigits, collectionIndex, tint], i) => {
       const collection = range.collections[collectionIndex] ?? null;
       const tintBase = tint ? TINT_BASE[tint] : undefined;
-      const ai = collection !== null && range.aiCollections.includes(collection);
-      const pick = featured.get(codeKey(range.brand, code));
+      const tags = rowTags.get(i) ?? [];
+      const ai =
+        (collection !== null && range.aiCollections.includes(collection)) || tags.some((t) => range.aiTags?.includes(t));
+      const pick = pickedRow.get(i);
       if (pick) {
-        pick.collection = collection;
+        Object.assign(pick, { collection, tags });
         if (tintBase) Object.assign(pick, { tintBase, base: baseFromTint(tintBase) });
-        continue;
+        return;
       }
       const hex = `#${hexDigits.toUpperCase()}`;
       let id = `${range.brand}-${slugify(name)}`;
@@ -184,10 +206,11 @@ function buildColours(): Colour[] {
         collection,
         featured: false,
         ai,
+        tags,
       });
-    }
+    });
   }
-  return [...featured.values(), ...out];
+  return [...featured, ...out];
 }
 
 export const colours: Colour[] = buildColours();
@@ -260,6 +283,7 @@ export function samplesFor(colour: Colour): { sample: Sample; priceCents: number
     .filter((s) => s.brand === colour.brand)
     .filter((s) => !s.collections || (colour.collection !== null && s.collections.includes(colour.collection)))
     .filter((s) => !(colour.collection !== null && s.excludeCollections?.includes(colour.collection)))
+    .filter((s) => !s.tags || s.tags.some((t) => colour.tags.includes(t)))
     .flatMap((s) => (s.prices[base] ? [{ sample: s, priceCents: s.prices[base]! }] : []))
     .sort((a, b) => a.priceCents - b.priceCents);
 }

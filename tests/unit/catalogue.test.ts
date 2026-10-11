@@ -82,8 +82,8 @@ describe('catalogue integrity', () => {
 
 describe('full colour ranges', () => {
   it('loads each brand’s range and keeps the hand-picked colours and their ids', () => {
-    for (const brand of ['plascon', 'duram', 'prominent']) expect(coloursFor(brand).length, brand).toBeGreaterThan(50);
-    expect(colours.length).toBeGreaterThan(2500);
+    for (const brand of ['plascon', 'dulux', 'duram', 'prominent']) expect(coloursFor(brand).length, brand).toBeGreaterThan(50);
+    expect(colours.length).toBeGreaterThan(5000);
     for (const id of ['dulux-egret', 'plascon-desert-spring', 'prominent-river-clay', 'duram-tree-fern', 'plascon-ravine']) {
       expect(getColour(id)?.featured, id).toBe(true);
     }
@@ -99,6 +99,13 @@ describe('full colour ranges', () => {
     expect(slugify('Rosé & Wine')).toBe('rose-and-wine');
   });
 
+  it('keeps a hand-picked colour whose code another name shares', () => {
+    // Dulux publishes 12GY 39/101 as both Soulful Sage and Sheer Stone.
+    expect(getColour('dulux-soulful-sage')!.featured).toBe(true);
+    expect(getColour('dulux-sheer-stone')!.code).toBe('12GY 39/101');
+    expect(getColour('dulux-sheer-stone')!.tags).toContain('colour-wall');
+  });
+
   it('uses Duram’s own tint base', () => {
     const deep = colours.find((c) => c.brand === 'duram' && c.tintBase === 'clear')!;
     expect(deep.base).toBe('deep');
@@ -107,8 +114,15 @@ describe('full colour ranges', () => {
 
   it('describes every colour, and shortlists the curated ones for the AI', () => {
     for (const c of colours) expect(c.notes.length, c.id).toBeGreaterThan(5);
-    expect(aiColours.every((c) => c.featured || c.collection === 'Essential Collection' || c.collection === 'Habitat Collection' || c.brand === 'prominent')).toBe(true);
-    expect(aiColours.length).toBeGreaterThan(200);
+    const curated = (c: (typeof colours)[number]) =>
+      c.featured ||
+      c.collection === 'Essential Collection' ||
+      c.collection === 'Habitat Collection' ||
+      c.brand === 'prominent' ||
+      c.tags.some((t) => t.startsWith('colour-of-the-year'));
+    expect(aiColours.every(curated)).toBe(true);
+    expect(aiColours.length).toBeGreaterThan(300);
+    for (const brand of ['plascon', 'dulux', 'duram', 'prominent']) expect(aiColours.some((c) => c.brand === brand), brand).toBe(true);
   });
 });
 
@@ -121,6 +135,14 @@ describe('sample pots', () => {
     expect(sampleFor(getColour('duram-tree-fern')!)).toMatchObject({ sample: { id: 'duram-habitat-sample' }, priceCents: 3600 });
     const clear = colours.find((c) => c.brand === 'duram' && c.tintBase === 'clear' && c.collection?.startsWith('Colour family'))!;
     expect(sampleFor(clear)).toMatchObject({ sample: { id: 'duram-walltech-tester' }, priceCents: 8900 });
+  });
+
+  it('offers the Dulux tester only for colour-wall colours', () => {
+    const wall = colours.find((c) => c.brand === 'dulux' && c.tags.includes('colour-wall'))!;
+    expect(sampleFor(wall)).toMatchObject({ sample: { id: 'dulux-luxurious-colour-tester' }, priceCents: 9900 });
+    const other = colours.find((c) => c.brand === 'dulux' && !c.tags.includes('colour-wall'))!;
+    expect(sampleFor(other)).toBeUndefined();
+    expect(smallestTinFor(other)?.litres).toBe(1);
   });
 
   it('has none where the brand makes none, and offers the smallest tin instead', () => {

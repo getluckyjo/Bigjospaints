@@ -94,7 +94,7 @@ const collection = colour.collection?.replace(/^(Palette|Colour family): /, '');
           ) : smallTin ? (
             <form class="bj-stack" style="--bj-stack-gap:12px" method="post" action="/cart" data-bj-busy>
               <p>
-                Screens show colours differently, so paint a test patch before you do the whole room. {brand.name} doesn’t make a sample pot {colour.brand === 'prominent' ? 'and suggests a 1 L tin for testing' : 'in this colour'}; the smallest tin is a {formatLitres(smallTin.litres)} {smallTin.product.name} at {formatZar(smallTin.priceCents)}.
+                Screens show colours differently, so paint a test patch before you do the whole room. {colour.brand === 'prominent' ? 'Prominent Paints doesn’t make sample pots and suggests a 1 L tin for testing' : 'There’s no sample pot in this colour'}; the smallest tin is a {formatLitres(smallTin.litres)} {brand.name} {smallTin.product.name} at {formatZar(smallTin.priceCents)}.
               </p>
               <input type="hidden" name="action" value="add-one" />
               <input type="hidden" name="colour" value={colour.id} />
