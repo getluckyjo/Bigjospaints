@@ -88,6 +88,8 @@ test.describe('AI colour consultant', () => {
     await picker.getByRole('button', { name: 'Your photo', exact: true }).click();
     await expect(img).toHaveAttribute('src', /^data:image\/jpeg;base64,/);
     await expect(label).toHaveText('Your photo');
+    // Only a mock-up can be sent on WhatsApp.
+    await expect(previews.getByRole('button', { name: 'Send on WhatsApp' })).toBeDisabled();
 
     for (const width of [1440, 390, 320]) {
       await page.setViewportSize({ width, height: 900 });
@@ -105,7 +107,54 @@ test.describe('AI colour consultant', () => {
     expect(edit.size).toMatch(/^\d+x\d+$/);
     expect(edit.size.split('x').every((n: string) => Number(n) % 16 === 0)).toBe(true);
     expect(edit.prompt).toMatch(/^Repaint the walls in this photo of a room in the paint colour /);
+    expect(edit.prompt).toContain('Also tidy the room');
     expect(edit.prompt).not.toContain('Fresh and leafy');
+  });
+
+  test('sends a mock-up on WhatsApp with its colour and cost', async ({ page, context }) => {
+    // A phone's share sheet: record what would be shared. __canShare = false acts like a computer without one.
+    await page.addInitScript(() => {
+      const w = window as unknown as { __shared: unknown[]; __canShare?: boolean };
+      w.__shared = [];
+      Object.defineProperty(navigator, 'canShare', { configurable: true, value: (data: ShareData) => !!data.files?.length && w.__canShare !== false });
+      Object.defineProperty(navigator, 'share', {
+        configurable: true,
+        value: async (data: ShareData) => {
+          const file = data.files![0];
+          const bitmap = await createImageBitmap(file);
+          w.__shared.push({ name: file.name, type: file.type, size: file.size, width: bitmap.width, height: bitmap.height, text: data.text });
+        },
+      });
+    });
+    await context.route('https://wa.me/**', (route) => route.fulfill({ contentType: 'text/html', body: '<!doctype html><title>WhatsApp stub</title>' }));
+    await fillConsultant(page, 'Warm and cosy');
+    await page.getByRole('button', { name: /Show my 3 colours/ }).click();
+    const previews = page.locator('[data-bj-previews]');
+    const share = previews.getByRole('button', { name: 'Send on WhatsApp' });
+    await expect(share).toBeEnabled({ timeout: 30_000 });
+    const shown = previews.locator('button[data-name][aria-pressed="true"]');
+    const id = (await shown.getAttribute('data-colour'))!;
+    const name = (await shown.getAttribute('data-name'))!;
+    const card = page.locator('.bj-option-card', { has: page.getByRole('heading', { name, exact: true }) });
+    const cost = (await card.locator('.bj-price-big strong').textContent())!;
+
+    await share.click();
+    const shared = () => page.evaluate(() => (window as unknown as { __shared: Record<string, unknown>[] }).__shared);
+    await expect.poll(async () => (await shared()).length).toBe(1);
+    const [sent] = await shared();
+    // The mock's 96 × 64 image with the colour-and-cost band (250 px at 1200 px wide) underneath.
+    expect(sent).toMatchObject({ name: `big-jos-paints-${id}.jpg`, type: 'image/jpeg', width: 96, height: 84 });
+    expect(sent.text).toContain(`Here’s our lounge in ${name}`);
+    expect(sent.text).toContain('as an AI mock-up');
+    expect(sent.text).toContain(cost);
+    expect(sent.text).toContain(`http://127.0.0.1:4522/colours/${id}`);
+
+    // Without a share sheet: the picture is saved and WhatsApp opens with the message.
+    await page.evaluate(() => ((window as unknown as { __canShare: boolean }).__canShare = false));
+    const [download, popup] = await Promise.all([page.waitForEvent('download'), context.waitForEvent('page'), share.click()]);
+    expect(download.suggestedFilename()).toBe(`big-jos-paints-${id}.jpg`);
+    expect(decodeURIComponent(popup.url())).toContain(`https://wa.me/?text=Here’s our lounge in ${name}`);
+    await expect(previews.getByRole('status')).toHaveText('We saved the picture to your device. Attach it in WhatsApp to send it with the message.');
   });
 
   test('falls back to brief-based colours, and says so, when the AI fails', async ({ page }) => {

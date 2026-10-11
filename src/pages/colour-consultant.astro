@@ -8,9 +8,11 @@ import Swatch from '../components/Swatch.astro';
 import copy from '../content/copy.json';
 import { deliveryDays } from '../lib/business';
 import { BRIEF_IDEAS, ROOM_TYPES, handleConsultPost, type ConsultPageState } from '../lib/consult';
-import { DEFAULT_HEIGHT_M, ROOM_PRESETS } from '../lib/estimate';
+import { getBrand } from '../lib/catalogue';
+import { DEFAULT_HEIGHT_M, ROOM_PRESETS, describeMix } from '../lib/estimate';
+import { formatZar } from '../lib/money';
 import { aiConfig } from '../lib/config';
-import { issuePreviewToken } from '../lib/preview';
+import { issuePreviewToken, roomLabel } from '../lib/preview';
 
 const c = copy.consultant;
 let state: ConsultPageState = { values: {}, errors: {}, result: null, photoUrl: null, formError: null };
@@ -36,6 +38,13 @@ const sizeLabels: Record<string, string> = { photo: 'Photo', brief: 'Your brief'
 const aiOn = !!aiConfig().apiKey;
 // With a photo, the results page asks OpenAI's image model to repaint it in each colour (src/scripts/preview.ts).
 const previewToken = result ? issuePreviewToken(state.photoUrl, result.suggestions.map((s) => s.colour.id), result.room.walls) : null;
+// What "Send on WhatsApp" needs: the wording, and each colour's paint and cost (src/scripts/preview-share.ts).
+const shareCopy = { room: roomLabel(v.roomType), text: c.previewShareText, saved: c.previewShareSaved, label: c.previewCardLabel, cost: c.previewCardCost, note: c.previewCardNote };
+const shareFor = (s: NonNullable<typeof result>['suggestions'][number]) => {
+  const brand = getBrand(s.colour.brand)?.name ?? s.colour.brand;
+  const tins = describeMix(s.estimate.mix);
+  return { hex: s.colour.hex, brand, code: s.colour.code ?? '', product: s.product.name, cost: formatZar(s.estimate.mix.totalCents), tins, url: `/colours/${s.colour.id}` };
+};
 ---
 
 <Base title={c.seo.title} description={c.seo.description}>
@@ -75,7 +84,7 @@ const previewToken = result ? issuePreviewToken(state.photoUrl, result.suggestio
               </div>
             )}
             {previewToken && (
-              <section class="bj-preview bj-stack" aria-labelledby="preview-title" data-bj-previews data-token={previewToken} data-failed={c.previewFailed} hidden>
+              <section class="bj-preview bj-stack" aria-labelledby="preview-title" data-bj-previews data-token={previewToken} data-failed={c.previewFailed} data-share={JSON.stringify(shareCopy)} hidden>
                 <div class="bj-stack" style="--bj-stack-gap:6px">
                   <h3 class="bj-icon-text" id="preview-title"><Icon name="spark" />{c.previewTitle}</h3>
                   <p class="bj-small bj-muted">{c.previewIntro}</p>
@@ -88,7 +97,7 @@ const previewToken = result ? issuePreviewToken(state.photoUrl, result.suggestio
                   <div class="bj-demo__picker" role="group" aria-label="Show your room in" data-bj-preview-picker>
                     <button type="button" class="bj-chip-button" aria-pressed="true" data-colour="">{c.previewAsSent}</button>
                     {result.suggestions.map((s) => (
-                      <button type="button" class="bj-chip-button bj-icon-text" aria-pressed="false" data-colour={s.colour.id} data-name={s.colour.name} disabled>
+                      <button type="button" class="bj-chip-button bj-icon-text" aria-pressed="false" data-colour={s.colour.id} data-name={s.colour.name} data-share={JSON.stringify(shareFor(s))} disabled>
                         <Swatch tag="span" hex={s.colour.hex} class="bj-demo__dot" />
                         <span>{s.colour.name}</span>
                         <span class="bj-preview__state" data-bj-preview-state>{c.previewPainting}</span>
@@ -97,6 +106,13 @@ const previewToken = result ? issuePreviewToken(state.photoUrl, result.suggestio
                   </div>
                   <figcaption class="bj-small bj-muted">{c.previewNote}</figcaption>
                 </figure>
+                <div class="bj-preview__share" data-bj-preview-share-row hidden>
+                  <button type="button" class="bj-button bj-button--secondary" aria-describedby="preview-share-hint" data-bj-preview-share>
+                    <Icon name="chat" />{c.previewShare}
+                  </button>
+                  <p class="bj-small bj-muted" id="preview-share-hint">{c.previewShareHint}</p>
+                  <p class="bj-small" role="status" data-bj-preview-share-status></p>
+                </div>
                 <p class="bj-small" data-bj-preview-none hidden>{c.previewNone}</p>
                 <p class="bj-sr-only" aria-live="polite" data-bj-preview-status></p>
               </section>

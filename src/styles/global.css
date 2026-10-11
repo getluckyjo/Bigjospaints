@@ -313,6 +313,11 @@ a.bj-chip-button[aria-current='true'] { background: var(--bj-ink); border-color:
 .bj-preview button.is-failed .bj-preview__state::before { content: none; }
 @keyframes bj-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .bj-preview button:disabled .bj-preview__state::before { animation: none; } }
+.bj-preview__share { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.bj-preview__share[hidden] { display: none; }
+.bj-preview__share p { margin: 0; }
+.bj-preview__share p:empty { display: none; }
+.bj-preview__share [role="status"] { flex-basis: 100%; }
 .bj-results__intro.has-preview { grid-template-columns: 1fr; }
 .bj-results__intro.has-preview .bj-results__photo { display: none; }
 

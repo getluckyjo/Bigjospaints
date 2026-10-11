@@ -1,8 +1,11 @@
 /**
  * "See it in your room": once the results show, ask /api/preview to repaint the customer's photo in
  * each of the three colours (in parallel; each takes up to a minute), then let them switch between
- * their photo and the AI mock-ups. Needs JavaScript; without it the results show swatches only.
+ * their photo and the AI mock-ups, and send one on WhatsApp with its colour and cost
+ * (preview-share.ts). Needs JavaScript; without it the results show swatches only.
  */
+import { drawCard, loadImage, sharePicture, shareText, type ShareCopy, type ShareInfo } from './preview-share';
+
 export function initPreviews() {
   const root = document.querySelector<HTMLElement>('[data-bj-previews]');
   const img = root?.querySelector<HTMLImageElement>('[data-bj-preview-img]');
@@ -18,8 +21,45 @@ export function initPreviews() {
   const urls = new Map<string, string>();
   let chosen = false;
 
+  // "Send on WhatsApp": a picture per colour, made as soon as its mock-up arrives, so the click can
+  // open the share sheet straight away.
+  const shareCopy = JSON.parse(root.dataset.share ?? 'null') as ShareCopy | null;
+  const shareRow = root.querySelector<HTMLElement>('[data-bj-preview-share-row]');
+  const shareButton = root.querySelector<HTMLButtonElement>('[data-bj-preview-share]');
+  const shareStatus = root.querySelector<HTMLElement>('[data-bj-preview-share-status]');
+  const cards = new Map<string, File>();
+  let current: HTMLButtonElement | null = null;
+  const syncShare = () => {
+    if (shareButton) shareButton.disabled = !cards.has(current?.dataset.colour ?? '');
+  };
+  const makeCard = async (button: HTMLButtonElement) => {
+    if (!shareCopy || !button.dataset.share) return;
+    const id = button.dataset.colour!;
+    try {
+      const picture = await loadImage(urls.get(id)!);
+      const blob = await drawCard(picture, button.dataset.name ?? '', JSON.parse(button.dataset.share) as ShareInfo, shareCopy, location.host);
+      cards.set(id, new File([blob], `big-jos-paints-${id}.jpg`, { type: 'image/jpeg' }));
+      if (shareRow) shareRow.hidden = false;
+      syncShare();
+    } catch (error) {
+      console.warn('[preview share]', (error as Error).message);
+    }
+  };
+  shareButton?.addEventListener('click', () => {
+    const file = cards.get(current?.dataset.colour ?? '');
+    if (!file || !current || !shareCopy) return;
+    if (shareStatus) shareStatus.textContent = '';
+    const info = JSON.parse(current.dataset.share!) as ShareInfo;
+    sharePicture(file, shareText(shareCopy, current.dataset.name ?? '', info, location.origin), () => {
+      if (shareStatus) shareStatus.textContent = shareCopy.saved;
+    });
+  });
+
   const show = (button: HTMLButtonElement) => {
     for (const b of buttons) b.setAttribute('aria-pressed', String(b === button));
+    current = button;
+    syncShare();
+    if (shareStatus) shareStatus.textContent = '';
     const id = button.dataset.colour ?? '';
     const name = button.dataset.name ?? '';
     if (!id || !urls.has(id)) {
@@ -69,6 +109,7 @@ export function initPreviews() {
             const res = await fetch('/api/preview', { method: 'POST', body });
             if (!res.ok) throw new Error((await res.json().catch(() => null))?.error ?? `HTTP ${res.status}`);
             urls.set(id, URL.createObjectURL(await res.blob()));
+            void makeCard(button);
             button.disabled = false;
             if (state) state.textContent = '';
             // Show the first finished preview, unless the customer has already picked one.

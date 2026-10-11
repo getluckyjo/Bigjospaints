@@ -4,7 +4,8 @@
  *
  * Each image edit costs money, so the endpoint only works with a token the consultation signs: it
  * ties the request to the exact photo (by SHA-256), the three suggested colours and a 30-minute
- * window. The prompt is built here from the catalogue; nothing the customer types reaches it.
+ * window. The prompt is built here from the catalogue; nothing the customer types reaches it. The model
+ * also tidies the room (clutter away, cushions straight), so the mock-up looks like a finished room.
  */
 import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
 import { getBrand, getColour, type Colour } from './catalogue';
@@ -86,10 +87,18 @@ export function previewPrompt(colour: Colour, walls: 'all' | 'feature'): string 
   return [
     `Repaint the walls in this photo of a room in the paint colour ${name}: a ${describe(colour.hex)}, close to hex ${colour.hex}, in a flat matt finish.`,
     which,
-    'Keep everything else exactly as it is in the photo: the furniture, floor, ceiling, windows, doors, frames and skirting, built-in cupboards and shelves, plants, artwork, objects and people, and the camera angle, framing and lighting.',
-    "Keep the walls' natural light, shadows and texture so the new paint looks real. Do not add, remove, move or restyle anything, and do not add any text.",
+    'Also tidy the room, as if it had been cleaned up for a photo: clear away clutter such as loose papers, clothes, bags, shoes, cables, dishes, boxes, toys and rubbish, and straighten cushions, throws and bedding.',
+    'Keep the room itself as it is in the photo: the furniture and where it stands, rugs, curtains and blinds, plants, artwork, lamps, books on the shelves, the floor, ceiling, windows, doors, frames and skirting, built-in cupboards and shelves, any people, and the camera angle, framing and lighting.',
+    "Keep the walls' natural light, shadows and texture so the new paint looks real. Do not add new furniture or decor, do not move or restyle the furniture, and do not add any text.",
     'Photorealistic.',
   ].join(' ');
+}
+
+/** The room as the customer would say it in a message: "lounge", "main bedroom", "room" for Other. */
+export function roomLabel(roomType: string | undefined): string {
+  if (!roomType || roomType === 'Other') return 'room';
+  if (roomType === 'Passage or entrance') return 'passage';
+  return roomType.toLowerCase();
 }
 
 export class PreviewError extends Error {

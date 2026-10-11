@@ -10,6 +10,7 @@ import {
   previewSecret,
   previewSize,
   repaint,
+  roomLabel,
   signPreviewToken,
   verifyPreviewToken,
 } from '../../src/lib/preview';
@@ -112,9 +113,22 @@ describe('preview prompt', () => {
     expect(all).toContain('Plascon');
     expect(all).toContain(colour.hex);
     expect(all).toMatch(/every wall/);
-    expect(all).toMatch(/Keep everything else exactly as it is/);
-    expect(all).toMatch(/do not add any text/);
+    expect(all).toMatch(/Also tidy the room/);
+    expect(all).toMatch(/clear away clutter/);
+    expect(all).toMatch(/Keep the room itself as it is/);
+    expect(all).toMatch(/do not move or restyle the furniture, and do not add any text/);
     expect(previewPrompt(colour, 'feature')).toMatch(/only the main wall/);
+  });
+});
+
+describe('room label', () => {
+  it('says the room as a customer would', () => {
+    expect(roomLabel('Lounge')).toBe('lounge');
+    expect(roomLabel('Main bedroom')).toBe('main bedroom');
+    expect(roomLabel("Children's room")).toBe("children's room");
+    expect(roomLabel('Passage or entrance')).toBe('passage');
+    expect(roomLabel('Other')).toBe('room');
+    expect(roomLabel(undefined)).toBe('room');
   });
 });
 
