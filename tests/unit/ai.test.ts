@@ -4,7 +4,14 @@ import { aiColours, colours, defaultProductFor, getProduct, products } from '../
 import type { AiConfig } from '../../src/lib/config';
 import { rulePicks } from '../../src/lib/rules';
 
-const cfg: AiConfig = { apiKey: 'sk-test', model: 'gpt-5.5', reasoningEffort: 'low', baseUrl: 'https://api.openai.test/v1' };
+const cfg: AiConfig = {
+  apiKey: 'sk-test',
+  model: 'gpt-5.5',
+  reasoningEffort: 'low',
+  baseUrl: 'https://api.openai.test/v1',
+  imageModel: 'gpt-image-2.5-sunburst',
+  imageQuality: 'medium',
+};
 const input: ConsultInput = {
   brief: 'Calm and warm, oak floors',
   roomType: 'Lounge',

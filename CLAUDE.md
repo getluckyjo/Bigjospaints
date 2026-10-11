@@ -16,6 +16,7 @@ Read `README.md` first. This is the paint shop sister site of Big Jo’s Beds (g
 - **Brand partnerships:** don’t claim any (no "authorised", no brand logos). Brand and colour names are the brands’ own.
 - **Swatches:** hex values are screen approximations. Keep the “paint a test patch” guidance near colour choices.
 - **Home-page demo:** `src/content/demo.json` is a real GPT-5.5 consultation, run on the live site on 11 Oct 2026; keep its AI text unedited. To change it, run a new consultation and copy the answer. The tinted-walls preview is a mock-up for that one photo, Patrick Perkins' living room (mask in `public/demo/walls.png`; a new photo needs a new mask), and the page says so.
+- **AI previews** (`src/lib/preview.ts`, README "AI previews"): OpenAI’s image model repaints the customer’s own photo in each suggested colour. Build the prompt only from the catalogue, never from the brief. Keep `/api/preview` behind the signed token (photo hash, the three colours, 30 minutes), and keep every preview labelled “AI mock-up”, with the sample-pot note. Never use generated images as site photos.
 - **Photos:** real photographs only, never renders or AI images. The owner chose the current set from Unsplash (11 Oct 2026); don't swap them without asking. They're free Unsplash photos (not Unsplash+, which needs a paid licence), credited next to each photo through `src/lib/photos.ts` and listed in README "Photos". Don't use the Big Jo’s Beds concept renders here.
 - **PayFast:**
   - Never mark an order paid outside `processItn()` (`src/lib/itn.ts`).

@@ -66,11 +66,16 @@ export function emailConfig(env: Env = process.env) {
 
 export type AiReasoningEffort = 'none' | 'low' | 'medium' | 'high' | 'xhigh';
 
+export type ImageQuality = 'low' | 'medium' | 'high' | 'xhigh' | 'max';
+
 export interface AiConfig {
   apiKey: string | null;
   model: string;
   reasoningEffort: AiReasoningEffort;
   baseUrl: string;
+  /** The image model that repaints the customer's photo for the previews. */
+  imageModel: string;
+  imageQuality: ImageQuality;
 }
 
 /** OpenAI settings. No key means demo mode: rule-based suggestions, clearly labelled on the page. */
@@ -81,5 +86,7 @@ export function aiConfig(env: Env = process.env): AiConfig {
     model: env.OPENAI_MODEL?.trim() || 'gpt-5.5',
     reasoningEffort: ['none', 'low', 'medium', 'high', 'xhigh'].includes(effort) ? effort : 'low',
     baseUrl: (env.OPENAI_BASE_URL?.trim() || 'https://api.openai.com/v1').replace(/\/$/, ''),
+    imageModel: env.OPENAI_IMAGE_MODEL?.trim() || 'gpt-image-2.5-sunburst',
+    imageQuality: (['low', 'medium', 'high', 'xhigh', 'max'] as const).find((q) => q === env.OPENAI_IMAGE_QUALITY?.trim()) ?? 'medium',
   };
 }

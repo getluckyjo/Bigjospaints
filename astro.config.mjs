@@ -12,7 +12,7 @@ export default defineConfig({
   site: process.env.PUBLIC_SITE_URL || undefined,
   output: 'static',
   // The colour consultant waits on the AI (usually 10–40 s), so give its function room.
-  adapter: vercel({ maxDuration: 60 }),
+  adapter: vercel({ maxDuration: 180 }),
   security: {
     // Replaced by src/middleware.ts, which applies the same same-origin check to form posts but
     // exempts PayFast's server-to-server payment notification (ITN) endpoint.

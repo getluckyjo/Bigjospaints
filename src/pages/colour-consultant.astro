@@ -10,6 +10,7 @@ import { deliveryDays } from '../lib/business';
 import { BRIEF_IDEAS, ROOM_TYPES, handleConsultPost, type ConsultPageState } from '../lib/consult';
 import { DEFAULT_HEIGHT_M, ROOM_PRESETS } from '../lib/estimate';
 import { aiConfig } from '../lib/config';
+import { issuePreviewToken } from '../lib/preview';
 
 const c = copy.consultant;
 let state: ConsultPageState = { values: {}, errors: {}, result: null, photoUrl: null, formError: null };
@@ -33,6 +34,8 @@ const result = state.result;
 const errorList = Object.entries(state.errors);
 const sizeLabels: Record<string, string> = { photo: 'Photo', brief: 'Your brief', length: 'Length', width: 'Width', height: 'Ceiling height' };
 const aiOn = !!aiConfig().apiKey;
+// With a photo, the results page asks OpenAI's image model to repaint it in each colour (src/scripts/preview.ts).
+const previewToken = result ? issuePreviewToken(state.photoUrl, result.suggestions.map((s) => s.colour.id), result.room.walls) : null;
 ---
 
 <Base title={c.seo.title} description={c.seo.description}>
@@ -70,6 +73,33 @@ const aiOn = !!aiConfig().apiKey;
                   </div>
                 </div>
               </div>
+            )}
+            {previewToken && (
+              <section class="bj-preview bj-stack" aria-labelledby="preview-title" data-bj-previews data-token={previewToken} data-failed={c.previewFailed} hidden>
+                <div class="bj-stack" style="--bj-stack-gap:6px">
+                  <h3 class="bj-icon-text" id="preview-title"><Icon name="spark" />{c.previewTitle}</h3>
+                  <p class="bj-small bj-muted">{c.previewIntro}</p>
+                </div>
+                <figure class="bj-preview__figure">
+                  <div class="bj-preview__frame">
+                    <img alt="Your room, as you sent it" data-bj-preview-img />
+                    <span class="bj-preview__label" data-bj-preview-label>{c.previewAsSent}</span>
+                  </div>
+                  <div class="bj-demo__picker" role="group" aria-label="Show your room in" data-bj-preview-picker>
+                    <button type="button" class="bj-chip-button" aria-pressed="true" data-colour="">{c.previewAsSent}</button>
+                    {result.suggestions.map((s) => (
+                      <button type="button" class="bj-chip-button bj-icon-text" aria-pressed="false" data-colour={s.colour.id} data-name={s.colour.name} disabled>
+                        <Swatch tag="span" hex={s.colour.hex} class="bj-demo__dot" />
+                        <span>{s.colour.name}</span>
+                        <span class="bj-preview__state" data-bj-preview-state>{c.previewPainting}</span>
+                      </button>
+                    ))}
+                  </div>
+                  <figcaption class="bj-small bj-muted">{c.previewNote}</figcaption>
+                </figure>
+                <p class="bj-small" data-bj-preview-none hidden>{c.previewNone}</p>
+                <p class="bj-sr-only" aria-live="polite" data-bj-preview-status></p>
+              </section>
             )}
             <div class="bj-options">
               {result.suggestions.map((option, i) => <OptionCard option={option} index={i} walls={result.room.walls} />)}

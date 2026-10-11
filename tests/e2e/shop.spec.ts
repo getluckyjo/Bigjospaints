@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 import path from 'node:path';
 import { checkoutSignature, type Pair } from '../../src/lib/payfast';
 import { PAYFAST_SANDBOX } from '../../src/lib/config';
@@ -59,6 +60,54 @@ test.describe('AI colour consultant', () => {
     await expect(card.locator('.bj-price-big strong')).toHaveText(/^R[\d,]+(\.\d\d)?$/);
   });
 
+  test('paints AI mock-ups of the customer’s own room in each colour', async ({ page, request }) => {
+    await fillConsultant(page, 'Fresh and leafy');
+    await page.getByRole('button', { name: /Show my 3 colours/ }).click();
+    const previews = page.locator('[data-bj-previews]');
+    await expect(previews).toBeVisible({ timeout: 30_000 });
+    await expect(previews.getByRole('heading', { name: 'See it in your room' })).toBeVisible();
+    await expect(previews.getByText('These are AI mock-ups made from your photo.')).toBeVisible();
+    const picker = previews.getByRole('group', { name: 'Show your room in' });
+    const colours = picker.locator('button[data-name]');
+    await expect(colours).toHaveCount(3);
+    for (const button of await colours.all()) await expect(button).toBeEnabled({ timeout: 30_000 });
+
+    // The first finished mock-up shows by itself, labelled as AI.
+    const img = previews.locator('[data-bj-preview-img]');
+    const label = previews.locator('[data-bj-preview-label]');
+    await expect(label).toHaveText(/^AI mock-up: /);
+    await expect(img).toHaveAttribute('src', /^blob:/);
+    await expect(img).toHaveAttribute('alt', /^AI mock-up of your room with the walls painted /);
+
+    const second = colours.nth(1);
+    const name = (await second.getAttribute('data-name'))!;
+    await second.click();
+    await expect(second).toHaveAttribute('aria-pressed', 'true');
+    await expect(label).toHaveText(`AI mock-up: ${name}`);
+    await expect.poll(() => img.evaluate((el: HTMLImageElement) => [el.naturalWidth, el.naturalHeight])).toEqual([96, 64]); // the mock's image
+    await picker.getByRole('button', { name: 'Your photo', exact: true }).click();
+    await expect(img).toHaveAttribute('src', /^data:image\/jpeg;base64,/);
+    await expect(label).toHaveText('Your photo');
+
+    for (const width of [1440, 390, 320]) {
+      await page.setViewportSize({ width, height: 900 });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), `overflow at ${width}px`).toBe(true);
+    }
+    const axe = await new AxeBuilder({ page }).include('#results').withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+    expect(axe.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => v.id)).toEqual([]);
+
+    // What the image model received: the photo, at its own shape, and a prompt built from the catalogue.
+    const edit = await (await request.get(`${MOCK}/last-edit`)).json();
+    expect(edit.authorization).toBe('Bearer test-key');
+    expect(edit.model).toBe('gpt-image-2.5-sunburst');
+    expect(edit.quality).toBe('medium');
+    expect(edit.hasImage).toBe(true);
+    expect(edit.size).toMatch(/^\d+x\d+$/);
+    expect(edit.size.split('x').every((n: string) => Number(n) % 16 === 0)).toBe(true);
+    expect(edit.prompt).toMatch(/^Repaint the walls in this photo of a room in the paint colour /);
+    expect(edit.prompt).not.toContain('Fresh and leafy');
+  });
+
   test('falls back to brief-based colours, and says so, when the AI fails', async ({ page }) => {
     await fillConsultant(page, 'trigger-error please');
     await page.getByRole('button', { name: /Show my 3 colours/ }).click();
@@ -83,6 +132,8 @@ test.describe('AI colour consultant', () => {
     await page.getByLabel('Your brief').fill('Warm and cosy');
     await page.getByRole('button', { name: /Show my 3 colours/ }).click();
     await expect(page.locator('.bj-option-card')).toHaveCount(3);
+    // The AI mock-ups need JavaScript, so their panel stays hidden.
+    await expect(page.locator('[data-bj-previews]')).toBeHidden();
     await page.locator('.bj-option-card').first().getByRole('button', { name: /Add .* to cart/ }).click();
     await expect(page).toHaveURL(/\/cart\?added=/);
     await expect(page.locator('.bj-cart-line').first()).toBeVisible();

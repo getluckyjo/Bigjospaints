@@ -3,6 +3,7 @@
  * With JS: photo preview and drag-and-drop, brief idea chips, the photo is shrunk on the phone
  * before upload (phone photos are often 5–10 MB), and results load in place with a waiting state.
  */
+import { initPreviews } from './preview';
 
 const MAX_EDGE = 1600;
 const QUALITY = 0.82;
@@ -125,6 +126,7 @@ function setupSubmit(form: HTMLFormElement, root: HTMLElement) {
 }
 
 export function initConsultant() {
+  initPreviews();
   const root = document.querySelector<HTMLElement>('[data-bj-consult]');
   const form = root?.querySelector<HTMLFormElement>('[data-bj-consult-form]');
   if (!root || !form || form.dataset.ready) return;

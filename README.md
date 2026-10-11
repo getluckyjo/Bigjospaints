@@ -28,8 +28,18 @@ Open http://localhost:4321. Without `OPENAI_API_KEY` the consultant still works:
 2. **The AI** (`src/lib/ai.ts`) calls OpenAI’s Responses API with model `gpt-5.5` and reasoning effort `low`. It sends the photo, the brief, the room and the catalogue: every paint, and a shortlist of colours (the hand-picked ones plus each brand’s curated collection, not the full ranges, to keep each call small). A **strict JSON schema** limits every colour and paint to ids in the catalogue, so the AI can’t invent a colour, a code or a price. The server checks every id again, and swaps a paint from the wrong brand for the colour’s own brand.
 3. **The maths** (`src/lib/estimate.ts`) works out the wall area, then the litres (2 coats plus 10% extra), then the cheapest mix of tins. Prices come only from the catalogue, never from the AI.
 4. **If the AI is off or fails**, `src/lib/rules.ts` picks three colours from the brief by keyword rules, and the page says so.
-5. **Photos** go to OpenAI only to get suggestions. They aren’t stored (`store: false`), and OpenAI doesn’t use API data for training.
+5. **Photos** go to OpenAI only to get suggestions and paint the previews. We don’t store them (`store: false` on the consultation), and OpenAI doesn’t use API data for training.
 6. **Cost control:** each address can ask for 8 consultations per 10 minutes, per server instance. Each consultation is one `gpt-5.5` call: the photo plus about 15,000 tokens of instructions and colour shortlist in (the same every time, so OpenAI caches most of it), and a short JSON answer out. Set a monthly budget and watch usage in the OpenAI dashboard.
+
+### AI previews: “See it in your room”
+
+When the customer sends a photo, the results page also shows their own room repainted in each of the three colours.
+
+1. **The consultation signs a token** (`src/lib/preview.ts`): an HMAC of the photo’s SHA-256, the three colour ids, all walls or a feature wall, and a 30-minute expiry. The key is `PREVIEW_SECRET`, or one derived from `OPENAI_API_KEY`. Without a key there are no previews.
+2. **The page** (`src/scripts/preview.ts`) sends the same photo with the token to `POST /api/preview` once per colour, all three at once. Each preview takes up to a minute. The first one to finish shows by itself, and buttons switch between the photo and each mock-up. Without JavaScript the panel stays hidden.
+3. **The server** checks the token, that the colour is one of the three, and that the photo’s hash matches, so the endpoint can’t be used as a free image editor. It then calls OpenAI’s Images API (`/v1/images/edits`, model `gpt-image-2.5-sunburst`, quality `medium`) with a prompt built only from the catalogue: the colour’s name, brand, hex and a plain description, matt finish, and “keep everything else exactly as it is”. Nothing the customer types reaches the prompt. The output keeps the photo’s shape at about one megapixel. Each address can ask for 30 previews per 10 minutes, and each token is good for 6 (three colours and a retry of each), per server instance.
+4. **The page says what they are:** every preview is labelled “AI mock-up”, with a note that the model can change small details and that a sample pot and test patch come first.
+5. **Cost:** three image edits per consultation with a photo. GPT Image 2.5 costs $8 per million image tokens in and $30 per million out. The server logs the token counts of every preview (`[preview] tokens` in the Vercel logs). `OPENAI_IMAGE_QUALITY` trades cost for detail: `low` is cheapest; `high`, `xhigh` and `max` cost more. Image edits can take more than a minute, so the server functions may run for up to 180 s (`maxDuration` in `astro.config.mjs`).
 
 ## The catalogue (`src/data/catalogue.json` and `src/data/colours/`)
 
@@ -81,7 +91,7 @@ The checkout flow is the same as Big Jo’s Beds:
 
 ## Launch inputs still needed
 
-- [ ] `OPENAI_API_KEY` in Vercel (Production, type Sensitive). Without it the consultant runs in demo mode.
+- [ ] `OPENAI_API_KEY` in Vercel (Production, type Sensitive). Without it the consultant runs in demo mode and there are no AI previews.
 - [ ] Your selling prices in `src/data/catalogue.json`.
 - [ ] Delivery fee in `src/config/business.json → delivery.feeCents` (0 for free), and where you deliver.
 - [ ] Legal name, registration number, physical address and email in `src/config/business.json` (ECTA s43).
@@ -104,6 +114,7 @@ The checkout flow is the same as Big Jo’s Beds:
 | `src/content/copy.json` | Site copy (draft for owner review) |
 | `src/config/business.json` | Business details and delivery (3 days; fee to be set) |
 | `src/lib/ai.ts`, `rules.ts`, `consult.ts` | The colour consultant |
+| `src/lib/preview.ts`, `src/scripts/preview.ts`, `src/pages/api/preview.ts` | AI previews of the customer’s room in each colour |
 | `src/lib/estimate.ts` | Wall area, litres and tin mix |
 | `src/lib/cart.ts`, `checkout.ts`, `payfast.ts`, `itn.ts`, `orders.ts` | Shop and payments |
 | `public/logos/` | The Big Jo’s Paints logo (`npm run logos` makes the variants) |
