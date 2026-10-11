@@ -5,7 +5,7 @@ import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import Swatch from '../components/Swatch.astro';
 import { deliveryDays, deliveryFeeCents } from '../lib/business';
-import { CART_COOKIE, parseCart, priceCart, serializeCart } from '../lib/cart';
+import { CART_COOKIE, MAX_QTY, MAX_SAMPLES, parseCart, priceCart, serializeCart } from '../lib/cart';
 import { applyCartAction } from '../lib/cart-actions';
 import { formatLitres } from '../lib/estimate';
 import { formatZar } from '../lib/money';
@@ -24,7 +24,8 @@ if (Astro.request.method === 'POST') {
 }
 
 Astro.response.headers.set('Cache-Control', 'no-store');
-const { lines, subtotalCents, litres } = priceCart(entries);
+const { lines, subtotalCents, litres, pots } = priceCart(entries);
+const itemsLabel = [litres ? `Paint (${formatLitres(litres)})` : '', pots ? `${pots} sample pot${pots === 1 ? '' : 's'}` : ''].filter(Boolean).join(' and ');
 const added = Number(Astro.url.searchParams.get('added') ?? 0);
 const total = subtotalCents + (deliveryFeeCents ?? 0);
 ---
@@ -57,13 +58,13 @@ const total = subtotalCents + (deliveryFeeCents ?? 0);
                 <Swatch hex={line.colour.hex} class="bj-chip bj-cart-line__chip" />
                 <div>
                   <p><strong><a href={`/colours/${line.colour.id}`}>{line.colour.name}</a></strong>{line.colour.code && <span class="bj-muted"> · {line.colour.code}</span>}</p>
-                  <p class="bj-small">{line.brandName} {line.product.name} ({line.product.finish}), {formatLitres(line.sizeLitres)} tin, {formatZar(line.unitPriceCents)} each</p>
+                  <p class="bj-small">{line.brandName} {line.product.name} ({line.product.finish}), {formatLitres(line.sizeLitres)} {line.isSample ? 'sample pot' : 'tin'}, {formatZar(line.unitPriceCents)} each</p>
                   <div class="bj-cart-line__actions">
                     <form method="post" action="/cart" class="bj-row" style="gap:8px">
                       <input type="hidden" name="action" value="update" />
                       <input type="hidden" name="key" value={line.key} />
                       <label class="bj-sr-only" for={`qty-${line.key}`}>Quantity of {line.colour.name}, {formatLitres(line.sizeLitres)}</label>
-                      <input class="bj-input" id={`qty-${line.key}`} name="qty" type="number" min="0" max="50" value={line.quantity} />
+                      <input class="bj-input" id={`qty-${line.key}`} name="qty" type="number" min="0" max={line.isSample ? MAX_SAMPLES : MAX_QTY} value={line.quantity} />
                       <button class="bj-link-button" type="submit">Update</button>
                     </form>
                     <form method="post" action="/cart">
@@ -78,7 +79,7 @@ const total = subtotalCents + (deliveryFeeCents ?? 0);
             ))}
           </ul>
           <dl class="bj-totals">
-            <div><dt>Paint ({formatLitres(litres)})</dt><dd>{formatZar(subtotalCents)}</dd></div>
+            <div><dt>{itemsLabel}</dt><dd>{formatZar(subtotalCents)}</dd></div>
             <div><dt class="bj-icon-text"><Icon name="delivery" />Delivery in {deliveryDays} days</dt><dd>{deliveryFeeCents === null ? 'To be confirmed' : deliveryFeeCents === 0 ? 'Free' : formatZar(deliveryFeeCents)}</dd></div>
             <div class="bj-totals__total"><dt>Total</dt><dd>{formatZar(total)}</dd></div>
           </dl>

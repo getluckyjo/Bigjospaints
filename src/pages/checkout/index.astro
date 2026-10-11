@@ -6,7 +6,7 @@ import Field from '../../components/Field.astro';
 import Icon from '../../components/Icon.astro';
 import Swatch from '../../components/Swatch.astro';
 import { PROVINCES, deliveryDays, deliveryFeeCents } from '../../lib/business';
-import { CART_COOKIE } from '../../lib/cart';
+import { CART_COOKIE, itemsHeading } from '../../lib/cart';
 import { handleCheckout } from '../../lib/checkout';
 import { commerceMode } from '../../lib/config';
 import { formatLitres } from '../../lib/estimate';
@@ -124,7 +124,7 @@ const sandbox = commerceMode() === 'sandbox';
               </div>
             ))}
             <dl class="bj-totals">
-              <div><dt>Paint</dt><dd>{formatZar(subtotalCents)}</dd></div>
+              <div><dt>{itemsHeading(lines)}</dt><dd>{formatZar(subtotalCents)}</dd></div>
               <div><dt class="bj-icon-text"><Icon name="delivery" />Delivery in {deliveryDays} days</dt><dd>{deliveryFeeCents === null ? 'To be confirmed' : deliveryFeeCents === 0 ? 'Free' : formatZar(deliveryFeeCents)}</dd></div>
               <div class="bj-totals__total"><dt>Total</dt><dd>{formatZar(totalCents)}</dd></div>
             </dl>

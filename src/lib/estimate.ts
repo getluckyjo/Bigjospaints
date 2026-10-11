@@ -116,5 +116,6 @@ export function describeMix(mix: TinMix): string {
 }
 
 export function formatLitres(litres: number): string {
+  if (litres > 0 && litres < 1) return `${Math.round(litres * 1000)} ml`;
   return `${Number.isInteger(litres) ? litres : litres.toFixed(1)} L`;
 }

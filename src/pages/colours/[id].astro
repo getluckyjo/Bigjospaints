@@ -2,7 +2,8 @@
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
 import Swatch from '../../components/Swatch.astro';
-import { FAMILIES, colours, fromPricePerLitreCents, getBrand, productsFor, sizesFor, type Colour } from '../../lib/catalogue';
+import { FAMILIES, colours, fromPricePerLitreCents, getBrand, productsFor, sampleFor, sizesFor, smallestTinFor, type Colour } from '../../lib/catalogue';
+import { closestColours } from '../../lib/colour-search';
 import { deliveryDays } from '../../lib/business';
 import { formatLitres } from '../../lib/estimate';
 import { formatZar } from '../../lib/money';
@@ -15,7 +16,10 @@ const { colour } = Astro.props as { colour: Colour };
 const brand = getBrand(colour.brand)!;
 const options = productsFor(colour.brand).map((p) => ({ ...p, sizes: sizesFor(p, colour) }));
 const family = FAMILIES.find((f) => f.id === colour.family)?.label;
-const similar = colours.filter((c) => c.family === colour.family && c.id !== colour.id).slice(0, 6);
+const similar = closestColours(colour, 8);
+const sample = sampleFor(colour);
+const smallTin = sample ? undefined : smallestTinFor(colour);
+const collection = colour.collection?.replace(/^(Palette|Colour family): /, '');
 ---
 
 <Base
@@ -32,7 +36,7 @@ const similar = colours.filter((c) => c.family === colour.family && c.id !== col
         <div class="bj-stack" style="--bj-stack-gap:8px">
           <span class="bj-eyebrow">{brand.name}{family ? ` · ${family}` : ''}</span>
           <h1>{colour.name}</h1>
-          {colour.code && <p class="bj-muted">Colour code {colour.code}{colour.lrv != null ? ` · light reflectance ${colour.lrv}` : ''}</p>}
+          {colour.code && <p class="bj-muted">Colour code {colour.code}{colour.lrv != null ? ` · light reflectance ${colour.lrv}` : ''}{collection ? ` · ${collection}` : ''}</p>}
           <p class="bj-lead">{colour.notes.charAt(0).toUpperCase() + colour.notes.slice(1)}.</p>
         </div>
 
@@ -74,7 +78,34 @@ const similar = colours.filter((c) => c.family === colour.family && c.id !== col
           </ul>
         </form>
 
-        <p class="bj-note"><Icon name="info" />Screens show colours differently. Paint a test patch before you do the whole room.</p>
+        <section class="bj-sample-pot" aria-labelledby="sample-title">
+          <h2 class="bj-sample-pot__title bj-icon-text" id="sample-title"><Icon name="swatch" />Try it on your wall first</h2>
+          {sample ? (
+            <form class="bj-stack" style="--bj-stack-gap:12px" method="post" action="/cart" data-bj-busy>
+              <p>
+                Screens show colours differently, so paint a test patch before you do the whole room. A {formatLitres(sample.sample.millilitres / 1000)} {brand.name} {sample.sample.name} ({sample.sample.finish}) is {formatZar(sample.priceCents)}.
+                {sample.sample.covers && <span class="bj-muted"> {sample.sample.covers}</span>}
+              </p>
+              <input type="hidden" name="action" value="add-sample" />
+              <input type="hidden" name="colour" value={colour.id} />
+              <input type="hidden" name="sample" value={sample.sample.id} />
+              <div><button class="bj-button bj-button--secondary" type="submit" data-busy-label="Adding…"><Icon name="cart" />Order a sample pot · {formatZar(sample.priceCents)}</button></div>
+            </form>
+          ) : smallTin ? (
+            <form class="bj-stack" style="--bj-stack-gap:12px" method="post" action="/cart" data-bj-busy>
+              <p>
+                Screens show colours differently, so paint a test patch before you do the whole room. {brand.name} doesn’t make a sample pot {colour.brand === 'prominent' ? 'and suggests a 1 L tin for testing' : 'in this colour'}; the smallest tin is a {formatLitres(smallTin.litres)} {smallTin.product.name} at {formatZar(smallTin.priceCents)}.
+              </p>
+              <input type="hidden" name="action" value="add-one" />
+              <input type="hidden" name="colour" value={colour.id} />
+              <input type="hidden" name="size" value={`${smallTin.product.id}|${smallTin.litres}`} />
+              <input type="hidden" name="qty" value="1" />
+              <div><button class="bj-button bj-button--secondary" type="submit" data-busy-label="Adding…"><Icon name="cart" />Add a {formatLitres(smallTin.litres)} tin to test · {formatZar(smallTin.priceCents)}</button></div>
+            </form>
+          ) : (
+            <p class="bj-note"><Icon name="info" />Screens show colours differently. Paint a test patch before you do the whole room.</p>
+          )}
+        </section>
         <p><a class="bj-link-arrow" href="/colour-consultant"><Icon name="spark" />Not sure how much you need? Our AI consultant works it out for your room.</a></p>
       </div>
     </div>
@@ -83,15 +114,16 @@ const similar = colours.filter((c) => c.family === colour.family && c.id !== col
   {
     similar.length > 0 && (
       <section class="bj-container bj-section bj-stack" aria-labelledby="similar-title" style="padding-top:0">
-        <h2 class="bj-h3" id="similar-title">Similar colours</h2>
-        <ul class="bj-colour-grid">
+        <h2 class="bj-h3" id="similar-title">Closest colours</h2>
+        <p class="bj-muted">The nearest matches on screen, from every brand.</p>
+        <ul class="bj-colour-grid bj-colour-grid--compact">
           {similar.map((col) => (
             <li>
               <a class="bj-colour-tile" href={`/colours/${col.id}`}>
                 <Swatch hex={col.hex} class="bj-colour-tile__swatch" />
                 <span class="bj-colour-tile__text">
                   <strong>{col.name}</strong>
-                  <span>{getBrand(col.brand)?.name}</span>
+                  <span>{getBrand(col.brand)?.name}{col.code ? ` · ${col.code}` : ''}</span>
                 </span>
               </a>
             </li>

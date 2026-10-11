@@ -3,8 +3,8 @@
  * - Shows the cart count in the header (static pages can't read the cart cookie on the server).
  * - Forms: a busy state while submitting, and no double submits.
  */
-import { initColourFilter } from './colours';
 import { initConsultant } from './consultant';
+import { initDemo } from './demo';
 
 function cartCount(): number {
   const raw = document.cookie.split('; ').find((c) => c.startsWith('bjp_cart='))?.slice('bjp_cart='.length);
@@ -46,6 +46,6 @@ window.addEventListener('pageshow', (event) => {
 });
 
 initConsultant();
-initColourFilter();
+initDemo();
 
 document.querySelector<HTMLElement>('[data-bj-focus]')?.focus();

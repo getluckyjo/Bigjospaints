@@ -1,0 +1,37 @@
+{
+  "$comment": "Home-page demo: a real consultation, run on the live site (bigjospaints.vercel.app/colour-consultant) on 11 Oct 2026 with OpenAI GPT-5.5. The photo is the Big Jo’s Beds flax bedroom render (src/assets/demo/room.png, the same file as Big Jo’s Beds’ src/assets/images/bed-flax.png). roomRead, title, why and tip are the AI’s words, unedited; litres and prices are worked out from catalogue.json when the site is built, exactly as the consultant does. public/demo/walls.png marks the walls (white = wall) for the tinted preview.",
+  "ranOn": "2026-10-11",
+  "model": "GPT-5.5",
+  "photoAlt": "A bedroom with pale walls, a timber floor and a jute rug. A Big Jo’s bed with cream pillows stands between a wooden side table with a lamp and a plant, and a tall plant in a woven basket.",
+  "roomType": "Main bedroom",
+  "brief": "Calm and restful, something warmer than plain white. We love the timber floor and the plants.",
+  "size": "medium",
+  "walls": "all",
+  "heightM": 2.6,
+  "doors": 1,
+  "windows": 1,
+  "roomRead": "The bedroom has soft natural light, honey timber floors, cream bedding, woven textures and plenty of green plants, so warm off-whites and gentle nature tones will keep it restful.",
+  "options": [
+    {
+      "title": "Warm soft white",
+      "colour": "dulux-egret",
+      "product": "dulux-acrylic-pva",
+      "why": "Egret gives you the warmth you want without making the 4 × 4 m room feel smaller. It will sit beautifully with the timber floor, cream bedding and jute rug.",
+      "tip": "Keep the ceiling and skirtings in a clean soft white for a fresh, calm edge."
+    },
+    {
+      "title": "Quiet leafy calm",
+      "colour": "plascon-desert-spring",
+      "product": "plascon-cashmere",
+      "why": "Desert Spring is a pale grey-green that links naturally with the plants while staying light and restful. It is soft enough for all walls in a main bedroom.",
+      "tip": "Pair it with natural linen, cane baskets and warm timber to stop the green feeling cool."
+    },
+    {
+      "title": "Gentle earthy warmth",
+      "colour": "prominent-river-clay",
+      "product": "prominent-premium-matt",
+      "why": "River Clay is a soft sandy beige that will bring out the honey tones in the floor and the warm stripe detail on the bed. It is warmer than white but still calm for sleeping.",
+      "tip": "Use off-white bedding and green plants to keep the look relaxed rather than too beige."
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import HomeDemo from '../components/HomeDemo.astro';
 import Icon from '../components/Icon.astro';
 import type { IconName } from '../lib/icons';
 import copy from '../content/copy.json';
@@ -41,6 +42,8 @@ const factIcons: IconName[] = ['swatch', 'tin', 'delivery'];
       }
     </div>
   </section>
+
+  <HomeDemo />
 
   <section class="bj-container bj-section bj-stack" aria-labelledby="steps-title">
     <h2 id="steps-title">{home.stepsTitle}</h2>

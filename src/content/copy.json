@@ -107,11 +107,14 @@
   "colours": {
     "seo": {
       "title": "Paint colours from South Africa’s top brands | Big Jo’s Paints",
-      "description": "Browse paint colours from top South African brands by colour family and brand. Choose your paint and tin size, and get it delivered in 3 days."
+      "description": "Search over 2,500 paint colours from Plascon, Duram, Prominent and Dulux by name, code, colour family and lightness. Order a sample pot or the paint, delivered in 3 days."
     },
     "title": "Browse colours",
-    "intro": "Colours from South Africa’s top brands, grouped by family. Choose one to see the paints it comes in and the prices.",
-    "notSure": "Not sure? Let the AI colour consultant suggest three for your room."
+    "intro": "{count} colours from South Africa’s top brands. Search by name or code, or filter by brand, colour and lightness. Choose one to see the paints it comes in, the prices and a sample pot.",
+    "notSure": "Not sure? Let the AI colour consultant suggest three for your room.",
+    "searchLabel": "Name or code",
+    "searchPlaceholder": "e.g. sage, Egret or 39YY 85/046",
+    "none": "No colours match those filters. Try a shorter search or fewer filters."
   },
   "brands": {
     "seo": {
@@ -141,7 +144,12 @@
       {
         "id": "screen",
         "question": "Will the colour look the same on my wall?",
-        "answer": "Screens show colours differently, and daylight changes them through the day. Use the swatch as a guide and paint a test patch before you do the whole room."
+        "answer": "Screens show colours differently, and daylight changes them through the day. Use the swatch as a guide and paint a test patch before you do the whole room. Most colours have a sample pot you can order with your paint or on its own."
+      },
+      {
+        "id": "samples",
+        "question": "Can I order a sample first?",
+        "answer": "Yes. Plascon and Duram make sample pots, from R36 for a 90 ml Duram Habitat sample to R89 for a 250 ml tester in a deep colour, and each colour page shows the one we can send in that colour. Prominent Paints doesn’t make sample pots, so its colour pages offer the smallest tin, 1 litre, instead. Samples are delivered in 3 days, like paint."
       },
       {
         "id": "delivery",

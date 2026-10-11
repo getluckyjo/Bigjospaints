@@ -15,6 +15,8 @@ export interface OrderLine {
   colourId: string;
   colourName: string;
   colourCode: string | null;
+  /** A sample pot; its size is in litres too (0.25 for 250 ml). */
+  isSample?: boolean;
   sizeLitres: number;
   quantity: number;
   unitPriceCents: number;

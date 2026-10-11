@@ -11,10 +11,11 @@ Read `README.md` first. This is the paint shop sister site of Big Jo’s Beds (g
   - an AI colour consultant driven by OpenAI GPT-5.5
   - photo + brief + room size gives 3 colours with the brand and the cost to paint
   - customers buy online and get the paint **delivered in 3 days** (`business.json → delivery.days`)
-- **Colours and prices:** `src/data/catalogue.json` is the only source of both. The AI may only return catalogue ids (strict JSON schema enums), and the server re-checks them. Never let the AI set a quantity or a price; all maths is in `src/lib/estimate.ts`.
+- **Colours and prices:** `src/data/catalogue.json` (prices, paints, sample pots, hand-picked colours) and `src/data/colours/<brand>.json` (each brand’s full range) are the only sources. Keep colour ids stable: they are in carts, orders and links. Only add a colour with the brand’s own published hex; don’t estimate one from a photo. Sample pots and prices come from research and are for owner review. The AI may only return catalogue ids (strict JSON schema enums), and the server re-checks them. Never let the AI set a quantity or a price; all maths is in `src/lib/estimate.ts`.
 - **What not to invent:** prices, delivery fees or areas, return terms, warranties, reviews, certifications or contact details. Unknowns stay `null` in `business.json` and are hidden on the site.
 - **Brand partnerships:** don’t claim any (no "authorised", no brand logos). Brand and colour names are the brands’ own.
 - **Swatches:** hex values are screen approximations. Keep the “paint a test patch” guidance near colour choices.
+- **Home-page demo:** `src/content/demo.json` is a real GPT-5.5 consultation, run on the live site on 11 Oct 2026; keep its AI text unedited. To change it, run a new consultation and copy the answer. The tinted-walls preview is a mock-up for that one photo (mask in `public/demo/walls.png`), and the page says so.
 - **PayFast:**
   - Never mark an order paid outside `processItn()` (`src/lib/itn.ts`).
   - `/api/payfast/itn` is the only route exempt from the origin check in `src/middleware.ts`.

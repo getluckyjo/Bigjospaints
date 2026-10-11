@@ -1,5 +1,5 @@
 {
-  "$comment": "Big Jo’s Paints catalogue: the only source of colours and prices. Built on 11 Oct 2026 from research into each brand’s own colour data and current South African retail prices. PRICES ARE INDICATIVE RETAIL PRICES FOR OWNER REVIEW: set your own selling prices here. Rules: priceCents is the regular (non-promotional) retail price incl. VAT seen on 11 Oct 2026 (Builders; Prominent’s own shop for Prominent). \"sizes\" is the light (pastel) tint base, used for light colours; \"bases.medium\"/\"bases.deep\" price darker colours where the brand sells those bases. Each colour’s \"base\" is estimated from its lightness (CIE L*: 65+ light, 45–65 medium, under 45 deep); the tinting counter has the final say. coverageM2PerLitre is the data-sheet figure per coat, capped at 10 m²/L because Plascon quotes a theoretical smooth-surface rate. Colour hex values come from each brand’s own website and are screen approximations.",
+  "$comment": "Big Jo’s Paints catalogue: the only source of colours and prices. Built on 11 Oct 2026 from research into each brand’s own colour data and current South African retail prices. PRICES ARE INDICATIVE RETAIL PRICES FOR OWNER REVIEW: set your own selling prices here. Rules: priceCents is the regular (non-promotional) retail price incl. VAT seen on 11 Oct 2026 (Builders; Prominent’s own shop for Prominent). \"sizes\" is the light (pastel) tint base, used for light colours; \"bases.medium\"/\"bases.deep\" price darker colours where the brand sells those bases. Each colour’s \"base\" is estimated from its lightness (CIE L*: 65+ light, 45–65 medium, under 45 deep); the tinting counter has the final say. coverageM2PerLitre is the data-sheet figure per coat, capped at 10 m²/L because Plascon quotes a theoretical smooth-surface rate. Sample pots (\"samples\") are the brands’ own tester pots at the same retailer prices; \"prices\" is keyed by the tint base the colour needs (pastel, deep, clear/transparent), and a missing base means that pot can’t take those colours. Prominent sells no sample pot, so its colours offer the smallest tin. The hand-picked colours below have their own notes; each brand’s full range is in src/data/colours/<brand>.json (name, code, hex, collection), and its family, base and description are worked out from the hex. Duram publishes each colour’s tint base, which is used instead of the lightness estimate. Colour hex values come from each brand’s own website and are screen approximations.",
   "checked": "2026-10-11",
   "brands": [
     {
@@ -491,6 +491,84 @@
       ]
     }
   ],
+  "samples": [
+    {
+      "id": "plascon-perfect-colour-matt-tester",
+      "brand": "plascon",
+      "name": "Perfect Colour Matt tester",
+      "finish": "matt",
+      "millilitres": 250,
+      "prices": {
+        "pastel": 4500
+      },
+      "covers": "Plascon says a 250 ml tester covers at least 1 m².",
+      "sources": [
+        "https://www.builders.co.za/paint/tinting/tester-pods/plascon-perfect-colour-matt-pastel-base-paint-tester-250-ml/p/000000000850039982",
+        "https://plascon.co.za/plascon-perfect-colour-tester-samples"
+      ]
+    },
+    {
+      "id": "plascon-double-velvet-tester",
+      "brand": "plascon",
+      "name": "Double Velvet tester",
+      "finish": "velvet sheen",
+      "millilitres": 250,
+      "prices": {
+        "pastel": 6500,
+        "deep": 6500,
+        "clear": 6500
+      },
+      "covers": "Plascon says a 250 ml tester covers at least 1 m².",
+      "sources": [
+        "https://www.builders.co.za/paint/tinting/tester-pods/plascon-double-velvet-pastel-tint-base-paint-tester-250-ml/p/000000000000411575",
+        "https://www.builders.co.za/paint/tinting/tester-pods/plascon-double-velvet-deep-tint-base-paint-tester-250-ml/p/000000000000411571",
+        "https://www.builders.co.za/paint/tinting/tester-pods/plascon-double-velvet-transparent-tint-base-paint-tester-250-ml/p/000000000000411576",
+        "https://plascon.co.za/plascon-perfect-colour-tester-samples"
+      ]
+    },
+    {
+      "id": "duram-habitat-sample",
+      "brand": "duram",
+      "name": "Habitat colour sample",
+      "finish": "low sheen",
+      "millilitres": 90,
+      "prices": {
+        "pastel": 3600,
+        "deep": 3600,
+        "clear": 3600
+      },
+      "collections": [
+        "Habitat Collection"
+      ],
+      "covers": "Duram says a 90 ml sample covers a 30 × 30 cm test patch.",
+      "sources": [
+        "https://www.builders.co.za/Paint/Tinting/Tester-Pods/Duram-Habitat-Collection-Paint-Sample-Savannah-Sunset-90-ml/p/000000000000736182",
+        "https://www.duram.co.za/try-a-colour-sample/"
+      ]
+    },
+    {
+      "id": "duram-walltech-tester",
+      "brand": "duram",
+      "name": "WallTech tester",
+      "finish": "low sheen",
+      "millilitres": 250,
+      "prices": {
+        "pastel": 5900,
+        "deep": 6900,
+        "clear": 8900
+      },
+      "excludeCollections": [
+        "Off-White Collection",
+        "Habitat Collection"
+      ],
+      "sources": [
+        "https://www.builders.co.za/Paint/Tinting/Tester-Pods/Duram-Wall-Tech-Pastel-Tint-Base-Paint-Sample-250-ml/p/000000000000723053",
+        "https://www.builders.co.za/Paint/Tinting/Tester-Pods/Duram-Wall-Tech-Deep-Tint-Base-Paint-Sample-250-ml/p/000000000000723054",
+        "https://www.builders.co.za/Paint/Tinting/Tester-Pods/Duram-Wall-Tech-Clear-Tint-Base-Paint-Sample-250-ml/p/000000000000723056",
+        "https://www.duram.co.za/product/walltech/"
+      ]
+    }
+  ],
   "colours": [
     {
       "id": "plascon-ray-of-light",
@@ -544,7 +622,7 @@
       "id": "plascon-ravine",
       "brand": "plascon",
       "name": "Ravine",
-      "code": "62",
+      "code": "61",
       "hex": "#CFCAC0",
       "family": "neutral",
       "lrv": null,

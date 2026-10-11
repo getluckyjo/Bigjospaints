@@ -3,7 +3,7 @@
 import Icon from './Icon.astro';
 import Swatch from './Swatch.astro';
 import copy from '../content/copy.json';
-import { getBrand } from '../lib/catalogue';
+import { getBrand, sampleFor } from '../lib/catalogue';
 import type { PricedSuggestion } from '../lib/consult';
 import { describeMix, formatLitres } from '../lib/estimate';
 import { fill, formatZar } from '../lib/money';
@@ -18,6 +18,7 @@ const { option, index, walls } = Astro.props;
 const { colour, product, estimate: est } = option;
 const brand = getBrand(colour.brand)?.name ?? colour.brand;
 const lines = est.mix.tins.map((t) => `${product.id}|${colour.id}|${t.litres}|${t.quantity}`);
+const sample = sampleFor(colour);
 ---
 
 <article class="bj-option-card" aria-labelledby={`option-${index}`}>
@@ -49,6 +50,18 @@ const lines = est.mix.tins.map((t) => `${product.id}|${colour.id}|${t.litres}|${
         <Icon name="cart" />{fill(copy.consultant.addToCart, { litres: formatLitres(est.mix.totalLitres) })}
       </button>
     </form>
+    {
+      sample && (
+        <form method="post" action="/cart" data-bj-busy>
+          <input type="hidden" name="action" value="add-sample" />
+          <input type="hidden" name="colour" value={colour.id} />
+          <input type="hidden" name="sample" value={sample.sample.id} />
+          <button class="bj-button bj-button--secondary" type="submit" data-busy-label="Adding…">
+            Order a sample pot first · {formatZar(sample.priceCents)}
+          </button>
+        </form>
+      )
+    }
     <a class="bj-small" href={`/colours/${colour.id}`}>More about {colour.name}</a>
   </div>
 </article>

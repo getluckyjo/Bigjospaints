@@ -4,7 +4,7 @@
  * from our catalogue, so it can't invent a colour, a code or a price; quantities and costs are
  * worked out afterwards in estimate.ts.
  */
-import { brands, canMix, colours, defaultProductFor, getColour, getProduct, products, type Colour, type Product } from './catalogue';
+import { aiColours, brands, canMix, defaultProductFor, getColour, getProduct, products, type Colour, type Product } from './catalogue';
 import type { AiConfig } from './config';
 import type { Room } from './estimate';
 
@@ -37,12 +37,16 @@ export class AiError extends Error {}
 
 const brandName = (id: string) => brands.find((b) => b.id === id)?.name ?? id;
 
-/** The catalogue as compact lines. Static, so it sits in the cacheable prefix of every request. */
+/**
+ * The catalogue as compact lines: every product and the AI shortlist of colours (the hand-picked
+ * ones plus each brand's curated collection, not the full ranges). Static, so it sits in the
+ * cacheable prefix of every request.
+ */
 export function catalogueText(): string {
   const productLines = products.map(
     (p) => `${p.id} | ${brandName(p.brand)} | ${p.name} | ${p.finish} | ${p.tier} | best for: ${p.bestFor}`,
   );
-  const colourLines = colours.map(
+  const colourLines = aiColours.map(
     (c) =>
       `${c.id} | ${brandName(c.brand)} | ${c.name}${c.code ? ` (${c.code})` : ''} | ${c.hex} | ${c.family}${c.lrv != null ? ` | LRV ${c.lrv}` : ''} | ${c.notes}`,
   );
@@ -83,7 +87,7 @@ export function responseSchema() {
           additionalProperties: false,
           required: ['colour_id', 'product_id', 'title', 'why', 'tip'],
           properties: {
-            colour_id: { type: 'string', enum: colours.map((c) => c.id) },
+            colour_id: { type: 'string', enum: aiColours.map((c) => c.id) },
             product_id: { type: 'string', enum: products.map((p) => p.id) },
             title: { type: 'string' },
             why: { type: 'string' },

@@ -1,0 +1,103 @@
+---
+/**
+ * Home-page demo: one real consultation (src/content/demo.json) shown the way the consultant works.
+ * The photo and brief go in, GPT-5.5's read and three colours come out, priced from our catalogue.
+ * With JS, choosing a colour tints the walls in the photo (src/scripts/demo.ts) as a mock-up.
+ */
+import { Image, getImage } from 'astro:assets';
+import Icon from './Icon.astro';
+import Swatch from './Swatch.astro';
+import demo from '../content/demo.json';
+import room from '../assets/demo/room.png';
+import { getBrand, getColour, getProduct } from '../lib/catalogue';
+import { priceSuggestions } from '../lib/consult';
+import { DEFAULT_HEIGHT_M, ROOM_PRESETS, describeMix, formatLitres, type Room } from '../lib/estimate';
+import { formatZar } from '../lib/money';
+
+const preset = ROOM_PRESETS[demo.size as keyof typeof ROOM_PRESETS];
+const roomSize: Room = {
+  lengthM: preset.lengthM,
+  widthM: preset.widthM,
+  heightM: demo.heightM ?? DEFAULT_HEIGHT_M,
+  walls: demo.walls as Room['walls'],
+  doors: demo.doors,
+  windows: demo.windows,
+};
+const options = priceSuggestions(
+  demo.options.map((o) => {
+    const colour = getColour(o.colour);
+    const product = getProduct(o.product);
+    if (!colour || !product) throw new Error(`demo.json: unknown colour or product in "${o.title}"`);
+    return { colour, product, title: o.title, why: o.why, tip: o.tip };
+  }),
+  roomSize,
+);
+// The canvas works on this exact file, so the tint lines up with the photo.
+const canvasPhoto = await getImage({ src: room, width: 1024, format: 'webp' });
+---
+
+<section class="bj-container bj-section bj-stack" aria-labelledby="demo-title" data-bj-demo data-photo={canvasPhoto.src} data-mask="/demo/walls.png">
+  <div class="bj-stack" style="--bj-stack-gap:12px">
+    <span class="bj-eyebrow bj-icon-text"><Icon name="spark" />See it work</span>
+    <h2 id="demo-title">One photo in. Three colours out.</h2>
+    <p class="bj-lead">We sent this bedroom to our AI colour consultant with a short brief. This is what {demo.model} came back with, priced from our catalogue.</p>
+  </div>
+
+  <div class="bj-demo">
+    <figure class="bj-demo__photo">
+      <div class="bj-demo__frame">
+        <Image src={room} alt={demo.photoAlt} widths={[640, 1024, 1536]} sizes="(min-width: 1100px) 600px, (min-width: 900px) 55vw, 100vw" loading="lazy" />
+        <canvas aria-hidden="true" data-bj-demo-canvas></canvas>
+        <span class="bj-demo__upload"><Icon name="camera" />Photo sent</span>
+      </div>
+      <div class="bj-demo__picker" role="group" aria-label="Show a colour on the walls" data-bj-demo-picker hidden>
+        <button type="button" class="bj-chip-button" aria-pressed="true" data-hex="">Photo as sent</button>
+        {
+          options.map((o) => (
+            <button type="button" class="bj-chip-button bj-icon-text" aria-pressed="false" data-hex={o.colour.hex}>
+              <Swatch tag="span" hex={o.colour.hex} class="bj-demo__dot" />
+              {o.colour.name}
+            </button>
+          ))
+        }
+      </div>
+      <figcaption class="bj-small bj-muted" data-bj-demo-caption>
+        <span data-bj-demo-js hidden>Choose a colour to see it on the walls. This preview is a mock-up we made for this photo; your results show swatches. </span>Example photo: a concept render from our sister shop, Big Jo’s Beds.
+      </figcaption>
+      <p class="bj-sr-only" aria-live="polite" data-bj-demo-status></p>
+    </figure>
+
+    <div class="bj-stack bj-demo__result">
+      <div class="bj-demo__brief">
+        <p class="bj-eyebrow">The brief</p>
+        <blockquote>“{demo.brief}”</blockquote>
+        <p class="bj-small bj-muted">{demo.roomType} · {preset.hint.replace(/, like .*$/, '')} · {demo.walls === 'all' ? 'all walls' : 'one feature wall'}</p>
+      </div>
+      <div class="bj-stack" style="--bj-stack-gap:8px">
+        <p class="bj-eyebrow bj-icon-text"><Icon name="spark" />{demo.model} saw</p>
+        <p>{demo.roomRead}</p>
+      </div>
+      <ol class="bj-demo__options">
+        {
+          options.map((o, i) => (
+            <li>
+              <Swatch hex={o.colour.hex} class="bj-demo__chip" />
+              <div class="bj-stack" style="--bj-stack-gap:4px">
+                <p class="bj-small bj-muted">Option {i + 1} · {o.title}</p>
+                <p class="bj-demo__name"><a href={`/colours/${o.colour.id}`}>{o.colour.name}</a></p>
+                <p class="bj-small">{getBrand(o.colour.brand)?.name} {o.product.name} ({o.product.finish}) · {describeMix(o.estimate.mix)} · <strong>{formatZar(o.estimate.mix.totalCents)}</strong></p>
+                <p class="bj-small">{o.why}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="bj-small bj-muted">
+        For {options[0].estimate.areaM2} m² of wall, two coats plus 10% extra: {options.map((o) => `${formatLitres(o.estimate.litres)} of ${o.colour.name}`).join(', ')}. Prices from our current price list.
+      </p>
+      <div class="bj-row">
+        <a class="bj-button" href="/colour-consultant"><Icon name="camera" />Try it with your room</a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -151,6 +151,23 @@ test('buying from a colour page, then changing and removing the line', async ({ 
   await expect(page.getByText('Your cart is empty.')).toBeVisible();
 });
 
+test('ordering a sample pot, or a 1 L tin where the brand makes no pots', async ({ page }) => {
+  await page.goto('/colours/plascon-desert-spring');
+  await page.getByRole('button', { name: /Order a sample pot · R45/ }).click();
+  await expect(page).toHaveURL(/\/cart\?added=1/);
+  const line = page.locator('.bj-cart-line');
+  await expect(line).toContainText('Plascon Perfect Colour Matt tester (matt), 250 ml sample pot, R45 each');
+  await expect(page.locator('.bj-totals')).toContainText('1 sample pot');
+  await page.goto('/colours/prominent-river-clay');
+  await expect(page.getByText('Prominent Paints doesn’t make a sample pot')).toBeVisible();
+  await page.getByRole('button', { name: /Add a 1 L tin to test/ }).click();
+  await expect(page.locator('.bj-cart-line')).toHaveCount(2);
+  await expect(page.locator('.bj-totals')).toContainText('Paint (1 L) and 1 sample pot');
+  await page.goto('/checkout');
+  await expect(page.locator('.bj-summary')).toContainText('1 × 250 ml Desert Spring');
+  await expect(page.locator('.bj-summary')).toContainText('Paint and samples');
+});
+
 test.describe('request security', () => {
   test('cross-site form posts are refused', async ({ request }) => {
     const response = await request.post('/cart', { form: { action: 'add' }, headers: { origin: 'https://evil.example' } });

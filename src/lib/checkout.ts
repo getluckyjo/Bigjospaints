@@ -83,14 +83,17 @@ export async function preparePayment(reference: string, token: string | null, ur
   if (order.status === 'paid' || order.status === 'needs_review') return { kind: 'redirect', to: orderUrl };
 
   const origin = siteOrigin(url);
-  const litres = order.lines.reduce((sum, l) => sum + l.sizeLitres * l.quantity, 0);
+  const paint = order.lines.filter((l) => !l.isSample);
+  const litres = paint.reduce((sum, l) => sum + l.sizeLitres * l.quantity, 0);
+  const pots = order.lines.filter((l) => l.isSample).reduce((sum, l) => sum + l.quantity, 0);
+  const what = [litres ? `${litres} L of paint` : '', pots ? `${pots} sample pot${pots === 1 ? '' : 's'}` : ''].filter(Boolean).join(' and ');
   const colourNames = [...new Set(order.lines.map((l) => l.colourName))];
   const { action, fields } = buildCheckoutForm(
     {
       reference: order.reference,
       amount: toPayFastAmount(order.totalCents),
       itemName: `Big Jo’s Paints order ${order.reference}`,
-      itemDescription: `${litres} L of paint: ${colourNames.join(', ')}. ${order.lines.length} line${order.lines.length === 1 ? '' : 's'}, ${formatZar(order.totalCents)}.`,
+      itemDescription: `${what}: ${colourNames.join(', ')}. ${order.lines.length} line${order.lines.length === 1 ? '' : 's'}, ${formatZar(order.totalCents)}.`,
       firstName: order.firstName,
       lastName: order.lastName,
       email: order.email,

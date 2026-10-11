@@ -25,19 +25,21 @@ Open http://localhost:4321. Without `OPENAI_API_KEY` the consultant still works:
 ## How the colour consultant works
 
 1. **The form** (`/colour-consultant`) asks for a photo, a brief (with idea chips) and the room size (small, medium or large presets, or measurements; all walls or a feature wall; ceiling height, doors and windows). Without JavaScript the form posts as normal, for photos up to 4 MB. With JavaScript the photo is shrunk on the phone to 1600 px before upload, and results load in place.
-2. **The AI** (`src/lib/ai.ts`) calls OpenAI’s Responses API with model `gpt-5.5` and reasoning effort `low`. It sends the photo, the brief, the room and the catalogue. A **strict JSON schema** limits every colour and paint to ids in `src/data/catalogue.json`, so the AI can’t invent a colour, a code or a price. The server checks every id again, and swaps a paint from the wrong brand for the colour’s own brand.
+2. **The AI** (`src/lib/ai.ts`) calls OpenAI’s Responses API with model `gpt-5.5` and reasoning effort `low`. It sends the photo, the brief, the room and the catalogue: every paint, and a shortlist of colours (the hand-picked ones plus each brand’s curated collection, not the full ranges, to keep each call small). A **strict JSON schema** limits every colour and paint to ids in the catalogue, so the AI can’t invent a colour, a code or a price. The server checks every id again, and swaps a paint from the wrong brand for the colour’s own brand.
 3. **The maths** (`src/lib/estimate.ts`) works out the wall area, then the litres (2 coats plus 10% extra), then the cheapest mix of tins. Prices come only from the catalogue, never from the AI.
 4. **If the AI is off or fails**, `src/lib/rules.ts` picks three colours from the brief by keyword rules, and the page says so.
 5. **Photos** go to OpenAI only to get suggestions. They aren’t stored (`store: false`), and OpenAI doesn’t use API data for training.
-6. **Cost control:** each address can ask for 8 consultations per 10 minutes, per server instance. Each consultation is one `gpt-5.5` call: the photo plus about 3,000 tokens of instructions and catalogue in, and a short JSON answer out. Set a monthly budget and watch usage in the OpenAI dashboard.
+6. **Cost control:** each address can ask for 8 consultations per 10 minutes, per server instance. Each consultation is one `gpt-5.5` call: the photo plus about 10,000 tokens of instructions and colour shortlist in (the same every time, so OpenAI caches most of it), and a short JSON answer out. Set a monthly budget and watch usage in the OpenAI dashboard.
 
-## The catalogue (`src/data/catalogue.json`)
+## The catalogue (`src/data/catalogue.json` and `src/data/colours/`)
 
-This file is the only source of colours and prices. It was built on 11 Oct 2026 from research:
+These files are the only source of colours and prices. They were built on 11 Oct 2026 from research:
 
-- **Colours:** 70 colours from Plascon, Dulux, Duram and Prominent. Names and codes come from each brand’s current range, and swatch hex values from the brand’s own website.
+- **Colours:** each brand’s full interior range, in `src/data/colours/<brand>.json` as name, code, hex and collection, taken from the brand’s own colour data. Ready-mixed colours made for one product only are left out. `src/lib/colour-science.ts` works out each colour’s family (greens, blues and so on), tint base and a short description from its hex. 70 hand-picked colours in `catalogue.json` keep their own notes and families, and come first on `/colours`.
+- **AI shortlist:** the hand-picked colours plus Plascon’s Essential Collection, Duram’s Habitat Collection, Prominent’s palette and Dulux’s curated colours (`aiCollections` in each brand file).
+- **Sample pots:** the brands’ own testers, at retailer prices: Plascon Perfect Colour Matt (250 ml, R45, light colours) and Double Velvet (250 ml, R65, any colour), Duram Habitat (90 ml, R36, Habitat colours) and WallTech (250 ml, R59 to R89 by tint base). Each colour offers the cheapest pot that can take it. Prominent makes no sample pots and suggests a 1 L tin instead, so its colour pages offer the 1 L tin. Duram’s Off-White colours can’t be tinted that small, so they have no sample either.
 - **Paints:** 10 interior wall paints, with tin sizes and regular (non-promotional) retail prices incl. VAT. Prices come from Builders, and from Prominent’s own shop for Prominent. Coverage comes from each brand’s data sheet, capped at 10 m²/L because Plascon quotes a theoretical rate.
-- **Tint bases:** darker colours are mixed in a deeper base that costs more. Each colour has a base estimated from its lightness, and is priced from that base’s tins where the brand sells one.
+- **Tint bases:** darker colours are mixed in a deeper base that costs more. Each colour has a base estimated from its lightness (Duram publishes its own, which is used instead), and is priced from that base’s tins where the brand sells one.
 - **Not included yet:**
   - Fired Earth: its colours couldn’t be verified online.
   - Earthcote: no standard interior emulsion.
@@ -76,7 +78,10 @@ The checkout flow is the same as Big Jo’s Beds:
 
 | Path | What it is |
 |---|---|
-| `src/data/catalogue.json` | Brands, paints (tins, prices, coverage) and colours |
+| `src/data/catalogue.json` | Brands, paints (tins, prices, coverage), sample pots and the hand-picked colours |
+| `src/data/colours/` | Each brand’s full colour range (name, code, hex, collection) |
+| `src/lib/colour-science.ts`, `colour-search.ts` | Colour family, base and description from a hex; search, filters and closest matches for `/colours` |
+| `src/content/demo.json`, `src/components/HomeDemo.astro` | The home-page demo: a real GPT-5.5 consultation on an example photo, with a tinted-walls preview |
 | `src/content/copy.json` | Site copy (draft for owner review) |
 | `src/config/business.json` | Business details and delivery (3 days; fee to be set) |
 | `src/lib/ai.ts`, `rules.ts`, `consult.ts` | The colour consultant |

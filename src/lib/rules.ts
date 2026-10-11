@@ -2,7 +2,7 @@
  * Brief-based picks, used when the AI isn't connected (no OPENAI_API_KEY) or doesn't answer.
  * Simple keyword rules over the catalogue; the page always says when these are shown.
  */
-import { colours, defaultProductFor, productsFor, type Colour, type ColourFamily, type Product } from './catalogue';
+import { aiColours, defaultProductFor, productsFor, type Colour, type ColourFamily, type Product } from './catalogue';
 import type { Suggestion } from './ai';
 
 const RULES: { words: RegExp; families: ColourFamily[] }[] = [
@@ -18,6 +18,7 @@ const RULES: { words: RegExp; families: ColourFamily[] }[] = [
   { words: /\b(blues?|navy|ocean|sea)\b/i, families: ['blue'] },
   { words: /\b(pinks?|terracotta|blush|rust|clay)\b/i, families: ['pink-terracotta'] },
   { words: /\b(yellows?|ochre|mustard|sunny|gold\w*)\b/i, families: ['yellow-ochre'] },
+  { words: /\b(purples?|lilac|lavender|violet|plum|mauve|aubergine)\b/i, families: ['purple'] },
   { words: /\b(whites?|cream)\b/i, families: ['white'] },
   { words: /\b(beige|neutral|greige|taupe|sand)\b/i, families: ['neutral'] },
 ];
@@ -32,6 +33,7 @@ const TITLES: Record<ColourFamily, string> = {
   blue: 'Cool and restful',
   'pink-terracotta': 'Earthy and warm',
   'yellow-ochre': 'Sunny and welcoming',
+  purple: 'Soft and dreamy',
   deep: 'Bold and cosy',
 };
 
@@ -74,7 +76,7 @@ export function rulePicks(brief: string, roomType: string, exclude: string[] = [
 
   for (const family of families) {
     if (picks.length === 3) break;
-    const pool = colours.filter((c) => c.family === family && !exclude.includes(c.id) && !picks.some((p) => p.colour.id === c.id));
+    const pool = aiColours.filter((c) => c.family === family && !exclude.includes(c.id) && !picks.some((p) => p.colour.id === c.id));
     if (pool.length === 0) continue;
     // Prefer a brand not used yet, then rotate through the pool by the brief's hash.
     const fresh = pool.filter((c) => !usedBrands.has(c.brand));

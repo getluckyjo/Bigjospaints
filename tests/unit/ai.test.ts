@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { AiError, askOpenAI, buildRequest, outputText, responseSchema, toResult, type ConsultInput } from '../../src/lib/ai';
-import { colours, defaultProductFor, getProduct, products } from '../../src/lib/catalogue';
+import { aiColours, colours, defaultProductFor, getProduct, products } from '../../src/lib/catalogue';
 import type { AiConfig } from '../../src/lib/config';
 import { rulePicks } from '../../src/lib/rules';
 
@@ -39,10 +39,18 @@ describe('request', () => {
     expect(buildRequest({ ...input, imageDataUrl: null }, cfg).input[0].content).toHaveLength(1);
   });
 
+  it('keeps the colour list within OpenAI’s structured-output limits', () => {
+    // Up to 1,000 enum values in a schema; over 250 values, at most 15,000 characters in one enum.
+    const ids = responseSchema().properties.options.items.properties.colour_id.enum;
+    expect(ids.length + products.length).toBeLessThanOrEqual(1000);
+    expect(ids.join('').length).toBeLessThanOrEqual(15000);
+    expect(ids.length).toBeLessThan(colours.length);
+  });
+
   it('only allows catalogue ids, and every property is required (strict mode)', () => {
     const schema = responseSchema();
     const item = schema.properties.options.items;
-    expect(item.properties.colour_id.enum).toEqual(colours.map((c) => c.id));
+    expect(item.properties.colour_id.enum).toEqual(aiColours.map((c) => c.id));
     expect(item.properties.product_id.enum).toEqual(products.map((p) => p.id));
     expect([...schema.required].sort()).toEqual(Object.keys(schema.properties).sort());
     expect([...item.required].sort()).toEqual(Object.keys(item.properties).sort());

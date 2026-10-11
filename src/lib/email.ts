@@ -5,6 +5,7 @@
 import { Resend } from 'resend';
 import { deliveryDays } from './business';
 import { emailConfig } from './config';
+import { itemsHeading } from './cart';
 import { formatLitres } from './estimate';
 import { formatZar } from './money';
 import type { Order } from './orders';
@@ -61,7 +62,7 @@ function lineText(order: Order): string {
 
 function totals(order: Order): string {
   return [
-    `Paint: ${formatZar(order.subtotalCents)}`,
+    `${itemsHeading(order.lines)}: ${formatZar(order.subtotalCents)}`,
     `Delivery: ${order.deliveryFeeCents === null ? 'to be confirmed' : order.deliveryFeeCents === 0 ? 'free' : formatZar(order.deliveryFeeCents)}`,
     `Total paid: ${formatZar(order.totalCents)}`,
   ].join('\n');

@@ -48,19 +48,63 @@ test('home leads to the consultant and says delivery is 3 days', async ({ page }
   await expect(page).toHaveURL(/\/colour-consultant$/);
 });
 
-test('colour browser filters by brand and family', async ({ page }) => {
+test('colour browser searches and filters the full range without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
   await page.goto('/colours');
-  const all = await page.locator('.bj-colour-grid li:visible').count();
-  await page.getByRole('button', { name: 'Dulux' }).click();
-  await expect(page).toHaveURL(/brand=dulux/);
-  const dulux = await page.locator('.bj-colour-grid li:visible').count();
-  expect(dulux).toBeGreaterThan(0);
-  expect(dulux).toBeLessThan(all);
-  for (const tile of await page.locator('.bj-colour-grid li:visible').all()) await expect(tile).toHaveAttribute('data-brand', 'dulux');
-  await page.getByRole('button', { name: 'Greens' }).click();
-  for (const group of await page.locator('[data-family]:visible').all()) await expect(group).toHaveAttribute('data-family', 'green');
-  await page.goto('/colours?brand=duram');
-  await expect(page.getByRole('button', { name: 'Duram' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('status')).toContainText(/^[\d,]+ colours, page 1 of \d+/);
+  await expect(page.locator('.bj-colour-grid li')).toHaveCount(60);
+  await page.getByLabel('Brand').selectOption('duram');
+  await page.getByLabel('Colour', { exact: true }).selectOption('green');
+  await page.getByRole('button', { name: 'Show colours' }).click();
+  await expect(page).toHaveURL(/brand=duram/);
+  await expect(page).toHaveURL(/family=green/);
+  for (const tile of await page.locator('.bj-colour-tile__text span').all()) await expect(tile).toContainText('Duram');
+  await page.goto('/colours?q=egret');
+  await expect(page.getByRole('link', { name: /Egret/ }).first()).toBeVisible();
+  await page.goto('/colours?q=zzzz-no-such-colour');
+  await expect(page.getByText('No colours match those filters.')).toBeVisible();
+  await page.goto('/colours?family=purple');
+  await expect(page.getByRole('link', { name: 'Purples and lilacs' })).toHaveAttribute('aria-current', 'true');
+  await page.getByRole('link', { name: 'Next' }).click();
+  await expect(page).toHaveURL(/family=purple&page=2|page=2&family=purple/);
+  await context.close();
+});
+
+test('home demo shows a real consultation and tints the walls', async ({ page }) => {
+  await page.goto('/');
+  const demo = page.locator('[data-bj-demo]');
+  await expect(demo.getByRole('heading', { name: 'One photo in. Three colours out.' })).toBeVisible();
+  await expect(demo.locator('.bj-demo__options li')).toHaveCount(3);
+  await expect(demo.getByText(/R\d/).first()).toBeVisible();
+  const egret = demo.getByRole('button', { name: 'Egret' });
+  await egret.click();
+  await expect(egret).toHaveAttribute('aria-pressed', 'true');
+  await expect(demo).toHaveClass(/is-tinted/);
+  await expect(demo.locator('[data-bj-demo-status]')).toHaveText('Showing the walls in Egret.');
+  // The walls take on the colour and the bed doesn't: compare the canvas with the photo it was made from.
+  await demo.getByRole('button', { name: 'Desert Spring' }).click();
+  await expect(demo.locator('[data-bj-demo-status]')).toHaveText('Showing the walls in Desert Spring.');
+  const px = await demo.evaluate(async (root: HTMLElement) => {
+    const canvas = root.querySelector('canvas')!;
+    const photo = new Image();
+    photo.src = root.dataset.photo!;
+    await photo.decode();
+    const plain = document.createElement('canvas');
+    plain.width = canvas.width;
+    plain.height = canvas.height;
+    plain.getContext('2d')!.drawImage(photo, 0, 0);
+    const at = (c: HTMLCanvasElement, x: number, y: number) =>
+      Array.from(c.getContext('2d')!.getImageData(Math.round(x * c.width), Math.round(y * c.height), 1, 1).data);
+    return { wall: at(canvas, 0.5, 0.08), wallBefore: at(plain, 0.5, 0.08), bed: at(canvas, 0.5, 0.55), bedBefore: at(plain, 0.5, 0.55) };
+  });
+  expect(px.wallBefore[0]).toBeGreaterThan(px.wallBefore[1]); // a warm white wall in the photo…
+  expect(px.wall[1]).toBeGreaterThan(px.wall[0]); // …turns grey-green
+  for (let c = 0; c < 3; c++) expect(Math.abs(px.bed[c] - px.bedBefore[c])).toBeLessThanOrEqual(2);
+  await demo.getByRole('button', { name: 'Photo as sent' }).click();
+  await expect(demo).not.toHaveClass(/is-tinted/);
+  await demo.getByRole('link', { name: 'Try it with your room' }).click();
+  await expect(page).toHaveURL(/\/colour-consultant$/);
 });
 
 test('the mobile menu opens', async ({ page }) => {
