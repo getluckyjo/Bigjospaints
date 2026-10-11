@@ -37,7 +37,7 @@ test.describe('AI colour consultant', () => {
     await expect(results).toBeFocused();
     await expect(results.getByText('Soft morning light from the left')).toBeVisible();
     await expect(page.locator('.bj-option-card')).toHaveCount(3);
-    await expect(results.getByText('The AI colour consultant isn’t switched on yet')).toHaveCount(0);
+    await expect(results.getByText('Your colour consultant isn’t switched on yet')).toHaveCount(0);
 
     // What OpenAI received.
     const last = await (await request.get(`${MOCK}/last`)).json();
@@ -161,7 +161,7 @@ test.describe('AI colour consultant', () => {
     await fillConsultant(page, 'trigger-error please');
     await page.getByRole('button', { name: /Show my 3 colours/ }).click();
     await expect(page.locator('#results')).toBeVisible({ timeout: 30_000 });
-    await expect(page.getByText('Our AI couldn’t look at your photo just now')).toBeVisible();
+    await expect(page.getByText('Your colour consultant couldn’t look at your photo just now')).toBeVisible();
     await expect(page.locator('.bj-option-card')).toHaveCount(3);
   });
 

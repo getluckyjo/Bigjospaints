@@ -1,7 +1,7 @@
 ---
 /**
  * Home-page demo: one real consultation (src/content/demo.json) shown the way the consultant works.
- * The photo and brief go in, GPT-5.5's read and three colours come out, priced from our catalogue.
+ * The photo and brief go in, the consultant's read and three colours come out, priced from our catalogue.
  * With JS, choosing a colour tints the walls in the photo (src/scripts/demo.ts) as a mock-up.
  */
 import { Image, getImage } from 'astro:assets';
@@ -41,7 +41,7 @@ const canvasPhoto = await getImage({ src: photo.src, width: 1024, format: 'webp'
   <div class="bj-stack" style="--bj-stack-gap:12px">
     <span class="bj-eyebrow bj-icon-text"><Icon name="spark" />See it work</span>
     <h2 id="demo-title">One photo in. Three colours out.</h2>
-    <p class="bj-lead">We sent this {demo.roomType.toLowerCase()} to our AI colour consultant with a short brief. This is what {demo.model} came back with, priced from our catalogue.</p>
+    <p class="bj-lead">We sent this {demo.roomType.toLowerCase()} to our colour consultant with a short brief. This is what it came back with, priced from our catalogue.</p>
   </div>
 
   <div class="bj-demo">
@@ -63,7 +63,7 @@ const canvasPhoto = await getImage({ src: photo.src, width: 1024, format: 'webp'
         }
       </div>
       <figcaption class="bj-small bj-muted" data-bj-demo-caption>
-        <span data-bj-demo-js hidden>Choose a colour to see it on the walls. We tinted this photo ourselves; with your photo, OpenAI’s image model paints an AI mock-up of your room in each colour. </span>Photo: <a href={photo.page} rel="noopener">{photo.photographer} on Unsplash</a>.
+        <span data-bj-demo-js hidden>Choose a colour to see it on the walls. We tinted this photo ourselves; with your photo, we paint an AI mock-up of your room in each colour. </span>Photo: <a href={photo.page} rel="noopener">{photo.photographer} on Unsplash</a>.
       </figcaption>
       <p class="bj-sr-only" aria-live="polite" data-bj-demo-status></p>
     </figure>
@@ -75,7 +75,7 @@ const canvasPhoto = await getImage({ src: photo.src, width: 1024, format: 'webp'
         <p class="bj-small bj-muted">{demo.roomType} · {preset.hint.replace(/, like .*$/, '')} · {demo.walls === 'all' ? 'all walls' : 'one feature wall'}</p>
       </div>
       <div class="bj-stack" style="--bj-stack-gap:8px">
-        <p class="bj-eyebrow bj-icon-text"><Icon name="spark" />{demo.model} saw</p>
+        <p class="bj-eyebrow bj-icon-text"><Icon name="spark" />What it saw</p>
         <p>{demo.roomRead}</p>
       </div>
       <ol class="bj-demo__options">

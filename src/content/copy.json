@@ -21,12 +21,12 @@
   ],
   "home": {
     "seo": {
-      "title": "Big Jo’s Paints | AI colour consultant and South Africa’s top paint brands",
+      "title": "Big Jo’s Paints | Your personal interior colour consultant and South Africa’s top paint brands",
       "description": "Upload a photo of your room and get three paint colours from top South African brands, with exactly how much paint you need and what it costs. Delivered in 3 days."
     },
-    "eyebrow": "AI colour consultant",
+    "eyebrow": "Your personal interior colour consultant",
     "title": "Find your colour. Know the cost.",
-    "body": "Send a photo of your room, say how you want it to feel, and our AI colour consultant picks three colours from South Africa’s top paint brands. You see exactly how much paint you need and what it costs. Buy it here, and it’s delivered in 3 days.",
+    "body": "Send a photo of your room, say how you want it to feel, and your personal interior colour consultant picks three colours from South Africa’s top paint brands. You see exactly how much paint you need and what it costs. Buy it here, and it’s delivered in 3 days.",
     "primaryCta": "Start with a photo",
     "secondaryCta": "Browse colours",
     "facts": [
@@ -59,7 +59,7 @@
     ],
     "aiTitle": "A colour consultant that looks at your room.",
     "aiBody": [
-      "Our colour consultant runs on OpenAI’s GPT-5.5. It looks at the light, floors, furniture and colours already in your photo, reads your brief, and suggests three colours that suit the room and each other.",
+      "Your personal interior colour consultant is powered by modern colour technology. It looks at the light, floors, furniture and colours already in your photo, reads your brief, and suggests three colours that suit the room and each other.",
       "It only chooses from real colours in our catalogue. We work out the litres and the price ourselves, from your room size and our price list, so the numbers never come from the AI."
     ],
     "samplesTitle": "Try it on your wall first.",
@@ -72,10 +72,11 @@
   },
   "consultant": {
     "seo": {
-      "title": "AI colour consultant | Big Jo’s Paints",
+      "title": "Your personal interior colour consultant | Big Jo’s Paints",
       "description": "Upload a photo of your room, describe the feel you want and add the room size. Get three paint colours with the brand, the paint you need and the cost."
     },
-    "title": "Your AI colour consultant",
+    "eyebrow": "Powered by modern colour technology",
+    "title": "Your personal interior colour consultant",
     "intro": "Three quick steps. You’ll get three colours, each with the brand, how much paint you need and what it costs.",
     "photoTitle": "Add a photo of your room",
     "photoEmpty": "Tap to take a photo or choose one",
@@ -102,7 +103,7 @@
     ],
     "resultsTitle": "Your three colours",
     "previewTitle": "See it in your room",
-    "previewIntro": "OpenAI’s image model repaints the walls in your photo in each of your colours, and tidies the room up. Each one takes up to a minute, so read on while you wait.",
+    "previewIntro": "We repaint the walls in your photo in each of your colours, and tidy the room up. Each one takes up to a minute, so read on while you wait.",
     "previewAsSent": "Your photo",
     "previewPainting": "Painting…",
     "previewFailed": "Couldn’t paint",
@@ -115,8 +116,8 @@
     "previewCardLabel": "AI mock-up",
     "previewCardCost": "Cost to paint · {tins}",
     "previewCardNote": "AI mock-up. Paint a test patch before you buy.",
-    "rulesNote": "The AI colour consultant isn’t switched on yet, so these three colours were matched to your brief by simple rules. The litres and prices are worked out for your room.",
-    "aiDownNote": "Our AI couldn’t look at your photo just now, so these colours were matched to your brief instead. Try again in a minute for a full consultation.",
+    "rulesNote": "Your colour consultant isn’t switched on yet, so these three colours were matched to your brief by simple rules. The litres and prices are worked out for your room.",
+    "aiDownNote": "Your colour consultant couldn’t look at your photo just now, so these colours were matched to your brief instead. Try again in a minute for a full consultation.",
     "estimateNote": "Prices are for wall paint only: two coats plus 10% extra. On-screen colours are approximate, so check a physical swatch or paint a test patch before you start.",
     "addToCart": "Add {litres} to cart",
     "startAgain": "Try a different brief"
@@ -128,7 +129,7 @@
     },
     "title": "Browse colours",
     "intro": "{count} colours from South Africa’s top brands. Search by name or code, or filter by brand, colour and lightness. Choose one to see the paints it comes in, the prices and a sample pot.",
-    "notSure": "Not sure? Let the AI colour consultant suggest three for your room.",
+    "notSure": "Not sure? Let your personal colour consultant suggest three for your room.",
     "searchLabel": "Name or code",
     "searchPlaceholder": "e.g. sage, Egret or 39YY 85/046",
     "none": "No colours match those filters. Try a shorter search or fewer filters."
@@ -144,14 +145,14 @@
   "help": {
     "seo": {
       "title": "Help and FAQs | Big Jo’s Paints",
-      "description": "How the AI colour consultant works, how we work out how much paint you need, delivery in 3 days, payment and your photo."
+      "description": "How your colour consultant works, how we work out how much paint you need, delivery in 3 days, payment and your photo."
     },
     "title": "Help",
     "faqs": [
       {
         "id": "ai",
-        "question": "How does the AI choose my colours?",
-        "answer": "It looks at your photo (the light, floors, furniture and colours already in the room) and reads your brief. Then it picks three colours from our catalogue of real brand colours, and a suitable paint for each. It never makes up a colour."
+        "question": "How does the colour consultant choose my colours?",
+        "answer": "It uses AI to look at your photo (the light, floors, furniture and colours already in the room) and read your brief. Then it picks three colours from our catalogue of real brand colours, and a suitable paint for each. It never makes up a colour."
       },
       {
         "id": "litres",

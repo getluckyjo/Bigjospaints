@@ -11,7 +11,6 @@ import { BRIEF_IDEAS, ROOM_TYPES, handleConsultPost, type ConsultPageState } fro
 import { getBrand } from '../lib/catalogue';
 import { DEFAULT_HEIGHT_M, ROOM_PRESETS, describeMix } from '../lib/estimate';
 import { formatZar } from '../lib/money';
-import { aiConfig } from '../lib/config';
 import { issuePreviewToken, roomLabel } from '../lib/preview';
 
 const c = copy.consultant;
@@ -35,7 +34,6 @@ const walls = v.walls ?? 'all';
 const result = state.result;
 const errorList = Object.entries(state.errors);
 const sizeLabels: Record<string, string> = { photo: 'Photo', brief: 'Your brief', length: 'Length', width: 'Width', height: 'Ceiling height' };
-const aiOn = !!aiConfig().apiKey;
 // With a photo, the results page asks OpenAI's image model to repaint it in each colour (src/scripts/preview.ts).
 const previewToken = result ? issuePreviewToken(state.photoUrl, result.suggestions.map((s) => s.colour.id), result.room.walls) : null;
 // What "Send on WhatsApp" needs: the wording, and each colour's paint and cost (src/scripts/preview-share.ts).
@@ -51,7 +49,7 @@ const shareFor = (s: NonNullable<typeof result>['suggestions'][number]) => {
   <section class="bj-container bj-section" data-bj-consult>
     <div class="bj-consult bj-stack">
       <div class="bj-stack" style="--bj-stack-gap:12px">
-        <span class="bj-eyebrow bj-icon-text"><Icon name="spark" />{aiOn ? 'Powered by OpenAI GPT-5.5' : 'AI colour consultant'}</span>
+        <span class="bj-eyebrow bj-icon-text"><Icon name="spark" />{c.eyebrow}</span>
         <h1>{c.title}</h1>
         <p class="bj-lead">{c.intro}</p>
       </div>
