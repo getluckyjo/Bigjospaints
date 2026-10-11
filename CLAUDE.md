@@ -15,7 +15,8 @@ Read `README.md` first. This is the paint shop sister site of Big Jo’s Beds (g
 - **What not to invent:** prices, delivery fees or areas, return terms, warranties, reviews, certifications or contact details. Unknowns stay `null` in `business.json` and are hidden on the site.
 - **Brand partnerships:** don’t claim any (no "authorised", no brand logos). Brand and colour names are the brands’ own.
 - **Swatches:** hex values are screen approximations. Keep the “paint a test patch” guidance near colour choices.
-- **Home-page demo:** `src/content/demo.json` is a real GPT-5.5 consultation, run on the live site on 11 Oct 2026; keep its AI text unedited. To change it, run a new consultation and copy the answer. The tinted-walls preview is a mock-up for that one photo (mask in `public/demo/walls.png`), and the page says so.
+- **Home-page demo:** `src/content/demo.json` is a real GPT-5.5 consultation, run on the live site on 11 Oct 2026; keep its AI text unedited. To change it, run a new consultation and copy the answer. The tinted-walls preview is a mock-up for that one photo (Sven Brandsma's lounge; a new photo needs a new mask) (mask in `public/demo/walls.png`), and the page says so.
+- **Photos:** real photographs only, never renders or AI images (owner, 11 Oct 2026). They're from Unsplash (free, not Unsplash+), credited next to each photo through `src/lib/photos.ts` and listed in README "Photos". Crop out brand logos and labels. Don't use the Big Jo’s Beds concept renders here.
 - **PayFast:**
   - Never mark an order paid outside `processItn()` (`src/lib/itn.ts`).
   - `/api/payfast/itn` is the only route exempt from the origin check in `src/middleware.ts`.

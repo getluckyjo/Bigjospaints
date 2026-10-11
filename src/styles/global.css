@@ -115,19 +115,41 @@ fieldset.bj-fieldset legend.bj-h3 { font: 400 var(--bj-type-h3)/1.04 var(--bj-fo
 .bj-on-ink { color: var(--bj-ink); }
 .bj-on-bone { color: var(--bj-bone); }
 
-/* Home hero: headline left, a fan of real paint chips right. */
+/* Real photos (src/components/Photo.astro), with the photographer's credit underneath. */
+.bj-photo { margin: 0; display: grid; gap: 8px; }
+.bj-photo__frame { position: relative; border-radius: var(--bj-radius-card); overflow: hidden; background: var(--bj-paper); }
+.bj-photo__frame > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.bj-photo__credit { font-size: .75rem; color: var(--bj-muted); }
+.bj-photo__credit a { color: inherit; }
+
+/* Home hero: headline left; a real room right, with three real paint chips over its corner. */
 .bj-paint-hero { display: grid; gap: 40px; align-items: center; padding-block: clamp(40px, 6vw, 88px); }
 @media (min-width: 900px) { .bj-paint-hero { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); } }
-.bj-fan { position: relative; height: clamp(300px, 34vw, 440px); max-width: 520px; width: 100%; margin-inline: auto; }
+.bj-hero-photo { width: 100%; max-width: 480px; margin-inline: auto; }
+.bj-hero-photo .bj-photo__frame { aspect-ratio: 4 / 5; }
+.bj-fan { position: absolute; left: 4%; bottom: 3%; width: min(46%, 220px); aspect-ratio: 1 / 1.1; }
 .bj-fan__chip {
-  position: absolute; bottom: 0; left: 50%; width: 34%; height: 92%;
+  position: absolute; bottom: 0; left: 50%; width: 40%; height: 88%;
   transform-origin: 50% 100%; transform: translateX(-50%) rotate(var(--bj-turn, 0deg));
-  display: flex; flex-direction: column; justify-content: flex-end; padding: 0 0 14px 14px;
-  border-radius: 10px; box-shadow: 0 1px 0 #292c2714, 0 12px 28px #292c2722;
-  background: linear-gradient(to bottom, var(--bj-chip) 0 76%, var(--bj-paper) 76%);
-  font-size: .75rem; line-height: 1.3; color: var(--bj-ink);
+  display: flex; flex-direction: column; justify-content: flex-end; padding: 0 8px 12% 10px;
+  border-radius: 8px; box-shadow: 0 1px 0 #292c2714, 0 10px 24px #292c2740;
+  background: linear-gradient(to bottom, var(--bj-chip) 0 70%, var(--bj-paper) 70%);
+  font-size: .6875rem; line-height: 1.25; color: var(--bj-ink); overflow: hidden;
 }
-.bj-fan__chip strong { font-size: .875rem; }
+.bj-fan__chip strong { font-size: .75rem; }
+@media (max-width: 479px) { .bj-fan__chip > * { display: none; } }
+
+/* Photo beside text; the photo comes first on small screens. */
+.bj-split { display: grid; gap: 28px; align-items: center; }
+.bj-split__photo .bj-photo__frame { aspect-ratio: 3 / 2; }
+@media (min-width: 900px) {
+  .bj-split { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 56px; }
+  .bj-split--reverse { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
+  .bj-split--reverse > .bj-split__photo { order: 2; }
+  .bj-split__photo .bj-photo__frame { aspect-ratio: 4 / 5; }
+  .bj-split__photo--wide .bj-photo__frame { aspect-ratio: 3 / 2; }
+  .bj-closing { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
+}
 
 /* How it works */
 .bj-steps { display: grid; gap: 20px; margin: 0; padding: 0; list-style: none; counter-reset: step; }
@@ -274,8 +296,6 @@ a.bj-chip-button[aria-current='true'] { background: var(--bj-ink); border-color:
   .bj-summary { position: static; order: -1; }
 }
 .is-thinking .bj-results { display: none; }
-.bj-closing { text-align: center; }
-.bj-closing .bj-lead { margin-inline: auto; }
 
 /* Home-page demo: the example photo with a tinted-walls preview, and the consultant's answer. */
 .bj-demo { display: grid; gap: 32px; align-items: start; }

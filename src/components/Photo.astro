@@ -1,0 +1,33 @@
+---
+/** A real photo with its photographer credit (see src/lib/photos.ts). */
+import { Image } from 'astro:assets';
+import type { Photo } from '../lib/photos';
+
+interface Props {
+  photo: Photo;
+  sizes: string;
+  widths?: number[];
+  loading?: 'lazy' | 'eager';
+  class?: string;
+  /** CSS object-position, for photos cropped by their frame. */
+  focus?: string;
+}
+const { photo, sizes, widths = [480, 800, 1200, 1600], loading = 'lazy', class: className, focus } = Astro.props;
+const usable = widths.filter((w) => w <= photo.src.width);
+---
+
+<figure class:list={['bj-photo', className]}>
+  <div class="bj-photo__frame">
+    <Image
+      src={photo.src}
+      alt={photo.alt}
+      widths={usable.length ? usable : [photo.src.width]}
+      sizes={sizes}
+      loading={loading}
+      fetchpriority={loading === 'eager' ? 'high' : undefined}
+      style={focus ? `object-position: ${focus}` : undefined}
+    />
+    <slot />
+  </div>
+  <figcaption class="bj-photo__credit">Photo: <a href={photo.page} rel="noopener">{photo.photographer} on Unsplash</a></figcaption>
+</figure>

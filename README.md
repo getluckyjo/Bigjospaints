@@ -48,6 +48,20 @@ These files are the only source of colours and prices. They were built on 11 Oct
 
 **Before launch, set your own selling prices in this file.** The research prices are a starting point, not your price list.
 
+## Photos
+
+The site uses real photographs only, never renders or AI images. They come from Unsplash, free to use under the [Unsplash License](https://unsplash.com/license), and each one is credited to its photographer next to the photo (`src/lib/photos.ts`, `src/components/Photo.astro`). The files in `src/assets/photos/` were downloaded from Unsplash’s image service at these addresses, and Astro makes the web sizes when the site is built:
+
+| File | Photographer | Where it’s used | Downloaded from |
+|---|---|---|---|
+| `dining-room.jpg` | [Elena Popova](https://unsplash.com/photos/a-dining-room-with-blue-walls-and-a-wooden-table-NlZMsnCzZp0) | Home hero | `https://images.unsplash.com/photo-1633389263541-84618e56b894?w=1600&q=80&fm=jpg` |
+| `living-room.jpg` | [Sven Brandsma](https://unsplash.com/photos/cozy-living-room-with-wood-stove-fRx9CBTvL-E) | Home demo (sent to the consultant) | `https://images.unsplash.com/photo-1791540255760-ef09617851c6?w=2000&q=80&fm=jpg` |
+| `test-patches.jpg` | [Patrick Federi](https://unsplash.com/photos/paint-swatches-on-a-weathered-wall-with-teal-door-lgflrTGpBvY) | Home, sample pots | `https://images.unsplash.com/photo-1760101187116-fa8409c3d9ac?w=1400&q=80&fm=jpg` |
+| `tins.jpg` | [Elisabeth Arnold](https://unsplash.com/photos/assortment-of-open-paint-cans-with-various-warm-color-paints-uZ1cCiDiQhc) | Home, brands | `https://images.unsplash.com/photo-1784887830054-ea5fbe193e7c?rect=1260,2560,2280,3440&w=1200&q=80&fm=jpg` (cropped to leave out other paint brands’ labels) |
+| `painting.jpg` | [Barney Goodman](https://unsplash.com/photos/person-painting-wall-with-roller-Azz07JvM-EA) | Home, closing | `https://images.unsplash.com/photo-1789841417999-67a24a247c90?w=1600&q=80&fm=jpg` |
+
+When you add a photo: check it’s a real photograph, free (not Unsplash+), and shows no brand logos or labels (crop them out), then add it to `src/lib/photos.ts` with alt text and the credit, and to this table.
+
 ## Payments and orders
 
 The checkout flow is the same as Big Jo’s Beds:
@@ -82,7 +96,8 @@ The checkout flow is the same as Big Jo’s Beds:
 | `src/data/catalogue.json` | Brands, paints (tins, prices, coverage), sample pots and the hand-picked colours |
 | `src/data/colours/` | Each brand’s full colour range (name, code, hex, collection) |
 | `src/lib/colour-science.ts`, `colour-search.ts` | Colour family, base and description from a hex; search, filters and closest matches for `/colours` |
-| `src/content/demo.json`, `src/components/HomeDemo.astro` | The home-page demo: a real GPT-5.5 consultation on an example photo, with a tinted-walls preview |
+| `src/content/demo.json`, `src/components/HomeDemo.astro` | The home-page demo: a real GPT-5.5 consultation on a real lounge photo, with a tinted-walls preview |
+| `src/lib/photos.ts`, `src/assets/photos/` | The site’s photos and their credits (see Photos) |
 | `src/content/copy.json` | Site copy (draft for owner review) |
 | `src/config/business.json` | Business details and delivery (3 days; fee to be set) |
 | `src/lib/ai.ts`, `rules.ts`, `consult.ts` | The colour consultant |

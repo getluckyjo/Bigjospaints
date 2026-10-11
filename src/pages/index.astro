@@ -2,18 +2,22 @@
 import Base from '../layouts/Base.astro';
 import HomeDemo from '../components/HomeDemo.astro';
 import Icon from '../components/Icon.astro';
+import Photo from '../components/Photo.astro';
 import type { IconName } from '../lib/icons';
 import copy from '../content/copy.json';
-import { colours, getBrand, sellingBrands, type ColourFamily } from '../lib/catalogue';
+import { colours, getBrand, samples, sellingBrands, type ColourFamily } from '../lib/catalogue';
 import { deliveryDays } from '../lib/business';
+import { fill, formatZar } from '../lib/money';
+import { photos } from '../lib/photos';
 
 const home = copy.home;
-// One real colour from each of five families, for the paint-chip fan.
-const fanFamilies: ColourFamily[] = ['green', 'neutral', 'pink-terracotta', 'blue', 'yellow-ochre'];
+// One real colour from each of three families, for the paint chips over the hero photo.
+const fanFamilies: ColourFamily[] = ['green', 'neutral', 'pink-terracotta'];
 const fan = fanFamilies
   .map((family) => colours.find((c) => c.family === family))
   .filter((c) => c !== undefined);
-const turns = [-24, -12, 0, 12, 24];
+const turns = [-14, 0, 14];
+const cheapestSampleCents = Math.min(...samples.flatMap((s) => Object.values(s.prices).filter((c): c is number => typeof c === 'number')));
 const factIcons: IconName[] = ['swatch', 'tin', 'delivery'];
 ---
 
@@ -31,16 +35,18 @@ const factIcons: IconName[] = ['swatch', 'tin', 'delivery'];
         {home.facts.map((fact, i) => <li><Icon name={factIcons[i]} />{fact.replace('3 days', `${deliveryDays} days`)}</li>)}
       </ul>
     </div>
-    <div class="bj-fan" aria-hidden="true">
-      {
-        fan.map((c, i) => (
-          <div class="bj-fan__chip" style={`--bj-chip: ${c.hex}; --bj-turn: ${turns[i] ?? 0}deg`}>
-            <strong>{c.name}</strong>
-            <span>{getBrand(c.brand)?.name}</span>
-          </div>
-        ))
-      }
-    </div>
+    <Photo photo={photos.diningRoom} class="bj-hero-photo" loading="eager" sizes="(min-width: 1200px) 480px, (min-width: 900px) 40vw, (min-width: 560px) 480px, 100vw" focus="50% 40%">
+      <div class="bj-fan" aria-hidden="true">
+        {
+          fan.map((c, i) => (
+            <div class="bj-fan__chip" style={`--bj-chip: ${c.hex}; --bj-turn: ${turns[i] ?? 0}deg`}>
+              <strong>{c.name}</strong>
+              <span>{getBrand(c.brand)?.name}</span>
+            </div>
+          ))
+        }
+      </div>
+    </Photo>
   </section>
 
   <HomeDemo />
@@ -71,18 +77,33 @@ const factIcons: IconName[] = ['swatch', 'tin', 'delivery'];
     </div>
   </section>
 
-  <section class="bj-container bj-section bj-stack" aria-labelledby="brands-title">
-    <h2 id="brands-title">{home.brandsTitle}</h2>
-    <p class="bj-lead">{home.brandsBody}</p>
-    <ul class="bj-brand-list">
-      {sellingBrands.map((b) => <li><a href={`/colours?brand=${b.id}`}>{b.name}</a></li>)}
-    </ul>
-    <a class="bj-link-arrow" href="/brands">See the brands and prices<Icon name="arrow-right" /></a>
+  <section class="bj-container bj-section bj-split" aria-labelledby="samples-title">
+    <Photo photo={photos.testPatches} class="bj-split__photo" sizes="(min-width: 900px) 40vw, 100vw" focus="50% 72%" />
+    <div class="bj-stack">
+      <h2 id="samples-title">{home.samplesTitle}</h2>
+      <p class="bj-lead">{fill(home.samplesBody, { price: formatZar(cheapestSampleCents) })}</p>
+      <a class="bj-link-arrow" href="/help#samples">{home.samplesLink}<Icon name="arrow-right" /></a>
+    </div>
   </section>
 
-  <section class="bj-container bj-section bj-stack bj-closing">
-    <h2>{home.closingTitle}</h2>
-    <p class="bj-lead">{home.closingBody}</p>
-    <div><a class="bj-button" href="/colour-consultant"><Icon name="camera" />{home.primaryCta}</a></div>
+  <section class="bj-container bj-section bj-split bj-split--reverse" aria-labelledby="brands-title">
+    <Photo photo={photos.tins} class="bj-split__photo" sizes="(min-width: 900px) 40vw, 100vw" />
+    <div class="bj-stack">
+      <h2 id="brands-title">{home.brandsTitle}</h2>
+      <p class="bj-lead">{home.brandsBody}</p>
+      <ul class="bj-brand-list">
+        {sellingBrands.map((b) => <li><a href={`/colours?brand=${b.id}`}>{b.name}</a></li>)}
+      </ul>
+      <a class="bj-link-arrow" href="/brands">See the brands and prices<Icon name="arrow-right" /></a>
+    </div>
+  </section>
+
+  <section class="bj-container bj-section bj-split bj-closing" aria-labelledby="closing-title">
+    <Photo photo={photos.painting} class="bj-split__photo bj-split__photo--wide" sizes="(min-width: 900px) 50vw, 100vw" />
+    <div class="bj-stack">
+      <h2 id="closing-title">{home.closingTitle}</h2>
+      <p class="bj-lead">{home.closingBody}</p>
+      <div><a class="bj-button" href="/colour-consultant"><Icon name="camera" />{home.primaryCta}</a></div>
+    </div>
   </section>
 </Base>

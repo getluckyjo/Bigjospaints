@@ -8,11 +8,11 @@ import { Image, getImage } from 'astro:assets';
 import Icon from './Icon.astro';
 import Swatch from './Swatch.astro';
 import demo from '../content/demo.json';
-import room from '../assets/demo/room.png';
 import { getBrand, getColour, getProduct } from '../lib/catalogue';
 import { priceSuggestions } from '../lib/consult';
 import { DEFAULT_HEIGHT_M, ROOM_PRESETS, describeMix, formatLitres, type Room } from '../lib/estimate';
 import { formatZar } from '../lib/money';
+import { photos } from '../lib/photos';
 
 const preset = ROOM_PRESETS[demo.size as keyof typeof ROOM_PRESETS];
 const roomSize: Room = {
@@ -33,20 +33,21 @@ const options = priceSuggestions(
   roomSize,
 );
 // The canvas works on this exact file, so the tint lines up with the photo.
-const canvasPhoto = await getImage({ src: room, width: 1024, format: 'webp' });
+const photo = photos.livingRoom;
+const canvasPhoto = await getImage({ src: photo.src, width: 1024, format: 'webp' });
 ---
 
 <section class="bj-container bj-section bj-stack" aria-labelledby="demo-title" data-bj-demo data-photo={canvasPhoto.src} data-mask="/demo/walls.png">
   <div class="bj-stack" style="--bj-stack-gap:12px">
     <span class="bj-eyebrow bj-icon-text"><Icon name="spark" />See it work</span>
     <h2 id="demo-title">One photo in. Three colours out.</h2>
-    <p class="bj-lead">We sent this bedroom to our AI colour consultant with a short brief. This is what {demo.model} came back with, priced from our catalogue.</p>
+    <p class="bj-lead">We sent this {demo.roomType.toLowerCase()} to our AI colour consultant with a short brief. This is what {demo.model} came back with, priced from our catalogue.</p>
   </div>
 
   <div class="bj-demo">
     <figure class="bj-demo__photo">
       <div class="bj-demo__frame">
-        <Image src={room} alt={demo.photoAlt} widths={[640, 1024, 1536]} sizes="(min-width: 1100px) 600px, (min-width: 900px) 55vw, 100vw" loading="lazy" />
+        <Image src={photo.src} alt={photo.alt} widths={[640, 1024, 1536]} sizes="(min-width: 1100px) 600px, (min-width: 900px) 55vw, 100vw" loading="lazy" />
         <canvas aria-hidden="true" data-bj-demo-canvas></canvas>
         <span class="bj-demo__upload"><Icon name="camera" />Photo sent</span>
       </div>
@@ -62,7 +63,7 @@ const canvasPhoto = await getImage({ src: room, width: 1024, format: 'webp' });
         }
       </div>
       <figcaption class="bj-small bj-muted" data-bj-demo-caption>
-        <span data-bj-demo-js hidden>Choose a colour to see it on the walls. This preview is a mock-up we made for this photo; your results show swatches. </span>Example photo: a concept render from our sister shop, Big Jo’s Beds.
+        <span data-bj-demo-js hidden>Choose a colour to see it on the walls. This preview is a mock-up we made for this photo; your results show swatches. </span>Photo: <a href={photo.page} rel="noopener">{photo.photographer} on Unsplash</a>.
       </figcaption>
       <p class="bj-sr-only" aria-live="polite" data-bj-demo-status></p>
     </figure>

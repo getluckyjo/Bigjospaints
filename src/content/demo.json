@@ -1,37 +1,36 @@
 {
-  "$comment": "Home-page demo: a real consultation, run on the live site (bigjospaints.vercel.app/colour-consultant) on 11 Oct 2026 with OpenAI GPT-5.5. The photo is the Big Jo’s Beds flax bedroom render (src/assets/demo/room.png, the same file as Big Jo’s Beds’ src/assets/images/bed-flax.png). roomRead, title, why and tip are the AI’s words, unedited; litres and prices are worked out from catalogue.json when the site is built, exactly as the consultant does. public/demo/walls.png marks the walls (white = wall) for the tinted preview.",
+  "$comment": "Home-page demo: a real consultation, run on the live site (bigjospaints.vercel.app/colour-consultant) on 11 Oct 2026 with OpenAI GPT-5.5. The photo is a real lounge photographed by Sven Brandsma on Unsplash (src/assets/photos/living-room.jpg; credit in src/lib/photos.ts), sent at 1600 px as the consultant's own upload does. The brief is as sent. roomRead, title, why and tip are the AI's words, unedited; litres and prices are worked out from catalogue.json when the site is built, exactly as the consultant does. public/demo/walls.png marks the pink walls (white = wall) for the tinted preview: picked by colour (CIELAB hue, chroma, lightness) inside the back wall, with the window view, photo frames, hanging pot and cabinet cut out by hand.",
   "ranOn": "2026-10-11",
   "model": "GPT-5.5",
-  "photoAlt": "A bedroom with pale walls, a timber floor and a jute rug. A Big Jo’s bed with cream pillows stands between a wooden side table with a lamp and a plant, and a tall plant in a woven basket.",
-  "roomType": "Main bedroom",
-  "brief": "Calm and restful, something warmer than plain white. We love the timber floor and the plants.",
-  "size": "medium",
+  "roomType": "Lounge",
+  "brief": "Our lounge is a dusty pink and we're ready for a change. Something calm but still warm, to go with the wood stove, the oak floor and our plants.",
+  "size": "large",
   "walls": "all",
   "heightM": 2.6,
   "doors": 1,
   "windows": 1,
-  "roomRead": "The bedroom has soft natural light, honey timber floors, cream bedding, woven textures and plenty of green plants, so warm off-whites and gentle nature tones will keep it restful.",
+  "roomRead": "Your lounge has good side light, warm oak flooring, a black wood stove with brick, lots of creamy trim and natural plant greens, so a warm calm neutral or soft sage will sit better than the current dusty pink.",
   "options": [
     {
-      "title": "Warm soft white",
-      "colour": "dulux-egret",
+      "title": "Warm and easy",
+      "colour": "dulux-sahara-drive",
       "product": "dulux-acrylic-pva",
-      "why": "Egret gives you the warmth you want without making the 4 × 4 m room feel smaller. It will sit beautifully with the timber floor, cream bedding and jute rug.",
-      "tip": "Keep the ceiling and skirtings in a clean soft white for a fresh, calm edge."
+      "why": "This sandy beige keeps the warmth of the oak floor and stove area, but feels calmer and more timeless than pink. It will also work well with the grey sofa and cream macramé.",
+      "tip": "Keep the ceiling and trim in a soft white so the room stays bright."
     },
     {
-      "title": "Quiet leafy calm",
-      "colour": "plascon-desert-spring",
+      "title": "Soft natural calm",
+      "colour": "duram-tree-fern",
+      "product": "duram-classic-matt",
+      "why": "This pale sage picks up the plants and softens the black stove without making the lounge feel cold. It is light enough for all walls in your 6 × 4 m room.",
+      "tip": "Pair it with warm oak, woven textures and off-white curtains or blinds."
+    },
+    {
+      "title": "Quiet greige warmth",
+      "colour": "plascon-ravine",
       "product": "plascon-cashmere",
-      "why": "Desert Spring is a pale grey-green that links naturally with the plants while staying light and restful. It is soft enough for all walls in a main bedroom.",
-      "tip": "Pair it with natural linen, cane baskets and warm timber to stop the green feeling cool."
-    },
-    {
-      "title": "Gentle earthy warmth",
-      "colour": "prominent-river-clay",
-      "product": "prominent-premium-matt",
-      "why": "River Clay is a soft sandy beige that will bring out the honey tones in the floor and the warm stripe detail on the bed. It is warmer than white but still calm for sleeping.",
-      "tip": "Use off-white bedding and green plants to keep the look relaxed rather than too beige."
+      "why": "This classic greige is a safe, grown-up shift from dusty pink while still feeling warm beside the oak and brick. It will make the grey sofa look intentional rather than heavy.",
+      "tip": "Add a few terracotta or rust cushions to echo the fire and keep the scheme cosy."
     }
   ]
 }

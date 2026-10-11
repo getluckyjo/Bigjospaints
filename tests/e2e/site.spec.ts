@@ -77,14 +77,14 @@ test('home demo shows a real consultation and tints the walls', async ({ page })
   await expect(demo.getByRole('heading', { name: 'One photo in. Three colours out.' })).toBeVisible();
   await expect(demo.locator('.bj-demo__options li')).toHaveCount(3);
   await expect(demo.getByText(/R\d/).first()).toBeVisible();
-  const egret = demo.getByRole('button', { name: 'Egret' });
-  await egret.click();
-  await expect(egret).toHaveAttribute('aria-pressed', 'true');
+  const sahara = demo.getByRole('button', { name: 'Sahara Drive' });
+  await sahara.click();
+  await expect(sahara).toHaveAttribute('aria-pressed', 'true');
   await expect(demo).toHaveClass(/is-tinted/);
-  await expect(demo.locator('[data-bj-demo-status]')).toHaveText('Showing the walls in Egret.');
-  // The walls take on the colour and the bed doesn't: compare the canvas with the photo it was made from.
-  await demo.getByRole('button', { name: 'Desert Spring' }).click();
-  await expect(demo.locator('[data-bj-demo-status]')).toHaveText('Showing the walls in Desert Spring.');
+  await expect(demo.locator('[data-bj-demo-status]')).toHaveText('Showing the walls in Sahara Drive.');
+  // The walls take on the colour and the sofa doesn't: compare the canvas with the photo it was made from.
+  await demo.getByRole('button', { name: 'Tree Fern' }).click();
+  await expect(demo.locator('[data-bj-demo-status]')).toHaveText('Showing the walls in Tree Fern.');
   const px = await demo.evaluate(async (root: HTMLElement) => {
     const canvas = root.querySelector('canvas')!;
     const photo = new Image();
@@ -96,15 +96,23 @@ test('home demo shows a real consultation and tints the walls', async ({ page })
     plain.getContext('2d')!.drawImage(photo, 0, 0);
     const at = (c: HTMLCanvasElement, x: number, y: number) =>
       Array.from(c.getContext('2d')!.getImageData(Math.round(x * c.width), Math.round(y * c.height), 1, 1).data);
-    return { wall: at(canvas, 0.5, 0.08), wallBefore: at(plain, 0.5, 0.08), bed: at(canvas, 0.5, 0.55), bedBefore: at(plain, 0.5, 0.55) };
+    return { wall: at(canvas, 0.42, 0.3), wallBefore: at(plain, 0.42, 0.3), sofa: at(canvas, 0.75, 0.75), sofaBefore: at(plain, 0.75, 0.75) };
   });
-  expect(px.wallBefore[0]).toBeGreaterThan(px.wallBefore[1]); // a warm white wall in the photo…
-  expect(px.wall[1]).toBeGreaterThan(px.wall[0]); // …turns grey-green
-  for (let c = 0; c < 3; c++) expect(Math.abs(px.bed[c] - px.bedBefore[c])).toBeLessThanOrEqual(2);
+  expect(px.wallBefore[0]).toBeGreaterThan(px.wallBefore[1]); // a dusty pink wall in the photo…
+  expect(px.wall[1]).toBeGreaterThan(px.wall[0]); // …turns sage green
+  for (let c = 0; c < 3; c++) expect(Math.abs(px.sofa[c] - px.sofaBefore[c])).toBeLessThanOrEqual(2);
   await demo.getByRole('button', { name: 'Photo as sent' }).click();
   await expect(demo).not.toHaveClass(/is-tinted/);
   await demo.getByRole('link', { name: 'Try it with your room' }).click();
   await expect(page).toHaveURL(/\/colour-consultant$/);
+});
+
+test('home photos are credited to their Unsplash photographers', async ({ page }) => {
+  await page.goto('/');
+  const credits = page.locator('main').getByRole('link', { name: /on Unsplash$/ });
+  await expect(credits).toHaveCount(5);
+  for (const link of await credits.all()) await expect(link).toHaveAttribute('href', /^https:\/\/unsplash\.com\/photos\//);
+  await expect(page.getByText(/from R\d+, paint a test patch/)).toBeVisible();
 });
 
 test('the mobile menu opens', async ({ page }) => {

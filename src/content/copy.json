@@ -62,6 +62,9 @@
       "Our colour consultant runs on OpenAI’s GPT-5.5. It looks at the light, floors, furniture and colours already in your photo, reads your brief, and suggests three colours that suit the room and each other.",
       "It only chooses from real colours in our catalogue. We work out the litres and the price ourselves, from your room size and our price list, so the numbers never come from the AI."
     ],
+    "samplesTitle": "Try it on your wall first.",
+    "samplesBody": "A screen can’t show a colour exactly, and daylight changes it through the day. Order a sample pot from {price}, paint a test patch, and look at it in the morning and the evening before you buy.",
+    "samplesLink": "How sample pots work",
     "brandsTitle": "Every top brand, one place.",
     "brandsBody": "Compare colours across brands, then buy them in one order.",
     "closingTitle": "Ready to see your room in colour?",

@@ -1,6 +1,6 @@
 /**
  * Home-page demo: tint the walls of the example photo in a chosen paint colour.
- * The wall mask (public/demo/walls.png, white = wall) was traced by hand for this one photo. Each
+ * The wall mask (public/demo/walls.png, white = wall) was made for this one photo (see demo.json). Each
  * wall pixel keeps its own light and shade: the paint colour is scaled by how bright that pixel is
  * compared with the brightest part of the wall, in linear light, then blended in by the mask.
  */
