@@ -1,0 +1,31 @@
+---
+import Icon from './Icon.astro';
+import copy from '../content/copy.json';
+import { business, deliveryDays, whatsappHref } from '../lib/business';
+import { policies } from '../lib/policies';
+---
+
+<footer class="bj-dark bj-section bj-footer">
+  <div class="bj-container bj-footer__grid">
+    <div class="bj-stack" style="--bj-stack-gap:16px">
+      <img src="/logos/big-jos-paints-bone.svg" width="190" height="64" alt="Big Jo’s Paints" loading="lazy" />
+      <p>{copy.tagline}</p>
+    </div>
+    <nav class="bj-footer__links" aria-label="Footer">
+      {copy.nav.map((link) => <a href={link.href}>{link.label}</a>)}
+      <a href="/cart">Cart</a>
+    </nav>
+    <div class="bj-footer__links">
+      <p class="bj-icon-text"><Icon name="delivery" />Delivered in {deliveryDays} days</p>
+      {policies.map((p) => <a href={`/policies/${p.slug}`}>{p.title}</a>)}
+      {business.email && <a href={`mailto:${business.email}`}>{business.email}</a>}
+      {business.whatsapp && (
+        <a class="bj-icon-text" href={whatsappHref('Hi Big Jo’s Paints, I have a question.')}>
+          <Icon name="chat" />WhatsApp us
+        </a>
+      )}
+      <p class="bj-small bj-icon-text"><Icon name="secure" />Payments are processed by PayFast.</p>
+      <p class="bj-small">{copy.trademarks}</p>
+    </div>
+  </div>
+</footer>

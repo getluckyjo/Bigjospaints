@@ -1,0 +1,166 @@
+{
+  "$comment": "Big Jo’s Paints website copy. DRAFT for owner review (written 11 Oct 2026 from the owner's brief: online reseller of South Africa's top paint brands, AI colour consultant on OpenAI GPT-5.5, photo + brief + room size gives 3 colours with brand and cost, buy online, delivered in 3 days).",
+  "tagline": "Big on colour. Easy on you.",
+  "nav": [
+    {
+      "label": "Colour consultant",
+      "href": "/colour-consultant"
+    },
+    {
+      "label": "Colours",
+      "href": "/colours"
+    },
+    {
+      "label": "Brands",
+      "href": "/brands"
+    },
+    {
+      "label": "Help",
+      "href": "/help"
+    }
+  ],
+  "home": {
+    "seo": {
+      "title": "Big Jo’s Paints | AI colour consultant and South Africa’s top paint brands",
+      "description": "Upload a photo of your room and get three paint colours from top South African brands, with exactly how much paint you need and what it costs. Delivered in 3 days."
+    },
+    "eyebrow": "AI colour consultant",
+    "title": "Find your colour. Know the cost.",
+    "body": "Send a photo of your room, say how you want it to feel, and our AI colour consultant picks three colours from South Africa’s top paint brands. You see exactly how much paint you need and what it costs. Buy it here, and it’s delivered in 3 days.",
+    "primaryCta": "Start with a photo",
+    "secondaryCta": "Browse colours",
+    "facts": [
+      "Top South African brands in one place",
+      "Exact litres, no guesswork",
+      "Delivered in 3 days"
+    ],
+    "stepsTitle": "Three colours in about a minute.",
+    "steps": [
+      {
+        "icon": "camera",
+        "title": "Snap your room",
+        "body": "Take a photo, or choose one from your phone."
+      },
+      {
+        "icon": "note",
+        "title": "Tell us the feel",
+        "body": "Calm, warm, bright or bold. A few words is enough."
+      },
+      {
+        "icon": "size",
+        "title": "Add the room size",
+        "body": "Pick small, medium or large, or type the measurements."
+      },
+      {
+        "icon": "swatch",
+        "title": "Get three colours",
+        "body": "Each with the brand, the paint, the litres and the cost. Add it to your cart, and it’s delivered in 3 days."
+      }
+    ],
+    "aiTitle": "A colour consultant that looks at your room.",
+    "aiBody": [
+      "Our colour consultant runs on OpenAI’s GPT-5.5. It looks at the light, floors, furniture and colours already in your photo, reads your brief, and suggests three colours that suit the room and each other.",
+      "It only chooses from real colours in our catalogue. We work out the litres and the price ourselves, from your room size and our price list, so the numbers never come from the AI."
+    ],
+    "brandsTitle": "Every top brand, one place.",
+    "brandsBody": "Compare colours across brands, then buy them in one order.",
+    "closingTitle": "Ready to see your room in colour?",
+    "closingBody": "It takes about a minute, and it’s free."
+  },
+  "consultant": {
+    "seo": {
+      "title": "AI colour consultant | Big Jo’s Paints",
+      "description": "Upload a photo of your room, describe the feel you want and add the room size. Get three paint colours with the brand, the paint you need and the cost."
+    },
+    "title": "Your AI colour consultant",
+    "intro": "Three quick steps. You’ll get three colours, each with the brand, how much paint you need and what it costs.",
+    "photoTitle": "Add a photo of your room",
+    "photoEmpty": "Tap to take a photo or choose one",
+    "photoHint": "A photo in daylight works best. JPEG, PNG or WebP.",
+    "photoChange": "Change photo",
+    "photoPrivacy": "We send your photo to OpenAI only to suggest colours, and we don’t keep it.",
+    "noPhoto": "No photo handy? Skip this step and describe the room in step 2.",
+    "briefTitle": "Tell us the feel you want",
+    "roomTypeLabel": "Which room is it?",
+    "briefLabel": "Your brief",
+    "briefHint": "Tap an idea or write your own, for example “calm and warm, we have oak floors and a grey couch”.",
+    "sizeTitle": "How big is the room?",
+    "wallsLabel": "What are you painting?",
+    "wallsAll": "All the walls",
+    "wallsFeature": "One feature wall",
+    "moreLabel": "Ceiling height, doors and windows",
+    "submit": "Show my 3 colours",
+    "submitNote": "Free. Takes about 20 seconds.",
+    "thinkingTitle": "Finding your colours…",
+    "thinkingSteps": [
+      "Looking at the light in your room…",
+      "Matching colours to your brief…",
+      "Working out the paint and the price…"
+    ],
+    "resultsTitle": "Your three colours",
+    "rulesNote": "The AI colour consultant isn’t switched on yet, so these three colours were matched to your brief by simple rules. The litres and prices are worked out for your room.",
+    "aiDownNote": "Our AI couldn’t look at your photo just now, so these colours were matched to your brief instead. Try again in a minute for a full consultation.",
+    "estimateNote": "Prices are for wall paint only: two coats plus 10% extra. On-screen colours are approximate, so check a physical swatch or paint a test patch before you start.",
+    "addToCart": "Add {litres} to cart",
+    "startAgain": "Try a different brief"
+  },
+  "colours": {
+    "seo": {
+      "title": "Paint colours from South Africa’s top brands | Big Jo’s Paints",
+      "description": "Browse paint colours from top South African brands by colour family and brand. Choose your paint and tin size, and get it delivered in 3 days."
+    },
+    "title": "Browse colours",
+    "intro": "Colours from South Africa’s top brands, grouped by family. Choose one to see the paints it comes in and the prices.",
+    "notSure": "Not sure? Let the AI colour consultant suggest three for your room."
+  },
+  "brands": {
+    "seo": {
+      "title": "Paint brands | Big Jo’s Paints",
+      "description": "The South African paint brands we sell, their wall paints, finishes and prices per tin."
+    },
+    "title": "The brands we sell",
+    "intro": "South Africa’s top paint brands, side by side. Prices are per tin, including VAT."
+  },
+  "help": {
+    "seo": {
+      "title": "Help and FAQs | Big Jo’s Paints",
+      "description": "How the AI colour consultant works, how we work out how much paint you need, delivery in 3 days, payment and your photo."
+    },
+    "title": "Help",
+    "faqs": [
+      {
+        "id": "ai",
+        "question": "How does the AI choose my colours?",
+        "answer": "It looks at your photo (the light, floors, furniture and colours already in the room) and reads your brief. Then it picks three colours from our catalogue of real brand colours, and a suitable paint for each. It never makes up a colour."
+      },
+      {
+        "id": "litres",
+        "question": "How do you work out how much paint I need?",
+        "answer": "We work out your wall area from the room size: the length and width of the room times the ceiling height, less a door and a window. We allow two coats plus 10% extra for cutting in and touch-ups, then choose the cheapest mix of tins that covers it."
+      },
+      {
+        "id": "screen",
+        "question": "Will the colour look the same on my wall?",
+        "answer": "Screens show colours differently, and daylight changes them through the day. Use the swatch as a guide and paint a test patch before you do the whole room."
+      },
+      {
+        "id": "delivery",
+        "question": "How fast is delivery?",
+        "answer": "Your paint is delivered in 3 days."
+      },
+      {
+        "id": "payment",
+        "question": "How do I pay?",
+        "answer": "Securely online through PayFast, by card or Instant EFT. We never see your card or banking details."
+      },
+      {
+        "id": "photo",
+        "question": "What happens to my photo?",
+        "answer": "We send it to OpenAI only to get your colour suggestions, and we don’t keep it. OpenAI doesn’t use it to train its models."
+      }
+    ]
+  },
+  "testShop": "Test shop: checkout uses the PayFast sandbox. No real payments are taken and no paint is sent.",
+  "footer": "Big Jo’s Paints. South Africa’s top paint brands, delivered in 3 days.",
+  "trademarks": "Brand names and colour names belong to their owners."
+}

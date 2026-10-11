@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Swatch from '../components/Swatch.astro';
+import copy from '../content/copy.json';
+import { coloursFor, productsFor, sellingBrands } from '../lib/catalogue';
+import { deliveryDays } from '../lib/business';
+import { formatLitres } from '../lib/estimate';
+import { formatZar } from '../lib/money';
+
+const b = copy.brands;
+---
+
+<Base title={b.seo.title} description={b.seo.description}>
+  <section class="bj-container bj-section bj-stack">
+    <div class="bj-stack" style="--bj-stack-gap:12px">
+      <h1>{b.title}</h1>
+      <p class="bj-lead">{b.intro}</p>
+      <ul class="bj-facts"><li><Icon name="delivery" />Every order delivered in {deliveryDays} days</li></ul>
+    </div>
+    {
+      sellingBrands.map((brand) => {
+        const paints = productsFor(brand.id);
+        const brandColours = coloursFor(brand.id);
+        return (
+          <section class="bj-stack" style="--bj-stack-gap:16px; padding-top:24px; border-top:1px solid var(--bj-line)" aria-labelledby={`brand-${brand.id}`}>
+            <h2 class="bj-h3" id={`brand-${brand.id}`}>{brand.name}</h2>
+            <div class="bj-compare-strip" aria-hidden="true" style="height:24px">
+              {brandColours.slice(0, 12).map((c) => <Swatch tag="span" hex={c.hex} />)}
+            </div>
+            <div class="bj-table-wrap">
+              <table>
+                <thead><tr><th scope="col">Paint</th><th scope="col">Finish</th><th scope="col">Best for</th><th scope="col">Light colours, per tin</th></tr></thead>
+                <tbody>
+                  {paints.map((p) => (
+                    <tr>
+                      <th scope="row">{p.name}</th>
+                      <td>{p.finish}</td>
+                      <td>{p.bestFor}</td>
+                      <td>{p.sizes.map((s) => `${formatLitres(s.litres)} ${formatZar(s.priceCents)}`).join(' · ')}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p class="bj-small bj-muted">Darker colours are mixed in a deeper base and can cost more; the colour page shows the price for each colour.</p>
+            <a class="bj-link-arrow" href={`/colours?brand=${brand.id}`}>See {brandColours.length} {brand.name} colours<Icon name="arrow-right" /></a>
+          </section>
+        );
+      })
+    }
+  </section>
+</Base>

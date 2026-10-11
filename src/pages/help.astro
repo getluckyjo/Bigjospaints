@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import copy from '../content/copy.json';
+import { business, whatsappHref } from '../lib/business';
+
+const h = copy.help;
+---
+
+<Base title={h.seo.title} description={h.seo.description}>
+  <section class="bj-container bj-section bj-stack bj-reading">
+    <h1>{h.title}</h1>
+    <div class="bj-accordion">
+      {
+        h.faqs.map((faq) => (
+          <details id={faq.id}>
+            <summary>{faq.question}</summary>
+            <div>{faq.answer}</div>
+          </details>
+        ))
+      }
+    </div>
+    <div class="bj-row">
+      <a class="bj-button" href="/colour-consultant"><Icon name="spark" />Find my colours</a>
+      {business.whatsapp && <a class="bj-icon-text" href={whatsappHref('Hi Big Jo’s Paints, I have a question.')}><Icon name="chat" />WhatsApp us</a>}
+    </div>
+  </section>
+</Base>

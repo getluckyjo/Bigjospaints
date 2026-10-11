@@ -1,0 +1,38 @@
+---
+/**
+ * Hands the customer to PayFast with a signed form. Reached by a 303 from POST /checkout,
+ * so going "back" from PayFast lands here (GET) rather than re-posting the checkout form.
+ */
+export const prerender = false;
+
+import Base from '../../../layouts/Base.astro';
+import { preparePayment } from '../../../lib/checkout';
+
+const pay = await preparePayment(Astro.params.reference ?? '', Astro.url.searchParams.get('t'), Astro.url);
+if (pay.kind === 'missing') return new Response(null, { status: 404 });
+if (pay.kind === 'redirect') return Astro.redirect(pay.to, 303);
+Astro.response.headers.set('Cache-Control', 'no-store');
+const reference = pay.reference;
+---
+
+<Base title="Taking you to PayFast | Big Jo’s Paints" noindex>
+  <section class="bj-container bj-section bj-stack bj-reading">
+    <h1>Taking you to PayFast…</h1>
+    <p>If nothing happens in a few seconds, use the button below.</p>
+    <form id="payfast" name="payfast" method="post" action={pay.action}>
+      {pay.fields.map(([name, value]) => <input type="hidden" name={name} value={value} />)}
+      <button class="bj-button" type="submit">Continue to PayFast</button>
+    </form>
+  </section>
+  <script is:inline define:vars={{ reference }}>
+    // Submit automatically once per order per tab, so "back" from PayFast doesn't bounce the
+    // customer straight back to PayFast. After that, the button above does the job.
+    var key = 'bjp-payfast-' + reference;
+    var first = true;
+    try {
+      first = !sessionStorage.getItem(key);
+      sessionStorage.setItem(key, '1');
+    } catch (e) {}
+    if (first) document.forms.payfast.submit();
+  </script>
+</Base>

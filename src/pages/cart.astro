@@ -1,0 +1,93 @@
+---
+export const prerender = false;
+
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Swatch from '../components/Swatch.astro';
+import { deliveryDays, deliveryFeeCents } from '../lib/business';
+import { CART_COOKIE, parseCart, priceCart, serializeCart } from '../lib/cart';
+import { applyCartAction } from '../lib/cart-actions';
+import { formatLitres } from '../lib/estimate';
+import { formatZar } from '../lib/money';
+
+let entries = parseCart(Astro.cookies.get(CART_COOKIE)?.value);
+
+if (Astro.request.method === 'POST') {
+  const { entries: next, added } = applyCartAction(entries, await Astro.request.formData());
+  Astro.cookies.set(CART_COOKIE, serializeCart(next), {
+    path: '/',
+    maxAge: 60 * 60 * 24 * 30,
+    sameSite: 'lax',
+    secure: Astro.url.protocol === 'https:',
+  });
+  return Astro.redirect(added ? `/cart?added=${added}` : '/cart', 303);
+}
+
+Astro.response.headers.set('Cache-Control', 'no-store');
+const { lines, subtotalCents, litres } = priceCart(entries);
+const added = Number(Astro.url.searchParams.get('added') ?? 0);
+const total = subtotalCents + (deliveryFeeCents ?? 0);
+---
+
+<Base title="Your cart | Big Jo’s Paints" noindex>
+  <section class="bj-container bj-section bj-stack" style="max-width:860px">
+    <h1>Your cart</h1>
+    {
+      added > 0 && lines.length > 0 && (
+        <div class="bj-alert bj-alert--success" role="status" tabindex="-1" data-bj-focus>
+          <Icon name="done" />
+          <p>Added to your cart. Keep shopping or check out when you’re ready.</p>
+        </div>
+      )
+    }
+    {
+      lines.length === 0 ? (
+        <div class="bj-stack">
+          <p class="bj-lead">Your cart is empty.</p>
+          <div class="bj-row">
+            <a class="bj-button" href="/colour-consultant"><Icon name="spark" />Find my colours</a>
+            <a class="bj-button bj-button--secondary" href="/colours">Browse colours</a>
+          </div>
+        </div>
+      ) : (
+        <>
+          <ul class="bj-cart-lines">
+            {lines.map((line) => (
+              <li class="bj-cart-line">
+                <Swatch hex={line.colour.hex} class="bj-chip bj-cart-line__chip" />
+                <div>
+                  <p><strong><a href={`/colours/${line.colour.id}`}>{line.colour.name}</a></strong>{line.colour.code && <span class="bj-muted"> · {line.colour.code}</span>}</p>
+                  <p class="bj-small">{line.brandName} {line.product.name} ({line.product.finish}), {formatLitres(line.sizeLitres)} tin, {formatZar(line.unitPriceCents)} each</p>
+                  <div class="bj-cart-line__actions">
+                    <form method="post" action="/cart" class="bj-row" style="gap:8px">
+                      <input type="hidden" name="action" value="update" />
+                      <input type="hidden" name="key" value={line.key} />
+                      <label class="bj-sr-only" for={`qty-${line.key}`}>Quantity of {line.colour.name}, {formatLitres(line.sizeLitres)}</label>
+                      <input class="bj-input" id={`qty-${line.key}`} name="qty" type="number" min="0" max="50" value={line.quantity} />
+                      <button class="bj-link-button" type="submit">Update</button>
+                    </form>
+                    <form method="post" action="/cart">
+                      <input type="hidden" name="action" value="remove" />
+                      <input type="hidden" name="key" value={line.key} />
+                      <button class="bj-link-button" type="submit">Remove<span class="bj-sr-only"> {line.colour.name}, {formatLitres(line.sizeLitres)}</span></button>
+                    </form>
+                  </div>
+                </div>
+                <p class="bj-cart-line__price">{formatZar(line.lineCents)}</p>
+              </li>
+            ))}
+          </ul>
+          <dl class="bj-totals">
+            <div><dt>Paint ({formatLitres(litres)})</dt><dd>{formatZar(subtotalCents)}</dd></div>
+            <div><dt class="bj-icon-text"><Icon name="delivery" />Delivery in {deliveryDays} days</dt><dd>{deliveryFeeCents === null ? 'To be confirmed' : deliveryFeeCents === 0 ? 'Free' : formatZar(deliveryFeeCents)}</dd></div>
+            <div class="bj-totals__total"><dt>Total</dt><dd>{formatZar(total)}</dd></div>
+          </dl>
+          <div class="bj-row" style="justify-content:space-between">
+            <a class="bj-link-arrow" href="/colours">Keep shopping</a>
+            <a class="bj-button" href="/checkout"><Icon name="secure" />Check out</a>
+          </div>
+        </>
+      )
+    }
+  </section>
+</Base>

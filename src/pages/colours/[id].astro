@@ -1,0 +1,103 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import Swatch from '../../components/Swatch.astro';
+import { FAMILIES, colours, fromPricePerLitreCents, getBrand, productsFor, sizesFor, type Colour } from '../../lib/catalogue';
+import { deliveryDays } from '../../lib/business';
+import { formatLitres } from '../../lib/estimate';
+import { formatZar } from '../../lib/money';
+
+export function getStaticPaths() {
+  return colours.map((colour) => ({ params: { id: colour.id }, props: { colour } }));
+}
+
+const { colour } = Astro.props as { colour: Colour };
+const brand = getBrand(colour.brand)!;
+const options = productsFor(colour.brand).map((p) => ({ ...p, sizes: sizesFor(p, colour) }));
+const family = FAMILIES.find((f) => f.id === colour.family)?.label;
+const similar = colours.filter((c) => c.family === colour.family && c.id !== colour.id).slice(0, 6);
+---
+
+<Base
+  title={`${colour.name}${colour.code ? ` ${colour.code}` : ''} by ${brand.name} | Big Jo’s Paints`}
+  description={`${colour.name} by ${brand.name}: ${colour.notes}. Buy it in ${options.map((p) => p.name).join(', ')}, delivered in ${deliveryDays} days.`}
+>
+  <section class="bj-container bj-section bj-stack">
+    <nav class="bj-breadcrumb" aria-label="Breadcrumb"><a href="/colours">Colours</a> / <span aria-current="page">{colour.name}</span></nav>
+    <div class="bj-colour-page">
+      <Swatch hex={colour.hex} class="bj-colour-hero">
+        <span class="bj-small">{colour.hex.toUpperCase()} (screen approximation)</span>
+      </Swatch>
+      <div class="bj-stack">
+        <div class="bj-stack" style="--bj-stack-gap:8px">
+          <span class="bj-eyebrow">{brand.name}{family ? ` · ${family}` : ''}</span>
+          <h1>{colour.name}</h1>
+          {colour.code && <p class="bj-muted">Colour code {colour.code}{colour.lrv != null ? ` · light reflectance ${colour.lrv}` : ''}</p>}
+          <p class="bj-lead">{colour.notes.charAt(0).toUpperCase() + colour.notes.slice(1)}.</p>
+        </div>
+
+        <form class="bj-stack" method="post" action="/cart" data-bj-busy>
+          <input type="hidden" name="action" value="add-one" />
+          <input type="hidden" name="colour" value={colour.id} />
+          <ul class="bj-options-list" style="list-style:none;margin:0;padding:0">
+            {options.map((p) => (
+              <li class="bj-choice" style="padding-left:16px">
+                <span class="bj-choice__name">{brand.name} {p.name} · {p.finish}</span>
+                <span class="bj-choice__hint">{p.bestFor}. From {formatZar(fromPricePerLitreCents(p.sizes))} per litre.</span>
+              </li>
+            ))}
+          </ul>
+          <div class="bj-buy-row">
+            <div class="bj-field">
+              <label for="tin-size">Paint and tin size</label>
+              <select class="bj-input" id="tin-size" name="size">
+                {options.map((p, i) => (
+                  <optgroup label={`${p.name} (${p.finish})`}>
+                    {p.sizes.map((s) => (
+                      <option value={`${p.id}|${s.litres}`} selected={i === 0 && s === p.sizes[p.sizes.length - 1]}>
+                        {p.name} {formatLitres(s.litres)}: {formatZar(s.priceCents)}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+            </div>
+            <div class="bj-field">
+              <label for="qty">Quantity</label>
+              <input class="bj-input bj-qty" id="qty" name="qty" type="number" min="1" max="50" value="1" />
+            </div>
+          </div>
+          <button class="bj-button" type="submit" data-busy-label="Adding…"><Icon name="cart" />Add to cart</button>
+          <ul class="bj-facts">
+            <li><Icon name="delivery" />Delivered in {deliveryDays} days</li>
+            <li><Icon name="secure" />Pay securely with PayFast</li>
+          </ul>
+        </form>
+
+        <p class="bj-note"><Icon name="info" />Screens show colours differently. Paint a test patch before you do the whole room.</p>
+        <p><a class="bj-link-arrow" href="/colour-consultant"><Icon name="spark" />Not sure how much you need? Our AI consultant works it out for your room.</a></p>
+      </div>
+    </div>
+  </section>
+
+  {
+    similar.length > 0 && (
+      <section class="bj-container bj-section bj-stack" aria-labelledby="similar-title" style="padding-top:0">
+        <h2 class="bj-h3" id="similar-title">Similar colours</h2>
+        <ul class="bj-colour-grid">
+          {similar.map((col) => (
+            <li>
+              <a class="bj-colour-tile" href={`/colours/${col.id}`}>
+                <Swatch hex={col.hex} class="bj-colour-tile__swatch" />
+                <span class="bj-colour-tile__text">
+                  <strong>{col.name}</strong>
+                  <span>{getBrand(col.brand)?.name}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+</Base>

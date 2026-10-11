@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import { policies } from '../../lib/policies';
+
+export function getStaticPaths() {
+  return policies.map((policy) => ({ params: { slug: policy.slug }, props: { policy } }));
+}
+
+const { policy } = Astro.props;
+const { title, updated, Content } = policy;
+---
+
+<Base title={`${title} | Big Jo’s Paints`}>
+  <article class="bj-container bj-section bj-stack bj-reading">
+    <h1>{title}</h1>
+    {updated && <p class="bj-small bj-muted">Last updated {updated}</p>}
+    <Content />
+  </article>
+</Base>

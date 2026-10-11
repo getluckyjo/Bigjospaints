@@ -1,0 +1,167 @@
+import { expect, test, type Page } from '@playwright/test';
+import path from 'node:path';
+import { checkoutSignature, type Pair } from '../../src/lib/payfast';
+import { PAYFAST_SANDBOX } from '../../src/lib/config';
+import catalogue from '../../src/data/catalogue.json' with { type: 'json' };
+
+const PHOTO = path.join(import.meta.dirname, 'fixtures/room.jpg');
+const MOCK = 'http://127.0.0.1:4599';
+
+async function stubPayFast(page: Page) {
+  const posts: Pair[][] = [];
+  await page.route('https://sandbox.payfast.co.za/**', async (route) => {
+    posts.push([...new URLSearchParams(route.request().postData() ?? '').entries()]);
+    await route.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>PayFast stub</title><h1>PayFast stub</h1>' });
+  });
+  return posts;
+}
+
+async function fillConsultant(page: Page, brief = 'Calm and restful') {
+  await page.goto('/colour-consultant');
+  await page.setInputFiles('input[name="photo"]', PHOTO);
+  await expect(page.getByText('Photo added')).toBeVisible();
+  await page.getByLabel('Which room is it?').selectOption('Lounge');
+  await page.getByLabel('Your brief').fill(brief);
+  await page.getByText('I’ll measure it').click();
+  await page.getByLabel('Length (m)').fill('5');
+  await page.getByLabel('Width (m)').fill('4');
+}
+
+test.describe('AI colour consultant', () => {
+  test('sends the photo, brief and room to gpt-5.5 and shows three priced colours', async ({ page, request }) => {
+    await fillConsultant(page);
+    await page.getByRole('button', { name: /Show my 3 colours/ }).click();
+    const results = page.locator('#results');
+    await expect(results).toBeVisible({ timeout: 30_000 });
+    await expect(results).toBeFocused();
+    await expect(results.getByText('Soft morning light from the left')).toBeVisible();
+    await expect(page.locator('.bj-option-card')).toHaveCount(3);
+    await expect(results.getByText('The AI colour consultant isn’t switched on yet')).toHaveCount(0);
+
+    // What OpenAI received.
+    const last = await (await request.get(`${MOCK}/last`)).json();
+    expect(last.headers.authorization).toBe('Bearer test-key');
+    expect(last.body.model).toBe('gpt-5.5');
+    expect(last.body.text.format).toMatchObject({ type: 'json_schema', strict: true });
+    const [text, image] = last.body.input[0].content;
+    expect(text.text).toContain('Calm and restful');
+    expect(text.text).toContain('5 × 4 m');
+    expect(image.type).toBe('input_image');
+    expect(image.image_url).toMatch(/^data:image\/jpeg;base64,/);
+
+    // The mock picks the first colour of three brands; check the first card's maths.
+    const first = catalogue.colours[0];
+    const card = page.locator('.bj-option-card').first();
+    await expect(card.getByRole('heading')).toHaveText(first.name);
+    await expect(card.getByText('Mock reason for')).toBeVisible();
+    // 2 × (5 + 4) × 2.6 = 46.8 m², less a door (1.9) and a window (1.5) = 43.4 m²
+    await expect(card.locator('.bj-need')).toContainText('43.4 m²');
+    await expect(card.locator('.bj-price-big strong')).toHaveText(/^R[\d,]+(\.\d\d)?$/);
+  });
+
+  test('falls back to brief-based colours, and says so, when the AI fails', async ({ page }) => {
+    await fillConsultant(page, 'trigger-error please');
+    await page.getByRole('button', { name: /Show my 3 colours/ }).click();
+    await expect(page.locator('#results')).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByText('Our AI couldn’t look at your photo just now')).toBeVisible();
+    await expect(page.locator('.bj-option-card')).toHaveCount(3);
+  });
+
+  test('explains a missing room measurement', async ({ page }) => {
+    await page.goto('/colour-consultant');
+    await page.getByText('I’ll measure it').click();
+    await page.getByRole('button', { name: /Show my 3 colours/ }).click();
+    await expect(page.getByRole('alert')).toContainText('Enter a length between 1 and 20 m.');
+    await expect(page.getByLabel('Length (m)')).toHaveAttribute('aria-invalid', 'true');
+  });
+
+  test('works without JavaScript', async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    await page.goto('/colour-consultant');
+    await page.setInputFiles('input[name="photo"]', PHOTO);
+    await page.getByLabel('Your brief').fill('Warm and cosy');
+    await page.getByRole('button', { name: /Show my 3 colours/ }).click();
+    await expect(page.locator('.bj-option-card')).toHaveCount(3);
+    await page.locator('.bj-option-card').first().getByRole('button', { name: /Add .* to cart/ }).click();
+    await expect(page).toHaveURL(/\/cart\?added=/);
+    await expect(page.locator('.bj-cart-line').first()).toBeVisible();
+    await context.close();
+  });
+});
+
+test('consultant → cart → checkout → signed PayFast hand-off → order and cancel pages', async ({ page }) => {
+  const posts = await stubPayFast(page);
+  await fillConsultant(page);
+  await page.getByRole('button', { name: /Show my 3 colours/ }).click();
+  const card = page.locator('.bj-option-card').first();
+  await expect(card).toBeVisible({ timeout: 30_000 });
+  const cost = (await card.locator('.bj-price-big strong').textContent())!;
+  await card.getByRole('button', { name: /Add .* to cart/ }).click();
+
+  await expect(page).toHaveURL(/\/cart\?added=/);
+  await expect(page.getByRole('status')).toContainText('Added to your cart');
+  await expect(page.locator('.bj-totals__total dd')).toHaveText(cost);
+  await expect(page.locator('[data-bj-cart-count]')).not.toHaveText('');
+
+  await page.getByRole('link', { name: 'Check out' }).click();
+  await page.getByLabel('First name').fill('Lerato');
+  await page.getByLabel('Last name').fill("O'Neil");
+  await page.getByLabel('Email address').fill('lerato@example.com');
+  await page.getByLabel('Mobile number').fill('082 123 4567');
+  await page.getByLabel('Street address').fill('12 Jacaranda Street');
+  await page.getByLabel('Suburb').fill('Parkhurst');
+  await page.getByLabel('Town or city').fill('Johannesburg');
+  await page.getByLabel('Province').selectOption('Gauteng');
+  await page.getByLabel('Postal code').fill('2193');
+  await page.getByLabel(/test order/).check();
+  await page.getByRole('button', { name: `Pay ${cost} with PayFast` }).click();
+  await expect(page.getByRole('heading', { name: 'PayFast stub' })).toBeVisible();
+
+  const fields = posts[0];
+  const data = Object.fromEntries(fields);
+  expect(`R${Number(data.amount).toLocaleString('en-US', { minimumFractionDigits: data.amount.endsWith('.00') ? 0 : 2 })}`).toBe(cost);
+  expect(data.merchant_id).toBe(PAYFAST_SANDBOX.merchantId);
+  expect(data.m_payment_id).toMatch(/^BJP-\d{6}-[A-Z2-9]{4}$/);
+  expect(data.name_last).toBe('O’Neil');
+  expect(data.signature).toBe(checkoutSignature(fields.filter(([k]) => k !== 'signature'), PAYFAST_SANDBOX.passphrase));
+
+  await page.goto(data.return_url);
+  await expect(page.getByRole('heading', { name: 'We’re confirming your payment.' })).toBeVisible();
+  await expect(page.getByText(data.m_payment_id)).toBeVisible();
+  await page.goto(data.return_url.replace(/t=[^&]+/, 't=wrong'));
+  await expect(page.getByRole('heading', { name: 'We couldn’t find that order.' })).toBeVisible();
+  await page.goto(data.cancel_url);
+  await expect(page.getByRole('heading', { name: 'Your payment didn’t go through.' })).toBeVisible();
+});
+
+test('buying from a colour page, then changing and removing the line', async ({ page }) => {
+  const colour = catalogue.colours.find((c) => c.brand === 'plascon')!;
+  await page.goto(`/colours/${colour.id}`);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(colour.name);
+  await page.getByLabel('Quantity').fill('2');
+  await page.getByRole('button', { name: 'Add to cart' }).click();
+  await expect(page).toHaveURL(/\/cart\?added=2/);
+  const line = page.locator('.bj-cart-line');
+  await expect(line).toHaveCount(1);
+  await line.getByLabel(/Quantity of/).fill('3');
+  await line.getByRole('button', { name: 'Update' }).click();
+  await expect(page.locator('.bj-cart-line').getByLabel(/Quantity of/)).toHaveValue('3');
+  await page.locator('.bj-cart-line').getByRole('button', { name: /Remove/ }).click();
+  await expect(page.getByText('Your cart is empty.')).toBeVisible();
+});
+
+test.describe('request security', () => {
+  test('cross-site form posts are refused', async ({ request }) => {
+    const response = await request.post('/cart', { form: { action: 'add' }, headers: { origin: 'https://evil.example' } });
+    expect(response.status()).toBe(403);
+  });
+
+  test('payment notifications need a valid PayFast signature', async ({ request }) => {
+    const response = await request.post('/api/payfast/itn', {
+      data: 'm_payment_id=BJP-261011-AAAA&payment_status=COMPLETE&signature=bad',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    });
+    expect(response.status()).toBe(400);
+  });
+});

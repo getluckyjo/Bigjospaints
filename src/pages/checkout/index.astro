@@ -1,0 +1,137 @@
+---
+export const prerender = false;
+
+import Base from '../../layouts/Base.astro';
+import Field from '../../components/Field.astro';
+import Icon from '../../components/Icon.astro';
+import Swatch from '../../components/Swatch.astro';
+import { PROVINCES, deliveryDays, deliveryFeeCents } from '../../lib/business';
+import { CART_COOKIE } from '../../lib/cart';
+import { handleCheckout } from '../../lib/checkout';
+import { commerceMode } from '../../lib/config';
+import { formatLitres } from '../../lib/estimate';
+import { formatZar } from '../../lib/money';
+
+const state = await handleCheckout(Astro.request, Astro.cookies.get(CART_COOKIE)?.value);
+if (state.redirect) return Astro.redirect(state.redirect, 303);
+if (state.status) Astro.response.status = state.status;
+Astro.response.headers.set('Cache-Control', 'no-store');
+
+const { lines, subtotalCents, totalCents, values, errors, startError } = state;
+const errorList = Object.entries(errors);
+const labels: Record<string, string> = {
+  firstName: 'First name',
+  lastName: 'Last name',
+  email: 'Email address',
+  phone: 'Mobile number',
+  street: 'Street address',
+  suburb: 'Suburb',
+  city: 'Town or city',
+  province: 'Province',
+  postalCode: 'Postal code',
+  accept: 'Confirmation',
+};
+const sandbox = commerceMode() === 'sandbox';
+---
+
+<Base title="Checkout | Big Jo’s Paints" noindex>
+  <section class="bj-container bj-section bj-stack">
+    <h1>Checkout</h1>
+    {
+      lines.length === 0 ? (
+        <div class="bj-stack bj-reading">
+          <p class="bj-lead">Your cart is empty, so there’s nothing to pay for yet.</p>
+          <div><a class="bj-button" href="/colours">Browse colours</a></div>
+        </div>
+      ) : (
+        <div class="bj-checkout">
+          <form class="bj-form" method="post" action="/checkout" novalidate data-bj-busy>
+            {errorList.length > 0 && (
+              <div class="bj-alert" role="alert" tabindex="-1" data-bj-focus>
+                <Icon name="alert" />
+                <div class="bj-alert__body">
+                  <h2>Please check the highlighted details.</h2>
+                  <ul class="bj-list">{errorList.map(([field]) => <li><a href={`#co-${field}`}>{labels[field] ?? field}</a></li>)}</ul>
+                </div>
+              </div>
+            )}
+            {startError && (
+              <div class="bj-alert" role="alert" tabindex="-1" data-bj-focus>
+                <Icon name="alert" />
+                <p>We couldn’t start your payment. Nothing has been charged. Please try again in a moment.</p>
+              </div>
+            )}
+            <div class="bj-honeypot" aria-hidden="true">
+              <label for="co-website">Leave this empty</label>
+              <input id="co-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <fieldset class="bj-fieldset bj-form">
+              <legend class="bj-h3">Your details</legend>
+              <div class="bj-form-row">
+                <Field idPrefix="co" name="firstName" label="First name" value={values.firstName} error={errors.firstName} required autocomplete="given-name" maxlength={100} />
+                <Field idPrefix="co" name="lastName" label="Last name" value={values.lastName} error={errors.lastName} required autocomplete="family-name" maxlength={100} />
+              </div>
+              <Field idPrefix="co" name="email" type="email" label="Email address" hint="We’ll send your order confirmation here." value={values.email} error={errors.email} required autocomplete="email" maxlength={254} />
+              <Field idPrefix="co" name="phone" type="tel" label="Mobile number" hint="For the delivery driver." value={values.phone} error={errors.phone} required autocomplete="tel" maxlength={30} />
+            </fieldset>
+
+            <fieldset class="bj-fieldset bj-form">
+              <legend class="bj-h3">Delivery address</legend>
+              <p class="bj-note"><Icon name="delivery" />Your paint is delivered in {deliveryDays} days.</p>
+              <Field idPrefix="co" name="street" label="Street address" value={values.street} error={errors.street} required autocomplete="street-address" maxlength={200} />
+              <div class="bj-form-row">
+                <Field idPrefix="co" name="suburb" label="Suburb" value={values.suburb} error={errors.suburb} required autocomplete="address-level3" maxlength={100} />
+                <Field idPrefix="co" name="city" label="Town or city" value={values.city} error={errors.city} required autocomplete="address-level2" maxlength={100} />
+              </div>
+              <div class="bj-form-row">
+                <div class="bj-field">
+                  <label for="co-province">Province</label>
+                  <select class="bj-input" id="co-province" name="province" autocomplete="address-level1" aria-invalid={errors.province ? 'true' : undefined} aria-describedby={errors.province ? 'co-province-error' : undefined}>
+                    <option value="">Choose…</option>
+                    {PROVINCES.map((p) => <option value={p} selected={values.province === p}>{p}</option>)}
+                  </select>
+                  {errors.province && <p class="bj-error" id="co-province-error">{errors.province}</p>}
+                </div>
+                <Field idPrefix="co" name="postalCode" label="Postal code" value={values.postalCode} error={errors.postalCode} required autocomplete="postal-code" inputmode="numeric" maxlength={10} />
+              </div>
+              <Field idPrefix="co" name="notes" type="textarea" label="Delivery notes (optional)" hint="Gate codes, a complex name, or where to leave the paint." value={values.notes} maxlength={1000} />
+            </fieldset>
+
+            <div class="bj-field">
+              <label class="bj-check" for="co-accept">
+                <input id="co-accept" type="checkbox" name="accept" value="yes" required checked={values.accept === 'yes'} aria-invalid={errors.accept ? 'true' : undefined} aria-describedby={errors.accept ? 'co-accept-error' : undefined} />
+                <span>{sandbox ? 'I understand this is a test order: I won’t be charged and no paint will be sent.' : 'I’ve checked my colours, tin sizes and delivery address.'}</span>
+              </label>
+              {errors.accept && <p class="bj-error" id="co-accept-error">{errors.accept}</p>}
+            </div>
+
+            <div class="bj-stack" style="--bj-stack-gap:12px">
+              <button class="bj-button" type="submit" data-busy-label="Taking you to PayFast…" data-label={`Pay ${formatZar(totalCents)} with PayFast`}>
+                Pay {formatZar(totalCents)} with PayFast
+              </button>
+              <p class="bj-note"><Icon name="secure" />Pay securely on PayFast. We never see your card or banking details.</p>
+            </div>
+          </form>
+
+          <aside class="bj-summary" aria-labelledby="summary-title">
+            <h2 id="summary-title" class="bj-eyebrow">Your order</h2>
+            {lines.map((l) => (
+              <div class="bj-summary-line">
+                <Swatch hex={l.colour.hex} class="bj-chip" />
+                <span>{l.quantity} × {formatLitres(l.sizeLitres)} {l.colour.name}<br /><span class="bj-small bj-muted">{l.brandName} {l.product.name}</span></span>
+                <span>{formatZar(l.lineCents)}</span>
+              </div>
+            ))}
+            <dl class="bj-totals">
+              <div><dt>Paint</dt><dd>{formatZar(subtotalCents)}</dd></div>
+              <div><dt class="bj-icon-text"><Icon name="delivery" />Delivery in {deliveryDays} days</dt><dd>{deliveryFeeCents === null ? 'To be confirmed' : deliveryFeeCents === 0 ? 'Free' : formatZar(deliveryFeeCents)}</dd></div>
+              <div class="bj-totals__total"><dt>Total</dt><dd>{formatZar(totalCents)}</dd></div>
+            </dl>
+            <a class="bj-small" href="/cart">Change your cart</a>
+          </aside>
+        </div>
+      )
+    }
+  </section>
+</Base>

@@ -1,0 +1,32 @@
+---
+import Icon from './Icon.astro';
+import copy from '../content/copy.json';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const current = (href: string) => (path === href || path.startsWith(`${href}/`) ? 'page' : undefined);
+---
+
+<header class="bj-header">
+  <div class="bj-container bj-header__inner">
+    <a class="bj-logo" href="/" aria-label="Big Jo’s Paints home">
+      <img src="/logos/big-jos-paints-primary.svg" width="190" height="64" alt="Big Jo’s Paints" />
+    </a>
+    <nav class="bj-nav bj-desktop-nav" aria-label="Main navigation">
+      {copy.nav.map((link) => <a href={link.href} aria-current={current(link.href)}>{link.label}</a>)}
+    </nav>
+    <div class="bj-header__end">
+      <a class="bj-cart-link" href="/cart" aria-current={current('/cart')}>
+        <Icon name="cart" />
+        <span class="bj-cart-link__label">Cart</span>
+        <span class="bj-cart-count" data-bj-cart-count aria-hidden="true"></span>
+        <span class="bj-sr-only" data-bj-cart-count-sr></span>
+      </a>
+      <details class="bj-mobile-menu">
+        <summary><Icon name="menu" />Menu</summary>
+        <nav aria-label="Mobile navigation">
+          {copy.nav.map((link) => <a href={link.href} aria-current={current(link.href)}>{link.label}</a>)}
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>

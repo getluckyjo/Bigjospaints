@@ -1,0 +1,232 @@
+---
+export const prerender = false;
+
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import OptionCard from '../components/OptionCard.astro';
+import Swatch from '../components/Swatch.astro';
+import copy from '../content/copy.json';
+import { deliveryDays } from '../lib/business';
+import { BRIEF_IDEAS, ROOM_TYPES, handleConsultPost, type ConsultPageState } from '../lib/consult';
+import { DEFAULT_HEIGHT_M, ROOM_PRESETS } from '../lib/estimate';
+import { aiConfig } from '../lib/config';
+
+const c = copy.consultant;
+let state: ConsultPageState = { values: {}, errors: {}, result: null, photoUrl: null, formError: null };
+
+if (Astro.request.method === 'POST') {
+  let ip = '';
+  try {
+    ip = Astro.clientAddress;
+  } catch {
+    ip = Astro.request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? '';
+  }
+  state = await handleConsultPost(Astro.request, ip);
+  if (state.status) Astro.response.status = state.status;
+}
+Astro.response.headers.set('Cache-Control', 'no-store');
+
+const v = state.values;
+const size = v.size ?? 'medium';
+const walls = v.walls ?? 'all';
+const result = state.result;
+const errorList = Object.entries(state.errors);
+const sizeLabels: Record<string, string> = { photo: 'Photo', brief: 'Your brief', length: 'Length', width: 'Width', height: 'Ceiling height' };
+const aiOn = !!aiConfig().apiKey;
+---
+
+<Base title={c.seo.title} description={c.seo.description}>
+  <section class="bj-container bj-section" data-bj-consult>
+    <div class="bj-consult bj-stack">
+      <div class="bj-stack" style="--bj-stack-gap:12px">
+        <span class="bj-eyebrow bj-icon-text"><Icon name="spark" />{aiOn ? 'Powered by OpenAI GPT-5.5' : 'AI colour consultant'}</span>
+        <h1>{c.title}</h1>
+        <p class="bj-lead">{c.intro}</p>
+      </div>
+
+      {
+        result && (
+          <section class="bj-results bj-stack" id="results" aria-labelledby="results-title" tabindex="-1" data-bj-focus>
+            <h2 id="results-title">{c.resultsTitle}</h2>
+            {result.source === 'rules' && (
+              <div class="bj-alert bj-alert--info">
+                <Icon name="info" />
+                <p>{result.aiUnavailable ? c.aiDownNote : c.rulesNote}</p>
+              </div>
+            )}
+            {result.photoIssue && (
+              <div class="bj-alert bj-alert--info">
+                <Icon name="camera" />
+                <p>{result.photoIssue}</p>
+              </div>
+            )}
+            {(state.photoUrl || result.roomRead) && (
+              <div class:list={['bj-results__intro', { 'has-photo': state.photoUrl }]}>
+                {state.photoUrl && <img class="bj-results__photo" src={state.photoUrl} alt="Your room" />}
+                <div class="bj-stack" style="--bj-stack-gap:12px">
+                  {result.roomRead && <p class="bj-lead">{result.roomRead}</p>}
+                  <div class="bj-compare-strip" aria-hidden="true">
+                    {result.suggestions.map((s) => <Swatch tag="span" hex={s.colour.hex} class="bj-chip" />)}
+                  </div>
+                </div>
+              </div>
+            )}
+            <div class="bj-options">
+              {result.suggestions.map((option, i) => <OptionCard option={option} index={i} walls={result.room.walls} />)}
+            </div>
+            <p class="bj-note"><Icon name="info" />{c.estimateNote}</p>
+            <p class="bj-note"><Icon name="delivery" />Add a colour to your cart and it’s delivered in {deliveryDays} days.</p>
+            <div><a class="bj-button bj-button--secondary" href="#consult-form">{c.startAgain}</a></div>
+          </section>
+        )
+      }
+
+      <div class="bj-thinking" role="status" aria-live="polite" data-bj-thinking>
+        <div class="bj-thinking__chips" aria-hidden="true">
+          <span style="background:#A8B49A"></span><span style="background:#C98B6B"></span><span style="background:#7F96AD"></span>
+        </div>
+        <h2 class="bj-h3">{c.thinkingTitle}</h2>
+        <p data-bj-thinking-step>{c.thinkingSteps[0]}</p>
+      </div>
+
+      <form
+        class="bj-consult-form"
+        id="consult-form"
+        method="post"
+        action="/colour-consultant"
+        enctype="multipart/form-data"
+        novalidate
+        data-bj-consult-form
+        data-steps={JSON.stringify(c.thinkingSteps)}
+      >
+        {
+          (errorList.length > 0 || state.formError) && (
+            <div class="bj-alert" role="alert" tabindex="-1" data-bj-focus>
+              <Icon name="alert" />
+              <div class="bj-alert__body">
+                {state.formError ? <p>{state.formError}</p> : <h2>Please check these details</h2>}
+                {errorList.length > 0 && (
+                  <ul class="bj-list">
+                    {errorList.map(([name, message]) => <li><a href={`#cf-${name}`}>{sizeLabels[name] ?? name}</a>: {message}</li>)}
+                  </ul>
+                )}
+              </div>
+            </div>
+          )
+        }
+        <div class="bj-honeypot" aria-hidden="true">
+          <label for="cf-website">Leave this empty</label>
+          <input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <fieldset class="bj-step">
+          <legend><span class="bj-step__num">1</span>{c.photoTitle}</legend>
+          <div class="bj-drop" data-bj-drop>
+            <label class="bj-sr-only" for="cf-photo">Photo of your room</label>
+            <input id="cf-photo" type="file" name="photo" accept="image/jpeg,image/png,image/webp,image/*" aria-describedby="cf-photo-hint" aria-invalid={state.errors.photo ? 'true' : undefined} />
+            <div class="bj-drop__empty">
+              <Icon name="camera" />
+              <p class="bj-drop__title">{c.photoEmpty}</p>
+              <p class="bj-small bj-muted" id="cf-photo-hint">{c.photoHint}</p>
+            </div>
+            <div class="bj-drop__preview" aria-live="polite">
+              <img alt="Your room" data-bj-preview />
+              <div>
+                <p class="bj-drop__title">Photo added</p>
+                <p class="bj-small bj-muted">{c.photoChange}</p>
+              </div>
+            </div>
+          </div>
+          {state.errors.photo && <p class="bj-error" id="cf-photo-error">{state.errors.photo}</p>}
+          <p class="bj-note"><Icon name="secure" />{c.photoPrivacy}</p>
+          <p class="bj-small bj-muted">{c.noPhoto}</p>
+        </fieldset>
+
+        <fieldset class="bj-step">
+          <legend><span class="bj-step__num">2</span>{c.briefTitle}</legend>
+          <div class="bj-field">
+            <label for="cf-roomType">{c.roomTypeLabel}</label>
+            <select class="bj-input" id="cf-roomType" name="roomType">
+              {ROOM_TYPES.map((t) => <option value={t} selected={(v.roomType ?? 'Bedroom') === t}>{t}</option>)}
+            </select>
+          </div>
+          <div class="bj-field">
+            <label for="cf-brief">{c.briefLabel}</label>
+            <p class="bj-hint" id="cf-brief-hint">{c.briefHint}</p>
+            <div class="bj-chips" data-bj-chips hidden>
+              {BRIEF_IDEAS.map((idea) => <button type="button" class="bj-chip-button" aria-pressed="false" data-idea={idea}>{idea}</button>)}
+            </div>
+            <textarea class="bj-input" id="cf-brief" name="brief" maxlength="600" rows="3" aria-describedby="cf-brief-hint" aria-invalid={state.errors.brief ? 'true' : undefined}>{v.brief ?? ''}</textarea>
+            {state.errors.brief && <p class="bj-error">{state.errors.brief}</p>}
+          </div>
+        </fieldset>
+
+        <fieldset class="bj-step">
+          <legend><span class="bj-step__num">3</span>{c.sizeTitle}</legend>
+          <fieldset class="bj-choices">
+            <legend class="bj-sr-only">Room size</legend>
+            {
+              Object.entries(ROOM_PRESETS).map(([id, preset]) => (
+                <label class="bj-choice">
+                  <input type="radio" name="size" value={id} checked={size === id} />
+                  <span class="bj-choice__name">{preset.label}</span>
+                  <span class="bj-choice__hint">{preset.hint}</span>
+                </label>
+              ))
+            }
+            <label class="bj-choice">
+              <input type="radio" name="size" value="custom" checked={size === 'custom'} />
+              <span class="bj-choice__name">I’ll measure it</span>
+              <span class="bj-choice__hint">Type the length and width</span>
+            </label>
+          </fieldset>
+          <div class="bj-form-row bj-custom-size">
+            <div class="bj-field">
+              <label for="cf-length">Length (m)</label>
+              <input class="bj-input" id="cf-length" name="length" inputmode="decimal" value={v.length ?? ''} aria-invalid={state.errors.length ? 'true' : undefined} />
+              {state.errors.length && <p class="bj-error">{state.errors.length}</p>}
+            </div>
+            <div class="bj-field">
+              <label for="cf-width">Width (m)</label>
+              <input class="bj-input" id="cf-width" name="width" inputmode="decimal" value={v.width ?? ''} aria-invalid={state.errors.width ? 'true' : undefined} />
+              {state.errors.width && <p class="bj-error">{state.errors.width}</p>}
+            </div>
+          </div>
+          <fieldset class="bj-choices">
+            <legend class="bj-field-label" style="margin-bottom:8px">{c.wallsLabel}</legend>
+            <label class="bj-choice">
+              <input type="radio" name="walls" value="all" checked={walls === 'all'} />
+              <span class="bj-choice__name">{c.wallsAll}</span>
+            </label>
+            <label class="bj-choice">
+              <input type="radio" name="walls" value="feature" checked={walls === 'feature'} />
+              <span class="bj-choice__name">{c.wallsFeature}</span>
+            </label>
+          </fieldset>
+          <details class="bj-more" open={!!(state.errors.height || v.height)}>
+            <summary>{c.moreLabel}</summary>
+            <div class="bj-form-row bj-form-row--3">
+              <div class="bj-field">
+                <label for="cf-height">Ceiling height (m)</label>
+                <input class="bj-input" id="cf-height" name="height" inputmode="decimal" value={v.height ?? String(DEFAULT_HEIGHT_M)} />
+              </div>
+              <div class="bj-field">
+                <label for="cf-doors">Doors</label>
+                <input class="bj-input" id="cf-doors" name="doors" type="number" min="0" max="6" value={v.doors ?? '1'} />
+              </div>
+              <div class="bj-field">
+                <label for="cf-windows">Windows</label>
+                <input class="bj-input" id="cf-windows" name="windows" type="number" min="0" max="10" value={v.windows ?? '1'} />
+              </div>
+            </div>
+          </details>
+        </fieldset>
+
+        <div class="bj-submit-bar">
+          <button class="bj-button" type="submit" data-bj-consult-submit><Icon name="spark" />{c.submit}</button>
+          <p class="bj-small bj-muted">{c.submitNote}</p>
+        </div>
+      </form>
+    </div>
+  </section>
+</Base>

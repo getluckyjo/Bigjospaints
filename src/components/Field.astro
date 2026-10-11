@@ -1,0 +1,57 @@
+---
+/** Labelled text field with hint and error wired up through aria-describedby. */
+interface Props {
+  name: string;
+  label: string;
+  type?: 'text' | 'email' | 'tel' | 'textarea';
+  value?: string;
+  error?: string;
+  hint?: string;
+  required?: boolean;
+  autocomplete?: string;
+  inputmode?: 'numeric' | 'tel' | 'email' | 'text';
+  maxlength?: number;
+  idPrefix?: string;
+}
+
+const {
+  name,
+  label,
+  type = 'text',
+  value = '',
+  error,
+  hint,
+  required = false,
+  autocomplete,
+  inputmode,
+  maxlength,
+  idPrefix = 'f',
+} = Astro.props;
+const id = `${idPrefix}-${name}`;
+const hintId = hint ? `${id}-hint` : undefined;
+const errorId = error ? `${id}-error` : undefined;
+const describedBy = [hintId, errorId].filter(Boolean).join(' ') || undefined;
+const common = {
+  id,
+  name,
+  class: 'bj-input',
+  required,
+  autocomplete,
+  maxlength,
+  'aria-invalid': error ? ('true' as const) : undefined,
+  'aria-describedby': describedBy,
+};
+---
+
+<div class="bj-field">
+  <label for={id}>{label}</label>
+  {hint && <p class="bj-hint" id={hintId}>{hint}</p>}
+  {
+    type === 'textarea' ? (
+      <textarea {...common} rows="5">{value}</textarea>
+    ) : (
+      <input {...common} type={type} value={value} inputmode={inputmode} />
+    )
+  }
+  {error && <p class="bj-error" id={errorId}>{error}</p>}
+</div>

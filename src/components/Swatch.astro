@@ -1,0 +1,16 @@
+---
+/** A colour chip: the colour as a background, with ink or bone text that reads on it. */
+import { swatchTextColour } from '../lib/catalogue';
+
+interface Props {
+  hex: string;
+  class?: string;
+  tag?: 'div' | 'span';
+}
+
+const { hex, class: className, tag: Tag = 'div' } = Astro.props;
+---
+
+<Tag class:list={[className, swatchTextColour(hex) === 'ink' ? 'bj-on-ink' : 'bj-on-bone']} style={`--bj-chip: ${hex}`}>
+  <slot />
+</Tag>

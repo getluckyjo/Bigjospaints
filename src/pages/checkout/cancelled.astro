@@ -1,0 +1,16 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+---
+
+<Base title="Payment not completed | Big Jo’s Paints" noindex>
+  <section class="bj-container bj-section bj-stack bj-reading">
+    <Icon name="info" class="bj-status-icon" />
+    <h1>Your payment didn’t go through.</h1>
+    <p class="bj-lead">Nothing has been charged. Your cart is still saved if you’d like to try again.</p>
+    <div class="bj-row">
+      <a class="bj-button" href="/checkout">Try again</a>
+      <a class="bj-button bj-button--secondary" href="/cart">View your cart</a>
+    </div>
+  </section>
+</Base>

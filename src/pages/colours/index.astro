@@ -1,0 +1,53 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import Swatch from '../../components/Swatch.astro';
+import copy from '../../content/copy.json';
+import { FAMILIES, colours, getBrand, sellingBrands } from '../../lib/catalogue';
+
+const c = copy.colours;
+const groups = FAMILIES.map((f) => ({ ...f, colours: colours.filter((col) => col.family === f.id) })).filter((g) => g.colours.length);
+---
+
+<Base title={c.seo.title} description={c.seo.description}>
+  <section class="bj-container bj-section bj-stack" data-bj-colours>
+    <div class="bj-stack" style="--bj-stack-gap:12px">
+      <h1>{c.title}</h1>
+      <p class="bj-lead">{c.intro}</p>
+      <p><a class="bj-link-arrow" href="/colour-consultant"><Icon name="spark" />{c.notSure}</a></p>
+    </div>
+
+    <div class="bj-stack" style="--bj-stack-gap:12px" data-bj-filters hidden>
+      <div class="bj-filter" role="group" aria-label="Brand">
+        <button type="button" class="bj-chip-button" data-filter="brand:all" aria-pressed="true">All brands</button>
+        {sellingBrands.map((b) => <button type="button" class="bj-chip-button" data-filter={`brand:${b.id}`} aria-pressed="false">{b.name}</button>)}
+      </div>
+      <div class="bj-filter" role="group" aria-label="Colour family">
+        <button type="button" class="bj-chip-button" data-filter="family:all" aria-pressed="true">All colours</button>
+        {groups.map((g) => <button type="button" class="bj-chip-button" data-filter={`family:${g.id}`} aria-pressed="false">{g.label}</button>)}
+      </div>
+      <p class="bj-small bj-muted" aria-live="polite" data-bj-count>{colours.length} colours</p>
+    </div>
+
+    {
+      groups.map((g) => (
+        <section class="bj-family bj-stack" style="--bj-stack-gap:16px" data-family={g.id} aria-labelledby={`family-${g.id}`}>
+          <h2 class="bj-h3" id={`family-${g.id}`}>{g.label}</h2>
+          <ul class="bj-colour-grid">
+            {g.colours.map((col) => (
+              <li data-brand={col.brand}>
+                <a class="bj-colour-tile" href={`/colours/${col.id}`}>
+                  <Swatch hex={col.hex} class="bj-colour-tile__swatch" />
+                  <span class="bj-colour-tile__text">
+                    <strong>{col.name}</strong>
+                    <span>{getBrand(col.brand)?.name}{col.code ? ` · ${col.code}` : ''}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </section>
+</Base>

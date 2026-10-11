@@ -1,0 +1,54 @@
+---
+/** One of the three suggested colours: swatch, why it suits, what you'll need and the cost. */
+import Icon from './Icon.astro';
+import Swatch from './Swatch.astro';
+import copy from '../content/copy.json';
+import { getBrand } from '../lib/catalogue';
+import type { PricedSuggestion } from '../lib/consult';
+import { describeMix, formatLitres } from '../lib/estimate';
+import { fill, formatZar } from '../lib/money';
+
+interface Props {
+  option: PricedSuggestion;
+  index: number;
+  walls: 'all' | 'feature';
+}
+
+const { option, index, walls } = Astro.props;
+const { colour, product, estimate: est } = option;
+const brand = getBrand(colour.brand)?.name ?? colour.brand;
+const lines = est.mix.tins.map((t) => `${product.id}|${colour.id}|${t.litres}|${t.quantity}`);
+---
+
+<article class="bj-option-card" aria-labelledby={`option-${index}`}>
+  <Swatch hex={colour.hex} class="bj-option-card__swatch">
+    <span class="bj-eyebrow">Option {index + 1} · {option.title}</span>
+    <div>
+      <h3 class="bj-option-card__name" id={`option-${index}`}>{colour.name}</h3>
+      <p class="bj-small">{brand}{colour.code ? ` · ${colour.code}` : ''}</p>
+    </div>
+  </Swatch>
+  <div class="bj-option-card__body">
+    <p class="bj-option-card__product">{brand} {product.name} <span class="bj-muted">({product.finish})</span></p>
+    {option.why && <p>{option.why}</p>}
+    {option.tip && <p class="bj-note"><Icon name="info" />{option.tip}</p>}
+    <dl class="bj-need" aria-label="What you’ll need">
+      <dt>{walls === 'feature' ? 'Feature wall' : 'Walls'}</dt><dd>{est.areaM2} m²</dd>
+      <dt>Coats</dt><dd>{est.coats}</dd>
+      <dt>Paint needed</dt><dd>{formatLitres(est.litres)}</dd>
+      <dt>Tins</dt><dd>{describeMix(est.mix)}</dd>
+    </dl>
+    <div class="bj-price-big">
+      <span>Cost to paint</span>
+      <strong>{formatZar(est.mix.totalCents)}</strong>
+    </div>
+    <form method="post" action="/cart" data-bj-busy>
+      <input type="hidden" name="action" value="add" />
+      {lines.map((line) => <input type="hidden" name="line" value={line} />)}
+      <button class="bj-button" type="submit" data-busy-label="Adding…">
+        <Icon name="cart" />{fill(copy.consultant.addToCart, { litres: formatLitres(est.mix.totalLitres) })}
+      </button>
+    </form>
+    <a class="bj-small" href={`/colours/${colour.id}`}>More about {colour.name}</a>
+  </div>
+</article>

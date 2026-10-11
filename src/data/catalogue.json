@@ -1,0 +1,1336 @@
+{
+  "$comment": "Big Jo’s Paints catalogue: the only source of colours and prices. Built on 11 Oct 2026 from research into each brand’s own colour data and current South African retail prices. PRICES ARE INDICATIVE RETAIL PRICES FOR OWNER REVIEW: set your own selling prices here. Rules: priceCents is the regular (non-promotional) retail price incl. VAT seen on 11 Oct 2026 (Builders; Prominent’s own shop for Prominent). \"sizes\" is the light (pastel) tint base, used for light colours; \"bases.medium\"/\"bases.deep\" price darker colours where the brand sells those bases. Each colour’s \"base\" is estimated from its lightness (CIE L*: 65+ light, 45–65 medium, under 45 deep); the tinting counter has the final say. coverageM2PerLitre is the data-sheet figure per coat, capped at 10 m²/L because Plascon quotes a theoretical smooth-surface rate. Colour hex values come from each brand’s own website and are screen approximations.",
+  "checked": "2026-10-11",
+  "brands": [
+    {
+      "id": "plascon",
+      "name": "Plascon"
+    },
+    {
+      "id": "dulux",
+      "name": "Dulux"
+    },
+    {
+      "id": "prominent",
+      "name": "Prominent Paints"
+    },
+    {
+      "id": "duram",
+      "name": "Duram"
+    }
+  ],
+  "products": [
+    {
+      "id": "plascon-double-velvet",
+      "brand": "plascon",
+      "name": "Double Velvet",
+      "finish": "velvet sheen",
+      "tier": "premium",
+      "coverageM2PerLitre": 10.0,
+      "coats": 2,
+      "bestFor": "Washable velvet sheen for lounges, passages and children’s rooms",
+      "sizes": [
+        {
+          "litres": 1,
+          "priceCents": 45900
+        },
+        {
+          "litres": 5,
+          "priceCents": 89900
+        },
+        {
+          "litres": 20,
+          "priceCents": 299900
+        }
+      ],
+      "bases": {
+        "deep": [
+          {
+            "litres": 1,
+            "priceCents": 33900
+          },
+          {
+            "litres": 5,
+            "priceCents": 149900
+          },
+          {
+            "litres": 20,
+            "priceCents": 349900
+          }
+        ]
+      },
+      "sources": [
+        "https://www.builders.co.za/paint/shop-by-application/kids-paint/plascon-double-velvet-paint-white-20-l/p/000000000000026390",
+        "https://www.builders.co.za/paint/shop-by-application/kids-paint/plascon-double-velvet-paint-white-5-l/p/000000000011550019",
+        "https://www.builders.co.za/paint/tinting/sheen-tinting/plascon-double-velvet-deep-tint-base-paint-1-l/p/000000000000026116",
+        "https://www.builders.co.za/paint/tinting/sheen-tinting/plascon-double-velvet-deep-tint-base-paint-20-l/p/000000000000026120",
+        "https://www.builders.co.za/paint/tinting/sheen-tinting/plascon-double-velvet-deep-tint-base-paint-5-l/p/000000000000026123",
+        "https://www.builders.co.za/paint/tinting/sheen-tinting/plascon-double-velvet-pastel-tint-base-paint-1-l/p/000000000000026127",
+        "https://www.builders.co.za/paint/tinting/sheen-tinting/plascon-double-velvet-pastel-tint-base-paint-20-l/p/000000000000026131",
+        "https://www.builders.co.za/paint/tinting/sheen-tinting/plascon-double-velvet-pastel-tint-base-paint-5-l/p/000000000000026136",
+        "https://plascon.co.za/wp-content/uploads/2022/03/double_velvet_tds.pdf"
+      ]
+    },
+    {
+      "id": "plascon-cashmere",
+      "brand": "plascon",
+      "name": "Cashmere",
+      "finish": "matt",
+      "tier": "premium",
+      "coverageM2PerLitre": 10.0,
+      "coats": 2,
+      "bestFor": "Soft, smooth matt for bedrooms and lounges",
+      "sizes": [
+        {
+          "litres": 1,
+          "priceCents": 36900
+        },
+        {
+          "litres": 5,
+          "priceCents": 89900
+        },
+        {
+          "litres": 20,
+          "priceCents": 266900
+        }
+      ],
+      "bases": {
+        "deep": [
+          {
+            "litres": 1,
+            "priceCents": 35900
+          },
+          {
+            "litres": 5,
+            "priceCents": 169900
+          }
+        ]
+      },
+      "sources": [
+        "https://www.builders.co.za/paint/shop-by-application/ceiling-paint/plascon-cashmere-paint-white-20-l/p/000000000000026718",
+        "https://www.builders.co.za/paint/shop-by-application/ceiling-paint/plascon-cashmere-paint-white-5-l/p/000000000000026705",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/plascon-cashmere-deep-tint-base-paint-1-l/p/000000000000026709",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/plascon-cashmere-deep-tint-base-paint-5-l/p/000000000000027986",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/plascon-cashmere-pastel-tint-base-paint-1-l/p/000000000000026712",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/plascon-cashmere-pastel-tint-base-paint-20-l/p/000000000000057010",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/plascon-cashmere-pastel-tint-base-paint-5-l/p/000000000000027992",
+        "https://plascon.co.za/wp-content/uploads/2022/03/cashmere_tds.pdf"
+      ]
+    },
+    {
+      "id": "plascon-polvin",
+      "brand": "plascon",
+      "name": "Polvin",
+      "finish": "matt",
+      "tier": "mid",
+      "coverageM2PerLitre": 8.0,
+      "coats": 2,
+      "bestFor": "Value matt for bedrooms, lounges and ceilings",
+      "sizes": [
+        {
+          "litres": 1,
+          "priceCents": 23900
+        },
+        {
+          "litres": 5,
+          "priceCents": 63900
+        },
+        {
+          "litres": 10,
+          "priceCents": 99900
+        },
+        {
+          "litres": 20,
+          "priceCents": 169900
+        }
+      ],
+      "bases": {
+        "deep": [
+          {
+            "litres": 1,
+            "priceCents": 23900
+          },
+          {
+            "litres": 5,
+            "priceCents": 95900
+          },
+          {
+            "litres": 20,
+            "priceCents": 299900
+          }
+        ]
+      },
+      "sources": [
+        "https://www.builders.co.za/paint/shop-by-application/ceiling-paint/plascon-polvin-paint-white-1-l/p/000000000000027269",
+        "https://www.builders.co.za/paint/shop-by-application/ceiling-paint/plascon-polvin-paint-white-10-l/p/000000000000414943",
+        "https://www.builders.co.za/paint/shop-by-application/ceiling-paint/plascon-polvin-paint-white-20-l/p/000000000000027270",
+        "https://www.builders.co.za/paint/shop-by-application/ceiling-paint/plascon-polvin-paint-white-5-l/p/000000000000027276",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/plascon-polvin-deep-tint-base-paint-1-l/p/000000000000027284",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/plascon-polvin-deep-tint-base-paint-20-l/p/000000000000027296",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/plascon-polvin-deep-tint-base-paint-5-l/p/000000000000027311",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/plascon-polvin-pastel-tint-base-paint-1-l/p/000000000000027316",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/plascon-polvin-pastel-tint-base-paint-10-l/p/000000000000456377",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/plascon-polvin-pastel-tint-base-paint-20-l/p/000000000000015014",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/plascon-polvin-pastel-tint-base-paint-5-l/p/000000000000027328",
+        "https://plascon.co.za/wp-content/uploads/2025/01/EPL-TAP-Range-Polvin-Tint-Bases-TDS71.pdf"
+      ]
+    },
+    {
+      "id": "dulux-luxurious-silk",
+      "brand": "dulux",
+      "name": "Luxurious Silk",
+      "finish": "mid sheen",
+      "tier": "premium",
+      "coverageM2PerLitre": 9.0,
+      "coats": 2,
+      "bestFor": "Wipeable sheen for kitchens, bathrooms and busy rooms",
+      "sizes": [
+        {
+          "litres": 1,
+          "priceCents": 32900
+        },
+        {
+          "litres": 5,
+          "priceCents": 92900
+        },
+        {
+          "litres": 20,
+          "priceCents": 269900
+        }
+      ],
+      "bases": {
+        "medium": [
+          {
+            "litres": 1,
+            "priceCents": 38900
+          },
+          {
+            "litres": 5,
+            "priceCents": 127900
+          },
+          {
+            "litres": 20,
+            "priceCents": 299900
+          }
+        ],
+        "deep": [
+          {
+            "litres": 1,
+            "priceCents": 38900
+          },
+          {
+            "litres": 5,
+            "priceCents": 111900
+          },
+          {
+            "litres": 20,
+            "priceCents": 319900
+          }
+        ]
+      },
+      "sources": [
+        "https://www.builders.co.za/paint/shop-by-application/kids-paint/dulux-luxurious-silk-paint-brilliant-white-1-l/p/000000000145897001",
+        "https://www.builders.co.za/paint/shop-by-application/kids-paint/dulux-luxurious-silk-paint-brilliant-white-20-l/p/000000000000145900",
+        "https://www.builders.co.za/paint/shop-by-application/kids-paint/dulux-luxurious-silk-paint-brilliant-white-5-l/p/000000000145899014",
+        "https://www.builders.co.za/paint/tinting/sheen-tinting/dulux-luxurious-silk-deep-tint-base-9-paint-1-l/p/000000000000145945",
+        "https://www.builders.co.za/paint/tinting/sheen-tinting/dulux-luxurious-silk-deep-tint-base-9-paint-20-l/p/000000000000145947",
+        "https://www.builders.co.za/paint/tinting/sheen-tinting/dulux-luxurious-silk-deep-tint-base-9-paint-5-l/p/000000000000145946",
+        "https://www.builders.co.za/paint/tinting/sheen-tinting/dulux-luxurious-silk-medium-tint-base-8-paint-1-l/p/000000000000011257",
+        "https://www.builders.co.za/paint/tinting/sheen-tinting/dulux-luxurious-silk-medium-tint-base-8-paint-20-l/p/000000000000145944",
+        "https://www.builders.co.za/paint/tinting/sheen-tinting/dulux-luxurious-silk-medium-tint-base-8-paint-5-l/p/000000000000145943",
+        "https://www.builders.co.za/paint/tinting/sheen-tinting/dulux-luxurious-silk-pastel-tint-base-7-paint-1-l/p/000000000000145938",
+        "https://www.builders.co.za/paint/tinting/sheen-tinting/dulux-luxurious-silk-pastel-tint-base-7-paint-20-l/p/000000000000145941",
+        "https://www.builders.co.za/paint/tinting/sheen-tinting/dulux-luxurious-silk-pastel-tint-base-7-paint-5-l/p/000000000000145940",
+        "https://msp.images.akzonobel.com/prd/dh/ezadlx/documents/23/0c/ee/43/dulux_luxurious_silk.pdf"
+      ]
+    },
+    {
+      "id": "dulux-acrylic-pva",
+      "brand": "dulux",
+      "name": "Acrylic PVA",
+      "finish": "matt",
+      "tier": "mid",
+      "coverageM2PerLitre": 9.0,
+      "coats": 2,
+      "bestFor": "Value matt for bedrooms and lounges",
+      "sizes": [
+        {
+          "litres": 1,
+          "priceCents": 23900
+        },
+        {
+          "litres": 5,
+          "priceCents": 69900
+        },
+        {
+          "litres": 20,
+          "priceCents": 169900
+        }
+      ],
+      "bases": {
+        "medium": [
+          {
+            "litres": 1,
+            "priceCents": 26900
+          },
+          {
+            "litres": 5,
+            "priceCents": 78900
+          },
+          {
+            "litres": 20,
+            "priceCents": 255900
+          }
+        ],
+        "deep": [
+          {
+            "litres": 1,
+            "priceCents": 26900
+          },
+          {
+            "litres": 5,
+            "priceCents": 96900
+          }
+        ]
+      },
+      "sources": [
+        "https://www.builders.co.za/paint/pva-paint/matte-finish/dulux-acrylic-pva-matt-paint-brilliant-white-1-l---washable-finish-for-interior-and-exterior-walls-and-ceilings/p/000000000145953001",
+        "https://www.builders.co.za/paint/shop-by-application/ceiling-paint/dulux-acrylic-pva-matt-paint-brilliant-white-10-l---washable-finish-for-interior-and-exterior-walls-and-ceilings/p/000000000000400006",
+        "https://www.builders.co.za/paint/shop-by-application/ceiling-paint/dulux-acrylic-pva-matt-paint-brilliant-white-5-l---washable-finish-for-interior-and-exterior-walls-and-ceilings/p/000000000145992015",
+        "https://www.builders.co.za/paint/shop-by-application/ceiling-paint/dulux-acrylic-pva-paint-brilliant-white-20-l---washable-finish-for-interior-and-exterior-walls-and-ceilings/p/000000000000146004",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/dulux-acrylic-pva-deep-tint-base-9-paint-1-l/p/000000000000146020",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/dulux-acrylic-pva-deep-tint-base-9-paint-5-l/p/000000000000011220",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/dulux-acrylic-pva-medium-tint-base-8-paint-1-l/p/000000000000146018",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/dulux-acrylic-pva-medium-tint-base-8-paint-20-l/p/000000000000146015",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/dulux-acrylic-pva-medium-tint-base-8-paint-5-l/p/000000000000146019",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/dulux-acrylic-pva-pastel-tint-base-7-paint-1-l/p/000000000000146008",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/dulux-acrylic-pva-pastel-tint-base-7-paint-20-l/p/000000000000146014",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/dulux-acrylic-pva-pastel-tint-base-7-paint-5-l/p/000000000000010904",
+        "https://msp.images.akzonobel.com/prd/dh/ezadlx/documents/a8/ab/87/92/dulux_acrylic_pva.pdf"
+      ]
+    },
+    {
+      "id": "prominent-premium-matt",
+      "brand": "prominent",
+      "name": "Premium Matt",
+      "finish": "matt",
+      "tier": "premium",
+      "coverageM2PerLitre": 6.0,
+      "coats": 2,
+      "bestFor": "Matt for bedrooms and lounges",
+      "sizes": [
+        {
+          "litres": 1,
+          "priceCents": 17995
+        },
+        {
+          "litres": 5,
+          "priceCents": 58995
+        },
+        {
+          "litres": 20,
+          "priceCents": 202995
+        }
+      ],
+      "sources": [
+        "https://www.prominentpaints.co.za/product/premium-matt/?attribute_colour=WHITE&attribute_volume=1L",
+        "https://www.prominentpaints.co.za/product/premium-matt/?attribute_colour=WHITE&attribute_volume=20L",
+        "https://www.prominentpaints.co.za/product/premium-matt/?attribute_colour=WHITE&attribute_volume=5L",
+        "https://www.prominentpaints.co.za/wp-content/uploads/2023/03/PROMINENT-PREMIUM-MATT.pdf"
+      ]
+    },
+    {
+      "id": "prominent-premium-satin-silk",
+      "brand": "prominent",
+      "name": "Premium Satin Silk",
+      "finish": "satin",
+      "tier": "premium",
+      "coverageM2PerLitre": 8.0,
+      "coats": 2,
+      "bestFor": "Washable satin for kitchens, bathrooms and children’s rooms",
+      "sizes": [
+        {
+          "litres": 1,
+          "priceCents": 16995
+        },
+        {
+          "litres": 5,
+          "priceCents": 84995
+        },
+        {
+          "litres": 20,
+          "priceCents": 289995
+        }
+      ],
+      "sources": [
+        "https://www.prominentpaints.co.za/product/premium-satin-silk/?attribute_colour=WHITE&attribute_volume=1L",
+        "https://www.prominentpaints.co.za/product/premium-satin-silk/?attribute_colour=WHITE&attribute_volume=20L",
+        "https://www.prominentpaints.co.za/product/premium-satin-silk/?attribute_colour=WHITE&attribute_volume=5L",
+        "https://www.prominentpaints.co.za/wp-content/uploads/2023/03/PROMINENT-PREMIUM-SATIN-SILK.pdf"
+      ]
+    },
+    {
+      "id": "duram-classic-matt",
+      "brand": "duram",
+      "name": "Classic Matt",
+      "finish": "matt",
+      "tier": "premium",
+      "coverageM2PerLitre": 9.0,
+      "coats": 2,
+      "bestFor": "Smooth matt for bedrooms and lounges",
+      "sizes": [
+        {
+          "litres": 1,
+          "priceCents": 25900
+        },
+        {
+          "litres": 5,
+          "priceCents": 74900
+        },
+        {
+          "litres": 20,
+          "priceCents": 229900
+        }
+      ],
+      "bases": {
+        "deep": [
+          {
+            "litres": 1,
+            "priceCents": 27900
+          },
+          {
+            "litres": 5,
+            "priceCents": 84900
+          }
+        ]
+      },
+      "sources": [
+        "https://www.builders.co.za/paint/shop-by-application/ceiling-paint/duram-classic-matt-paint-white-20-l/p/000000000000715641",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/duram-classic-matt-deep-tint-base-paint-1-l---interior-matt-deep---colourant-required-for-custom-tinting-/p/000000000000715515",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/duram-classic-matt-deep-tint-base-paint-5-l---interior-matt-deep---colourant-required-for-custom-tinting-/p/000000000000715649",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/duram-classic-matt-pastel-tint-base-paint-1-l---interior-matt-deep---colourant-required-for-custom-tinting-/p/000000000000715599",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/duram-classic-matt-pastel-tint-base-paint-20-l---interior-matt-deep---colourant-required-for-custom-tinting-/p/000000000000715604",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/duram-classic-matt-pastel-tint-base-paint-5-l---interior-matt-deep---colourant-required-for-custom-tinting-/p/000000000000715605",
+        "https://www.duram.co.za/wp-content/uploads/2022/03/Classic-Matt-TDS-090523.pdf"
+      ]
+    },
+    {
+      "id": "duram-wallsheen",
+      "brand": "duram",
+      "name": "WallSheen",
+      "finish": "low sheen",
+      "tier": "mid",
+      "coverageM2PerLitre": 7.5,
+      "coats": 2,
+      "bestFor": "Washable low sheen for busy rooms",
+      "sizes": [
+        {
+          "litres": 5,
+          "priceCents": 57900
+        },
+        {
+          "litres": 20,
+          "priceCents": 199900
+        }
+      ],
+      "sources": [
+        "https://www.builders.co.za/paint/shop-by-application/kids-paint/duram-wallsheen-paint-white-1-l/p/000000000000715108",
+        "https://www.builders.co.za/paint/shop-by-application/kids-paint/duram-wallsheen-paint-white-20-l/p/000000000000682690",
+        "https://www.builders.co.za/paint/shop-by-application/kids-paint/duram-wallsheen-paint-white-5-l/p/000000000000682689",
+        "https://www.builders.co.za/paint/tinting/sheen-tinting/duram-wallsheen-pastel-tint-base-paint-20-l/p/000000000000715488",
+        "https://www.builders.co.za/paint/tinting/sheen-tinting/duram-wallsheen-pastel-tint-base-paint-5-l/p/000000000000715603",
+        "https://www.duram.co.za/wp-content/uploads/2017/08/WallSheen-TDS-070323.pdf"
+      ]
+    },
+    {
+      "id": "duram-wall-ceiling",
+      "brand": "duram",
+      "name": "Wall & Ceiling",
+      "finish": "matt",
+      "tier": "mid",
+      "coverageM2PerLitre": 7.5,
+      "coats": 2,
+      "bestFor": "Value matt for walls and ceilings",
+      "sizes": [
+        {
+          "litres": 1,
+          "priceCents": 16900
+        },
+        {
+          "litres": 5,
+          "priceCents": 45900
+        },
+        {
+          "litres": 20,
+          "priceCents": 134900
+        }
+      ],
+      "bases": {
+        "deep": [
+          {
+            "litres": 1,
+            "priceCents": 17900
+          },
+          {
+            "litres": 5,
+            "priceCents": 59900
+          }
+        ]
+      },
+      "sources": [
+        "https://www.builders.co.za/paint/pva-paint/matte-finish/duram-wall-and-ceiling-paint-white-5-l/p/000000000000682284",
+        "https://www.builders.co.za/paint/shop-by-application/ceiling-paint/duram-wall-and-ceiling-paint-white-1-l/p/000000000000782264",
+        "https://www.builders.co.za/paint/shop-by-application/ceiling-paint/duram-wall-and-ceiling-paint-white-10-l/p/000000000000529297",
+        "https://www.builders.co.za/paint/shop-by-application/ceiling-paint/duram-wall-and-ceiling-paint-white-20-l/p/000000000000645039",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/duram-wall-and-ceiling-deep-tint-base-paint-1-l---interior-matt-finish--smooth-coverage--require-tinting-for-custom-shade-/p/000000000000645045",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/duram-wall-and-ceiling-deep-tint-base-paint-5-l---interior-matt-finish--smooth-coverage--require-tinting-for-custom-shade-/p/000000000000645046",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/duram-wall-and-ceiling-pastel-tint-base-paint-1-l---interior-matt-finish--smooth-coverage--require-tinting-for-custom-shade-/p/000000000000645042",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/duram-wall-and-ceiling-pastel-tint-base-paint-20-l---premium-interior-matt-finish--washable-and-easy-to-clean--require-tinting-for-cutom-shade-/p/000000000000645044",
+        "https://www.builders.co.za/paint/tinting/matte-tinting/duram-wall-and-ceiling-pastel-tint-base-paint-5-l---interior-matt-finish--smooth-coverage--require-tinting-for-custom-shade-/p/000000000000645043",
+        "https://www.duram.co.za/wp-content/uploads/2017/08/WallCeiling-TDS-070323.pdf"
+      ]
+    }
+  ],
+  "colours": [
+    {
+      "id": "plascon-ray-of-light",
+      "brand": "plascon",
+      "name": "Ray Of Light",
+      "code": "O7-A2-3",
+      "hex": "#F4EDE9",
+      "family": "white",
+      "lrv": null,
+      "base": "light",
+      "notes": "soft warm white with a faint blush undertone",
+      "source": "https://colour.plascon.co.za/web_lib.php?file=data/colors.json"
+    },
+    {
+      "id": "plascon-antique-petal",
+      "brand": "plascon",
+      "name": "Antique Petal",
+      "code": "43",
+      "hex": "#DAD8D2",
+      "family": "white",
+      "lrv": null,
+      "base": "light",
+      "notes": "Essential Collection off-white with a touch of warm grey",
+      "source": "https://colour.plascon.co.za/web_lib.php?file=data/colors.json"
+    },
+    {
+      "id": "plascon-white-maas",
+      "brand": "plascon",
+      "name": "White Maas",
+      "code": "Y2-A2-2",
+      "hex": "#F3E4CD",
+      "family": "white",
+      "lrv": null,
+      "base": "light",
+      "notes": "creamy warm white; 2026 forecast (Fashion + Candy)",
+      "source": "https://plascon.co.za/plascon-colour-forecast-2026"
+    },
+    {
+      "id": "plascon-hudson",
+      "brand": "plascon",
+      "name": "Hudson",
+      "code": "26",
+      "hex": "#DAD2C3",
+      "family": "neutral",
+      "lrv": null,
+      "base": "light",
+      "notes": "warm sandy neutral; 2026 forecast (Orchard + Blooms)",
+      "source": "https://plascon.co.za/plascon-colour-forecast-2026"
+    },
+    {
+      "id": "plascon-ravine",
+      "brand": "plascon",
+      "name": "Ravine",
+      "code": "62",
+      "hex": "#CFCAC0",
+      "family": "neutral",
+      "lrv": null,
+      "base": "light",
+      "notes": "classic greige, an even blend of grey and beige",
+      "source": "https://colour.plascon.co.za/web_lib.php?file=data/colors.json"
+    },
+    {
+      "id": "plascon-serious",
+      "brand": "plascon",
+      "name": "Serious",
+      "code": "37",
+      "hex": "#C5C3BC",
+      "family": "grey",
+      "lrv": null,
+      "base": "light",
+      "notes": "soft, versatile mid-light neutral grey",
+      "source": "https://colour.plascon.co.za/web_lib.php?file=data/colors.json"
+    },
+    {
+      "id": "plascon-thames-dusk",
+      "brand": "plascon",
+      "name": "Thames Dusk",
+      "code": "41",
+      "hex": "#5C5F62",
+      "family": "grey",
+      "lrv": null,
+      "base": "deep",
+      "notes": "deep slate-charcoal grey",
+      "source": "https://colour.plascon.co.za/web_lib.php?file=data/colors.json"
+    },
+    {
+      "id": "plascon-dark-onyx",
+      "brand": "plascon",
+      "name": "Dark Onyx",
+      "code": "42",
+      "hex": "#333236",
+      "family": "deep",
+      "lrv": null,
+      "base": "deep",
+      "notes": "near-black charcoal for dramatic feature walls",
+      "source": "https://colour.plascon.co.za/web_lib.php?file=data/colors.json"
+    },
+    {
+      "id": "plascon-desert-spring",
+      "brand": "plascon",
+      "name": "Desert Spring",
+      "code": "G1-C2-3",
+      "hex": "#CCD2C7",
+      "family": "green",
+      "lrv": null,
+      "base": "light",
+      "notes": "pale grey-green, a soft airy sage",
+      "source": "https://colour.plascon.co.za/web_lib.php?file=data/colors.json"
+    },
+    {
+      "id": "plascon-olive",
+      "brand": "plascon",
+      "name": "Olive",
+      "code": "G2-E1-2",
+      "hex": "#525E51",
+      "family": "green",
+      "lrv": null,
+      "base": "deep",
+      "notes": "deep muted olive-green; 2026 forecast (Land + Sea)",
+      "source": "https://plascon.co.za/plascon-colour-forecast-2026"
+    },
+    {
+      "id": "plascon-evening-stroll",
+      "brand": "plascon",
+      "name": "Evening Stroll",
+      "code": "G6-C2-1",
+      "hex": "#91B0AD",
+      "family": "green",
+      "lrv": null,
+      "base": "light",
+      "notes": "soft greyed sea-green/teal; 2026 forecast (Land + Sea)",
+      "source": "https://plascon.co.za/plascon-colour-forecast-2026"
+    },
+    {
+      "id": "plascon-athenas-dream",
+      "brand": "plascon",
+      "name": "Athena's Dream",
+      "code": "B4-A2-1",
+      "hex": "#BAD2E9",
+      "family": "blue",
+      "lrv": null,
+      "base": "light",
+      "notes": "pale clear sky blue; 2026 forecast (Butter + Sky)",
+      "source": "https://plascon.co.za/plascon-colour-forecast-2026"
+    },
+    {
+      "id": "plascon-bashful-blue",
+      "brand": "plascon",
+      "name": "Bashful Blue",
+      "code": "B3-C1-4",
+      "hex": "#7E99AC",
+      "family": "blue",
+      "lrv": null,
+      "base": "medium",
+      "notes": "dusty mid blue with a grey cast; 2026 forecast (Land + Sea)",
+      "source": "https://plascon.co.za/plascon-colour-forecast-2026"
+    },
+    {
+      "id": "plascon-sapphire",
+      "brand": "plascon",
+      "name": "Sapphire",
+      "code": "B7-A1-1",
+      "hex": "#37589E",
+      "family": "blue",
+      "lrv": null,
+      "base": "deep",
+      "notes": "strong saturated royal blue; 2026 forecast (Butter + Sky)",
+      "source": "https://plascon.co.za/plascon-colour-forecast-2026"
+    },
+    {
+      "id": "plascon-just-terracotta",
+      "brand": "plascon",
+      "name": "Just Terracotta",
+      "code": "R7-C1-1",
+      "hex": "#93453A",
+      "family": "pink-terracotta",
+      "lrv": null,
+      "base": "deep",
+      "notes": "earthy fired-clay terracotta; 2026 forecast (Orchard + Blooms)",
+      "source": "https://plascon.co.za/plascon-colour-forecast-2026"
+    },
+    {
+      "id": "plascon-spanish-brocade",
+      "brand": "plascon",
+      "name": "Spanish Brocade",
+      "code": "O2-B1-3",
+      "hex": "#DD9278",
+      "family": "pink-terracotta",
+      "lrv": null,
+      "base": "light",
+      "notes": "soft coral-terracotta; 2026 forecast (Orchard + Blooms)",
+      "source": "https://plascon.co.za/plascon-colour-forecast-2026"
+    },
+    {
+      "id": "plascon-ruby-tuesday",
+      "brand": "plascon",
+      "name": "Ruby Tuesday",
+      "code": "R5-B2-2",
+      "hex": "#E9C6C6",
+      "family": "pink-terracotta",
+      "lrv": null,
+      "base": "light",
+      "notes": "soft dusty pink; 2026 forecast (Fashion + Candy)",
+      "source": "https://plascon.co.za/plascon-colour-forecast-2026"
+    },
+    {
+      "id": "plascon-blazing-sun",
+      "brand": "plascon",
+      "name": "Blazing Sun",
+      "code": "Y4-A1-4",
+      "hex": "#F1DA98",
+      "family": "yellow-ochre",
+      "lrv": null,
+      "base": "light",
+      "notes": "buttery soft yellow; 2026 forecast (Butter + Sky)",
+      "source": "https://plascon.co.za/plascon-colour-forecast-2026"
+    },
+    {
+      "id": "plascon-wanda",
+      "brand": "plascon",
+      "name": "Wanda",
+      "code": "Y4-C1-1",
+      "hex": "#9B883D",
+      "family": "yellow-ochre",
+      "lrv": null,
+      "base": "medium",
+      "notes": "olive-toned ochre/mustard; 2026 forecast (Orchard + Blooms)",
+      "source": "https://plascon.co.za/plascon-colour-forecast-2026"
+    },
+    {
+      "id": "plascon-chocolate-chunk",
+      "brand": "plascon",
+      "name": "Chocolate Chunk",
+      "code": "O2-D1-1",
+      "hex": "#7A4D38",
+      "family": "deep",
+      "lrv": null,
+      "base": "deep",
+      "notes": "rich warm chocolate brown; 2026 forecast (Butter + Sky)",
+      "source": "https://plascon.co.za/plascon-colour-forecast-2026"
+    },
+    {
+      "id": "dulux-clinic-white",
+      "brand": "dulux",
+      "name": "Clinic White",
+      "code": "83YY 88/033",
+      "hex": "#F1F0E8",
+      "family": "white",
+      "lrv": 88,
+      "base": "light",
+      "notes": "clean soft white; Dulux's 'perfect white' pairing for the 2026 blues",
+      "source": "https://www.dulux.co.za/en/colour-palettes/clinic-white-83yy-88-033-3054729"
+    },
+    {
+      "id": "dulux-egret",
+      "brand": "dulux",
+      "name": "Egret",
+      "code": "39YY 85/046",
+      "hex": "#EDE8DD",
+      "family": "white",
+      "lrv": 85,
+      "base": "light",
+      "notes": "warm creamy off-white",
+      "source": "https://www.dulux.co.za/en/colour-palettes/egret-39yy-85-046-2913999"
+    },
+    {
+      "id": "dulux-pelican",
+      "brand": "dulux",
+      "name": "Pelican",
+      "code": "30YY 72/018",
+      "hex": "#DEDCD7",
+      "family": "neutral",
+      "lrv": 72,
+      "base": "light",
+      "notes": "pale warm grey-beige; Colour of the Year 2027 palette",
+      "source": "https://www.dulux.co.za/en/colour-palettes/pelican-30yy-72-018-3170166"
+    },
+    {
+      "id": "dulux-sahara-drive",
+      "brand": "dulux",
+      "name": "Sahara Drive",
+      "code": "33YY 65/106",
+      "hex": "#DBCFBB",
+      "family": "neutral",
+      "lrv": 65,
+      "base": "light",
+      "notes": "warm sandy beige; Colours of the Year 2026 palette",
+      "source": "https://www.dulux.co.za/en/colour-palettes/sahara-drive-33yy-65-106-3054718"
+    },
+    {
+      "id": "dulux-roma-haze",
+      "brand": "dulux",
+      "name": "Roma Haze",
+      "code": "10YY 54/034",
+      "hex": "#C5BFB9",
+      "family": "neutral",
+      "lrv": 54,
+      "base": "light",
+      "notes": "soft taupe greige; Colour of the Year 2027 palette",
+      "source": "https://www.dulux.co.za/en/colour-palettes/roma-haze-10yy-54-034-3170165"
+    },
+    {
+      "id": "dulux-silver-trophy",
+      "brand": "dulux",
+      "name": "Silver Trophy",
+      "code": "30BB 53/012",
+      "hex": "#BDBFC0",
+      "family": "grey",
+      "lrv": 53,
+      "base": "light",
+      "notes": "cool, clean mid-light grey; Colour of the Year 2027 palette",
+      "source": "https://www.dulux.co.za/en/colour-palettes/silver-trophy-30bb-53-012-3170169"
+    },
+    {
+      "id": "dulux-stoney-dream",
+      "brand": "dulux",
+      "name": "Stoney Dream",
+      "code": "62YR 22/051",
+      "hex": "#857A74",
+      "family": "grey",
+      "lrv": 22,
+      "base": "medium",
+      "notes": "warm brown-grey taupe; Colour of the Year 2027 palette",
+      "source": "https://www.dulux.co.za/en/colour-palettes/stoney-dream-62yr-22-051-3170171"
+    },
+    {
+      "id": "dulux-soulful-sage",
+      "brand": "dulux",
+      "name": "Soulful Sage",
+      "code": "12GY 39/101",
+      "hex": "#A3A793",
+      "family": "green",
+      "lrv": 39,
+      "base": "light",
+      "notes": "ethereal silvery sage; Dulux Colour of the Year 2027",
+      "source": "https://www.dulux.co.za/en/colour-palettes/soulful-sage-12gy-39-101-3170164"
+    },
+    {
+      "id": "dulux-bamboo-twist",
+      "brand": "dulux",
+      "name": "Bamboo Twist",
+      "code": "30GY 50/183",
+      "hex": "#AFBE9B",
+      "family": "green",
+      "lrv": 50,
+      "base": "light",
+      "notes": "fresh soft leafy green; Colours of the Year 2026 palette",
+      "source": "https://www.dulux.co.za/en/colour-palettes/bamboo-twist-30gy-50-183-3054707"
+    },
+    {
+      "id": "dulux-fern-forest",
+      "brand": "dulux",
+      "name": "Fern Forest",
+      "code": "79GY 36/106",
+      "hex": "#91A392",
+      "family": "green",
+      "lrv": 36,
+      "base": "light",
+      "notes": "muted mid green with grey; Colour of the Year 2027 palette",
+      "source": "https://www.dulux.co.za/en/colour-palettes/fern-forest-79gy-36-106-3170182"
+    },
+    {
+      "id": "dulux-mellow-flow",
+      "brand": "dulux",
+      "name": "Mellow Flow",
+      "code": "10BB 39/100",
+      "hex": "#95A7B4",
+      "family": "blue",
+      "lrv": 39,
+      "base": "light",
+      "notes": "airy soft sky blue; one of the Dulux Colours of the Year 2026",
+      "source": "https://www.dulux.co.za/en/colour-palettes/mellow-flow-10bb-39-100-3054708"
+    },
+    {
+      "id": "dulux-free-groove",
+      "brand": "dulux",
+      "name": "Free Groove",
+      "code": "62BB 08/369",
+      "hex": "#024A7F",
+      "family": "blue",
+      "lrv": 8,
+      "base": "deep",
+      "notes": "vibrant bold indigo blue; one of the Dulux Colours of the Year 2026",
+      "source": "https://www.dulux.co.za/en/colour-palettes/free-groove-62bb-08-369-3054713"
+    },
+    {
+      "id": "dulux-connecticut-blue",
+      "brand": "dulux",
+      "name": "Connecticut Blue",
+      "code": "90BG 17/090",
+      "hex": "#5E717B",
+      "family": "blue",
+      "lrv": 17,
+      "base": "medium",
+      "notes": "deep slate blue-grey; Colour of the Year 2027 palette",
+      "source": "https://www.dulux.co.za/en/colour-palettes/connecticut-blue-90bg-17-090-3170172"
+    },
+    {
+      "id": "dulux-taupe-pink",
+      "brand": "dulux",
+      "name": "Taupe Pink",
+      "code": "10YR 50/101",
+      "hex": "#CEB2AF",
+      "family": "pink-terracotta",
+      "lrv": 50,
+      "base": "light",
+      "notes": "muted dusty pink-taupe; in both the 2026 and 2027 palettes",
+      "source": "https://www.dulux.co.za/en/colour-palettes/taupe-pink-10yr-50-101-3170179"
+    },
+    {
+      "id": "dulux-clay-pot",
+      "brand": "dulux",
+      "name": "Clay Pot",
+      "code": "50YR 21/318",
+      "hex": "#AD6C55",
+      "family": "pink-terracotta",
+      "lrv": 21,
+      "base": "medium",
+      "notes": "warm earthy terracotta; Colour of the Year 2027 palette",
+      "source": "https://www.dulux.co.za/en/colour-palettes/clay-pot-50yr-21-318-3170162"
+    },
+    {
+      "id": "dulux-winning-hue",
+      "brand": "dulux",
+      "name": "Winning Hue",
+      "code": "20YY 27/426",
+      "hex": "#AF8136",
+      "family": "yellow-ochre",
+      "lrv": 27,
+      "base": "medium",
+      "notes": "golden ochre/mustard; Colour of the Year 2027 palette",
+      "source": "https://www.dulux.co.za/en/colour-palettes/winning-hue-20yy-27-426-3170180"
+    },
+    {
+      "id": "dulux-slow-swing",
+      "brand": "dulux",
+      "name": "Slow Swing",
+      "code": "66BB 06/077",
+      "hex": "#2C3241",
+      "family": "deep",
+      "lrv": 6,
+      "base": "deep",
+      "notes": "meditative inky navy; one of the Dulux Colours of the Year 2026",
+      "source": "https://www.dulux.co.za/en/colour-palettes/slow-swing-66bb-06-077-3054714"
+    },
+    {
+      "id": "dulux-elegant-leather",
+      "brand": "dulux",
+      "name": "Elegant Leather",
+      "code": "48YR 09/077",
+      "hex": "#57453E",
+      "family": "deep",
+      "lrv": 9,
+      "base": "deep",
+      "notes": "deep leathery brown; Colour of the Year 2027 palette",
+      "source": "https://www.dulux.co.za/en/colour-palettes/elegant-leather-48yr-09-077-3170170"
+    },
+    {
+      "id": "duram-water-lily",
+      "brand": "duram",
+      "name": "Water Lily",
+      "code": "W05",
+      "hex": "#FBFAF6",
+      "family": "white",
+      "lrv": null,
+      "base": "light",
+      "notes": "warm-toned soft white (Off-White Collection)",
+      "source": "https://www.duram.co.za/colour-collection/off-white/"
+    },
+    {
+      "id": "duram-pelican-wing",
+      "brand": "duram",
+      "name": "Pelican Wing",
+      "code": "W01",
+      "hex": "#F6F6F4",
+      "family": "white",
+      "lrv": null,
+      "base": "light",
+      "notes": "crisp cool-toned white (Off-White Collection)",
+      "source": "https://www.duram.co.za/colour-collection/off-white/"
+    },
+    {
+      "id": "duram-pansy-shell",
+      "brand": "duram",
+      "name": "Pansy Shell",
+      "code": "02",
+      "hex": "#E2DACD",
+      "family": "neutral",
+      "lrv": null,
+      "base": "light",
+      "notes": "pale warm sand neutral (Habitat Collection)",
+      "source": "https://www.duram.co.za/colour/pansy-shell-02/"
+    },
+    {
+      "id": "duram-wilderness-sand",
+      "brand": "duram",
+      "name": "Wilderness Sand",
+      "code": "03",
+      "hex": "#E0CFB9",
+      "family": "neutral",
+      "lrv": null,
+      "base": "light",
+      "notes": "warm light beige (Habitat Collection)",
+      "source": "https://www.duram.co.za/colour/wilderness-sand-03/"
+    },
+    {
+      "id": "duram-little-karoo",
+      "brand": "duram",
+      "name": "Little Karoo",
+      "code": "13",
+      "hex": "#C1B5A3",
+      "family": "neutral",
+      "lrv": null,
+      "base": "light",
+      "notes": "earthy mid greige-taupe (Habitat Collection)",
+      "source": "https://www.duram.co.za/colour/little-karoo-13/"
+    },
+    {
+      "id": "duram-highveld-storm",
+      "brand": "duram",
+      "name": "Highveld Storm",
+      "code": "12",
+      "hex": "#D6D4CC",
+      "family": "grey",
+      "lrv": null,
+      "base": "light",
+      "notes": "light warm stone grey (Habitat Collection)",
+      "source": "https://www.duram.co.za/colour/highveld-storm-12/"
+    },
+    {
+      "id": "duram-grey-lourie",
+      "brand": "duram",
+      "name": "Grey Lourie",
+      "code": "32",
+      "hex": "#B8BBBB",
+      "family": "grey",
+      "lrv": null,
+      "base": "light",
+      "notes": "smoky mid-light grey (Habitat Collection)",
+      "source": "https://www.duram.co.za/colour/grey-lourie-32/"
+    },
+    {
+      "id": "duram-tree-fern",
+      "brand": "duram",
+      "name": "Tree Fern",
+      "code": "61",
+      "hex": "#CAD3C2",
+      "family": "green",
+      "lrv": null,
+      "base": "light",
+      "notes": "soft pale sage green (Habitat Collection)",
+      "source": "https://www.duram.co.za/colour/tree-fern-61/"
+    },
+    {
+      "id": "duram-milkwood-tree",
+      "brand": "duram",
+      "name": "Milkwood Tree",
+      "code": "63",
+      "hex": "#6D8177",
+      "family": "green",
+      "lrv": null,
+      "base": "medium",
+      "notes": "deep muted grey-green (Habitat Collection)",
+      "source": "https://www.duram.co.za/colour/milkwood-tree-63/"
+    },
+    {
+      "id": "duram-blue-squill",
+      "brand": "duram",
+      "name": "Blue Squill",
+      "code": "47",
+      "hex": "#B2C1D1",
+      "family": "blue",
+      "lrv": null,
+      "base": "light",
+      "notes": "soft powdery blue (Habitat Collection)",
+      "source": "https://www.duram.co.za/colour/blue-squill-47/"
+    },
+    {
+      "id": "duram-kingfisher-splash",
+      "brand": "duram",
+      "name": "Kingfisher Splash",
+      "code": "48",
+      "hex": "#69869E",
+      "family": "blue",
+      "lrv": null,
+      "base": "medium",
+      "notes": "mid dusty denim blue (Habitat Collection)",
+      "source": "https://www.duram.co.za/colour/kingfisher-splash-48/"
+    },
+    {
+      "id": "duram-pink-mallow",
+      "brand": "duram",
+      "name": "Pink Mallow",
+      "code": "83",
+      "hex": "#E5BCAC",
+      "family": "pink-terracotta",
+      "lrv": null,
+      "base": "light",
+      "notes": "soft peachy pink (Habitat Collection)",
+      "source": "https://www.duram.co.za/colour/pink-mallow-83/"
+    },
+    {
+      "id": "duram-coral-tree",
+      "brand": "duram",
+      "name": "Coral Tree",
+      "code": "74",
+      "hex": "#BF705E",
+      "family": "pink-terracotta",
+      "lrv": null,
+      "base": "medium",
+      "notes": "warm coral-terracotta (Habitat Collection)",
+      "source": "https://www.duram.co.za/colour/coral-tree-74/"
+    },
+    {
+      "id": "duram-yellow-weaver",
+      "brand": "duram",
+      "name": "Yellow Weaver",
+      "code": "68",
+      "hex": "#F2D186",
+      "family": "yellow-ochre",
+      "lrv": null,
+      "base": "light",
+      "notes": "warm sunny yellow (Habitat Collection)",
+      "source": "https://www.duram.co.za/colour/yellow-weaver-68/"
+    },
+    {
+      "id": "duram-acacia-honey",
+      "brand": "duram",
+      "name": "Acacia Honey",
+      "code": "69",
+      "hex": "#DDAB52",
+      "family": "yellow-ochre",
+      "lrv": null,
+      "base": "light",
+      "notes": "golden honey ochre (Habitat Collection)",
+      "source": "https://www.duram.co.za/colour/acacia-honey-69/"
+    },
+    {
+      "id": "duram-kelp-forest",
+      "brand": "duram",
+      "name": "Kelp Forest",
+      "code": "65",
+      "hex": "#2D3A2E",
+      "family": "deep",
+      "lrv": null,
+      "base": "deep",
+      "notes": "very deep forest green (Habitat Collection)",
+      "source": "https://www.duram.co.za/colour/kelp-forest-65/"
+    },
+    {
+      "id": "duram-bushveld-night",
+      "brand": "duram",
+      "name": "Bushveld Night",
+      "code": "45",
+      "hex": "#21373A",
+      "family": "deep",
+      "lrv": null,
+      "base": "deep",
+      "notes": "inky deep teal-navy (Habitat Collection)",
+      "source": "https://www.duram.co.za/colour/bushveld-night-45/"
+    },
+    {
+      "id": "prominent-white-cloud",
+      "brand": "prominent",
+      "name": "White Cloud",
+      "code": "0702-Y",
+      "hex": "#F9F8F1",
+      "family": "white",
+      "lrv": null,
+      "base": "light",
+      "notes": "clean soft white (Premium Satin Silk, tint only)",
+      "source": "https://www.prominentpaints.co.za/colour-palette/"
+    },
+    {
+      "id": "prominent-broken-white",
+      "brand": "prominent",
+      "name": "Broken White",
+      "code": "0908-Y29R",
+      "hex": "#F4E6D2",
+      "family": "white",
+      "lrv": null,
+      "base": "light",
+      "notes": "warm creamy broken white (Premium Satin Silk, tint only)",
+      "source": "https://www.prominentpaints.co.za/colour-palette/"
+    },
+    {
+      "id": "prominent-soft-cream",
+      "brand": "prominent",
+      "name": "Soft Cream",
+      "code": "0607-Y27R",
+      "hex": "#FCF0DD",
+      "family": "white",
+      "lrv": null,
+      "base": "light",
+      "notes": "light warm cream-white (Premium Matt, tint only)",
+      "source": "https://www.prominentpaints.co.za/colour-palette/"
+    },
+    {
+      "id": "prominent-marzipan",
+      "brand": "prominent",
+      "name": "Marzipan",
+      "code": "1504-Y35R",
+      "hex": "#E4DCD3",
+      "family": "neutral",
+      "lrv": null,
+      "base": "light",
+      "notes": "pale warm neutral with a pinkish-beige cast (Premium Satin Silk, tint only)",
+      "source": "https://www.prominentpaints.co.za/colour-palette/"
+    },
+    {
+      "id": "prominent-river-clay",
+      "brand": "prominent",
+      "name": "River Clay",
+      "code": "1811-Y34R",
+      "hex": "#DCC9B1",
+      "family": "neutral",
+      "lrv": null,
+      "base": "light",
+      "notes": "soft warm sandy beige (Premium Matt, tint only)",
+      "source": "https://www.prominentpaints.co.za/colour-palette/"
+    },
+    {
+      "id": "prominent-lands-end",
+      "brand": "prominent",
+      "name": "Lands End",
+      "code": "3406-Y20R",
+      "hex": "#B1AB9F",
+      "family": "neutral",
+      "lrv": null,
+      "base": "light",
+      "notes": "mid greige, grey with warm undertone (Premium Matt, tint only)",
+      "source": "https://www.prominentpaints.co.za/colour-palette/"
+    },
+    {
+      "id": "prominent-rock",
+      "brand": "prominent",
+      "name": "Rock",
+      "code": "3214-Y33R",
+      "hex": "#B6A48B",
+      "family": "neutral",
+      "lrv": null,
+      "base": "light",
+      "notes": "warm mid taupe-beige (Premium Matt, tint only)",
+      "source": "https://www.prominentpaints.co.za/colour-palette/"
+    },
+    {
+      "id": "prominent-gecko",
+      "brand": "prominent",
+      "name": "Gecko",
+      "code": "4705-Y24R",
+      "hex": "#8E8A82",
+      "family": "grey",
+      "lrv": null,
+      "base": "medium",
+      "notes": "warm mid-dark grey (Premium Satin Silk, tint only)",
+      "source": "https://www.prominentpaints.co.za/colour-palette/"
+    },
+    {
+      "id": "prominent-fresh-mint",
+      "brand": "prominent",
+      "name": "Fresh Mint",
+      "code": "1010-B90G",
+      "hex": "#C6F1DE",
+      "family": "green",
+      "lrv": null,
+      "base": "light",
+      "notes": "light fresh mint green (Premium Matt, tint only)",
+      "source": "https://www.prominentpaints.co.za/colour-palette/"
+    },
+    {
+      "id": "prominent-mountain-mist",
+      "brand": "prominent",
+      "name": "Mountain Mist",
+      "code": "3010-B30G",
+      "hex": "#A0B9BC",
+      "family": "blue",
+      "lrv": null,
+      "base": "light",
+      "notes": "soft grey-blue with a teal lean (Premium Matt, tint only)",
+      "source": "https://www.prominentpaints.co.za/colour-palette/"
+    },
+    {
+      "id": "prominent-soft-molucca",
+      "brand": "prominent",
+      "name": "Soft Molucca",
+      "code": "1009-Y47R",
+      "hex": "#F1DBC8",
+      "family": "pink-terracotta",
+      "lrv": null,
+      "base": "light",
+      "notes": "pale soft peach (Premium Matt, tint only)",
+      "source": "https://www.prominentpaints.co.za/colour-palette/"
+    },
+    {
+      "id": "prominent-burnt-brick",
+      "brand": "prominent",
+      "name": "Burnt Brick",
+      "code": "2570-Y60R",
+      "hex": "#C95920",
+      "family": "pink-terracotta",
+      "lrv": null,
+      "base": "medium",
+      "notes": "bold burnt orange-terracotta (Premium Matt, tint only)",
+      "source": "https://www.prominentpaints.co.za/colour-palette/"
+    },
+    {
+      "id": "prominent-deep-cream",
+      "brand": "prominent",
+      "name": "Deep Cream",
+      "code": "1425-Y23R",
+      "hex": "#E6C88F",
+      "family": "yellow-ochre",
+      "lrv": null,
+      "base": "light",
+      "notes": "rich warm cream-yellow (Premium Matt, tint only)",
+      "source": "https://www.prominentpaints.co.za/colour-palette/"
+    },
+    {
+      "id": "prominent-warm-mocha",
+      "brand": "prominent",
+      "name": "Warm Mocha",
+      "code": "3040-Y40R",
+      "hex": "#BC8750",
+      "family": "yellow-ochre",
+      "lrv": null,
+      "base": "medium",
+      "notes": "caramel ochre (Premium Matt, tint only)",
+      "source": "https://www.prominentpaints.co.za/colour-palette/"
+    },
+    {
+      "id": "prominent-golden-sands",
+      "brand": "prominent",
+      "name": "Golden Sands",
+      "code": "4935-Y40R",
+      "hex": "#896642",
+      "family": "deep",
+      "lrv": null,
+      "base": "medium",
+      "notes": "deep golden-brown earth tone (Premium Matt, tint only)",
+      "source": "https://www.prominentpaints.co.za/colour-palette/"
+    }
+  ]
+}

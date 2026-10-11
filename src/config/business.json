@@ -1,0 +1,19 @@
+{
+  "$comment": "Owner-supplied business details. null until supplied; nothing null is shown on the site. See README → Launch inputs.",
+  "tradingName": "Big Jo’s Paints",
+  "legalName": null,
+  "registrationNumber": null,
+  "physicalAddress": null,
+  "email": null,
+  "phone": null,
+  "whatsapp": "+27 60 961 5091",
+  "whatsappNote": "Johannes's own number, carried over from Big Jo's Beds (supplied 6 Oct 2026). Confirm it is the right number for Big Jo's Paints.",
+  "vatRegistered": false,
+  "vatNumber": null,
+  "delivery": {
+    "days": 3,
+    "daysSource": "Owner, 11 Oct 2026: 'customers can buy the paint online and get it delivered in 3 days'.",
+    "feeCents": null,
+    "feeNote": "Not supplied yet. While null, checkout shows the delivery fee as 'to be confirmed' and doesn't charge it; a live build fails until it is set (0 = free delivery)."
+  }
+}

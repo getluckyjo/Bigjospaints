@@ -1,0 +1,79 @@
+---
+/**
+ * Order status after PayFast. Status comes from the database (set by the ITN), never from the
+ * fact that PayFast redirected the customer here.
+ */
+export const prerender = false;
+
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { CART_COOKIE } from '../../lib/cart';
+import { deliveryDays } from '../../lib/business';
+import { findOrder } from '../../lib/checkout';
+import { formatLitres } from '../../lib/estimate';
+import { formatZar } from '../../lib/money';
+
+const order = await findOrder(Astro.params.reference ?? '', Astro.url.searchParams.get('t'));
+if (!order) Astro.response.status = 404;
+Astro.response.headers.set('Cache-Control', 'no-store');
+// A paid order empties the cart.
+if (order?.status === 'paid') Astro.cookies.delete(CART_COOKIE, { path: '/' });
+
+const state = !order ? 'missing' : order.status === 'paid' ? 'paid' : order.status === 'needs_review' ? 'review' : order.status === 'pending_payment' ? 'pending' : 'closed';
+---
+
+<Base title="Your order | Big Jo’s Paints" noindex>
+  <section class="bj-container bj-section bj-stack bj-reading">
+    {
+      state === 'missing' && (
+        <>
+          <h1>We couldn’t find that order.</h1>
+          <p class="bj-lead">Check the link in your email, or contact us with your order reference.</p>
+        </>
+      )
+    }
+    {
+      order && (
+        <>
+          {state === 'paid' && (
+            <div class="bj-stack" role="status">
+              <Icon name="done" class="bj-status-icon bj-status-icon--done" />
+              <h1>Thank you. Your order is confirmed.</h1>
+              <p class="bj-lead">We’ve emailed a confirmation to {order.email}. Your paint will be delivered in {deliveryDays} days.</p>
+            </div>
+          )}
+          {state === 'pending' && (
+            <div class="bj-stack" role="status">
+              <Icon name="pending" class="bj-status-icon" />
+              <h1>We’re confirming your payment.</h1>
+              <p class="bj-lead">This usually takes a few seconds. Refresh this page in a moment. If you paid by EFT it can take a little longer; we’ll email you as soon as it’s confirmed.</p>
+              <div><a class="bj-button bj-button--secondary" href={Astro.url.pathname + Astro.url.search}>Refresh</a></div>
+            </div>
+          )}
+          {state === 'review' && (
+            <div class="bj-stack" role="status">
+              <Icon name="alert" class="bj-status-icon" />
+              <h1>We’re checking this payment.</h1>
+              <p class="bj-lead">Something about this payment needs a manual check. We’ll contact you by email. You don’t need to pay again.</p>
+            </div>
+          )}
+          {state === 'closed' && (
+            <div class="bj-stack">
+              <h1>This order wasn’t paid.</h1>
+              <p class="bj-lead">Nothing has been charged. You can check out again from your cart.</p>
+              <div><a class="bj-button" href="/cart">View your cart</a></div>
+            </div>
+          )}
+          <dl class="bj-totals">
+            <div><dt>Order reference</dt><dd class="bj-ref">{order.reference}</dd></div>
+            {order.lines.map((l) => (
+              <div><dt>{l.quantity} × {formatLitres(l.sizeLitres)} {l.brandName} {l.productName}, {l.colourName}</dt><dd>{formatZar(l.unitPriceCents * l.quantity)}</dd></div>
+            ))}
+            <div><dt>Delivery to</dt><dd>{order.suburb}, {order.city}</dd></div>
+            <div class="bj-totals__total"><dt>Total</dt><dd>{formatZar(order.totalCents)}</dd></div>
+          </dl>
+        </>
+      )
+    }
+  </section>
+</Base>

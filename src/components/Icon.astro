@@ -1,0 +1,27 @@
+---
+/**
+ * Decorative line icon from src/data/icons.json. Hidden from assistive technology:
+ * always pair it with visible text (or bj-sr-only text) that carries the meaning.
+ */
+import { iconSvg, type IconName } from '../lib/icons';
+
+interface Props {
+  name: IconName;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+---
+
+<svg
+  class:list={['bj-icon', className]}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.75"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+  set:html={iconSvg(name)}
+/>
