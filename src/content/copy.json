@@ -25,12 +25,12 @@
   ],
   "home": {
     "seo": {
-      "title": "Big Jo’s Paints | Your personal interior colour consultant and South Africa’s top paint brands",
+      "title": "Big Jo’s Paints | Your personal colour consultant and South Africa’s top paint brands",
       "description": "Upload a photo of your room and get three paint colours from top South African brands, with exactly how much paint you need and what it costs. Delivered in 3 days."
     },
-    "eyebrow": "Your personal interior colour consultant",
+    "eyebrow": "Your personal colour consultant",
     "title": "Find your colour. Know the cost.",
-    "body": "Send a photo of your room, say how you want it to feel, and your personal interior colour consultant picks three colours from South Africa’s top paint brands. You see exactly how much paint you need and what it costs. Buy it here, and it’s delivered in 3 days.",
+    "body": "Send a photo of your room, say how you want it to feel, and your personal colour consultant picks three colours from South Africa’s top paint brands. You see exactly how much paint you need and what it costs. Buy it here, and it’s delivered in 3 days.",
     "primaryCta": "Start with a photo",
     "secondaryCta": "Browse colours",
     "facts": [
@@ -63,7 +63,7 @@
     ],
     "aiTitle": "A colour consultant that looks at your room.",
     "aiBody": [
-      "Your personal interior colour consultant is powered by modern colour technology. It looks at the light, floors, furniture and colours already in your photo, reads your brief, and suggests three colours that suit the room and each other.",
+      "Your personal colour consultant is powered by modern colour technology. It looks at the light, floors, furniture and colours already in your photo, reads your brief, and suggests three colours that suit the room and each other.",
       "It only chooses from real colours in our catalogue. We work out the litres and the price ourselves, from your room size and our price list, so the numbers never come from the AI."
     ],
     "samplesTitle": "Try it on your wall first.",
@@ -76,11 +76,11 @@
   },
   "consultant": {
     "seo": {
-      "title": "Your personal interior colour consultant | Big Jo’s Paints",
+      "title": "Your personal colour consultant | Big Jo’s Paints",
       "description": "Upload a photo of your room, describe the feel you want and add the room size. Get three paint colours with the brand, the paint you need and the cost."
     },
     "eyebrow": "Powered by modern colour technology",
-    "title": "Your personal interior colour consultant",
+    "title": "Your personal colour consultant",
     "intro": "Three quick steps. You’ll get three colours, each with the brand, how much paint you need and what it costs.",
     "photoTitle": "Add a photo of your room",
     "photoEmpty": "Tap to take a photo or choose one",
