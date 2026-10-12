@@ -99,7 +99,7 @@ The checkout flow is the same as Big Jo’s Beds:
 ## Launch inputs still needed
 
 - [ ] `OPENAI_API_KEY` in Vercel (Production, type Sensitive). Without it the consultant runs in demo mode and there are no AI previews.
-- [ ] Your selling prices in `src/data/catalogue.json`.
+- [ ] The tinting merchant’s trade price list, interior and exterior (owner, 12 Oct 2026). It sets the selling prices in `src/data/catalogue.json` and supplies the exterior paints for outside painting, which waits on it. Brands the merchant can’t tint are switched off until another merchant covers them.
 - [ ] Delivery fee in `src/config/business.json → delivery.feeCents` (0 for free), and where you deliver.
 - [ ] Legal name, registration number, physical address and email in `src/config/business.json` (ECTA s43).
 - [ ] Terms of sale, delivery and returns, and privacy notice as `src/content/policies/*.md`.
