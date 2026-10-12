@@ -4,6 +4,16 @@ An online shop for South Africa’s top paint brands, with an AI colour consulta
 
 Built with the Big Jo’s brand (same palette, type, icons and logo, with a “PAINTS” descriptor). Astro on Vercel, OpenAI for the consultant, PayFast for payments, Supabase for orders, Resend for email.
 
+## Status: paused until early 2027 (owner, 12 Oct 2026)
+
+- **Live test shop:** https://bigjospaints.vercel.app (PayFast sandbox, no real payments, orders kept in memory only). Everything on it is in this repo up to commit 459ccc3 and later docs.
+- **Deploying:** the Vercel project (bigjospaints) is not connected to this repo. Deploys were uploaded by hand from a session that no longer exists. To resume, connect the project to `getluckyjo/Bigjospaints` in Vercel and change its install command from `node unpack.mjs && npm ci` to `npm ci`; pushes to `main` then deploy.
+- **Plan:** the Claude doc “Big Jo’s Paints: commercial model and operating plan” (https://claude.ai/code/artifact/ebbb8d13-4222-44d6-9667-05fe981f0f83) has the pricing, unit economics, partners, Cape Town merchant shortlist and go-live steps.
+- **Next, in order:**
+  1. Quotes from Cape Town tinting merchants (Dulux Paint Specialist Centre, Maitland; AA Paint, Durbanville; ask Brights Hardware). Their price lists set the selling prices and add the exterior paints.
+  2. Build: send each paid order line to the merchant for its brand, delivery per parcel; switch off brands no merchant covers; outside painting (exterior paints, an outside-walls option and its maths, the consultant); prices and delivery fees from the plan.
+  3. The launch inputs below.
+
 ## Run it locally
 
 ```bash
